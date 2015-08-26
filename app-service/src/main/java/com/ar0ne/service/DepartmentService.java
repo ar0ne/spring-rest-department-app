@@ -1,9 +1,10 @@
-package com.ar0ne.dao;
+package com.ar0ne.service;
 
 import com.ar0ne.model.Department;
+
 import java.util.List;
 
-public interface DepartmentDao {
+public interface DepartmentService {
 
     public void addDepartment(Department department);
     public void removeDepartment(long id);

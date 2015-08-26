@@ -73,4 +73,12 @@ public class DepartmentDaoImpl implements DepartmentDao {
         String sql = "SELECT * FROM departments WHERE ID = :id";
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, new DepartmentMapper());
     }
+
+    @Override
+    public Department getDepartmentByName(String name) {
+        Map<String, Object> parameters = new HashMap(1);
+        parameters.put("name", name);
+        String sql = "SELECT * FROM departments WHERE NAME = :name";
+        return namedParameterJdbcTemplate.queryForObject(sql, parameters, new DepartmentMapper());
+    }
 }

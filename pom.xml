@@ -21,6 +21,7 @@
         <spring.version>4.1.6.RELEASE</spring.version>
         <mysql.connector.version>5.1.35</mysql.connector.version>
         <joda-time.version>2.5</joda-time.version>
+        <log4j.version>2.3</log4j.version>
     </properties>
 
     <dependencyManagement>
