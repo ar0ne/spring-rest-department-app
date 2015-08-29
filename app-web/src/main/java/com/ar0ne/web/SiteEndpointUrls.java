@@ -1,4 +1,4 @@
-package com.ar0ne.rest;
+package com.ar0ne.web;
 
 public final class SiteEndpointUrls {
 

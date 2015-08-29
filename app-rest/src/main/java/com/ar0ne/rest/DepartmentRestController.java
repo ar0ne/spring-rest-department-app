@@ -23,7 +23,7 @@ public class DepartmentRestController {
     @Autowired
     DepartmentService departmentService;
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_ALL, method = RequestMethod.GET)
     public ResponseEntity<List<Department>> getAllDepartments() {
         LOGGER.debug("get all departments()");
         List<Department> departmentList = departmentService.getAllDepartments();
@@ -31,7 +31,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT + "/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentById(@PathVariable("id") long id) {
         LOGGER.debug("get department by id ({})", id);
         try {
@@ -43,7 +43,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT + "/name/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_BY_NAME, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentByName(@PathVariable("name") String name) {
         LOGGER.debug("get department by name ({})", name);
         try {
@@ -54,7 +54,7 @@ public class DepartmentRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT + SiteEndpointUrls.CREATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_CREATE, method = RequestMethod.POST)
     public ResponseEntity addDepartment(@RequestBody Department department) {
         LOGGER.debug("add department({})", department);
         try {
@@ -67,7 +67,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT + SiteEndpointUrls.DELETE + "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeDepartment(@PathVariable Long id) {
         LOGGER.debug("remove department by id ({})", id);
 
@@ -80,7 +80,7 @@ public class DepartmentRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT + SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateDepartment(@RequestBody Department department) {
         LOGGER.debug("update department({})", department);
 

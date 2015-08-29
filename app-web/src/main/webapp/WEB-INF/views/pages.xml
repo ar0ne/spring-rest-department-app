@@ -53,7 +53,7 @@
         </put-list-attribute>
 
     </definition>
-    
+
     <definition name="fp/vacancy/add" extends="fp">
         <put-attribute name="content" value="fragment/fp/vacancy/add"/>
         <put-attribute name="title" value="Add Vacancy | Freelance Platform"/>
@@ -90,6 +90,11 @@
         <put-attribute name="content" value="fragment/fp/vacancy/list"/>
         <put-attribute name="title" value="Find Job | Freelance Platform"/>
     </definition>     -->
+
+    <definition name="web/department/details" extends="web">
+        <put-attribute name="content" value="fragment/web/department/details"/>
+    </definition>
+
 
     <definition name="web/error/404" extends="web">
         <put-attribute name="content" value="fragment/web/error/404"/>

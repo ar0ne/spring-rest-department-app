@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class HomeController {
+public class HomeWebController {
 
-    @RequestMapping(value = {"/index", "/"}, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.INDEX, method = RequestMethod.GET)
     public ModelAndView indexPage() {
 
         ModelAndView view = new ModelAndView("web/index");

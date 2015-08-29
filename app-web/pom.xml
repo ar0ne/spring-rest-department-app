@@ -17,10 +17,10 @@
     </properties>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>com.ar0ne</groupId>-->
-            <!--<artifactId>model</artifactId>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.ar0ne</groupId>
+            <artifactId>model</artifactId>
+        </dependency>
         <!--<dependency>-->
             <!--<groupId>com.ar0ne</groupId>-->
             <!--<artifactId>dao</artifactId>-->

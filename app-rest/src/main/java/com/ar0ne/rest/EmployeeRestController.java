@@ -20,14 +20,14 @@ public class EmployeeRestController {
     @Autowired
     EmployeeService employeeService;
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_ALL, method = RequestMethod.GET)
     public ResponseEntity<List<Employee>> getAllEmployees() {
         LOGGER.debug("get all employees()");
         List<Employee> departmentList = employeeService.getAllEmployees();
         return new ResponseEntity(departmentList, HttpStatus.OK);
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE + "/id/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
         LOGGER.debug("get employee by id ({})", id);
         try {
@@ -38,7 +38,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE + SiteEndpointUrls.CREATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
     public ResponseEntity addEmployee(@RequestBody Employee employee) {
         LOGGER.debug("add employee({})", employee);
         try {
@@ -51,7 +51,7 @@ public class EmployeeRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE + SiteEndpointUrls.DELETE + "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeEmployee(@PathVariable Long id) {
         LOGGER.debug("remove employee by id ({})", id);
 
@@ -64,7 +64,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE + SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateDepartment(@RequestBody Employee employee) {
         LOGGER.debug("update employee({})", employee);
 
