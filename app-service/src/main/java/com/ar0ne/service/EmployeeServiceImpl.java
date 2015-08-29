@@ -4,6 +4,7 @@ import com.ar0ne.dao.EmployeeDao;
 import com.ar0ne.model.Employee;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.util.Assert;
 
@@ -19,7 +20,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeDao = employeeDao;
     }
 
-    @Override
     public void addEmployee(Employee employee) {
         Assert.isNull(employee.getId(), "Employee ID must to be NULL");
         Assert.notNull(employee.getName(), "Employee NAME can't be NULL");
@@ -32,7 +32,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDao.addEmployee(employee);
     }
 
-    @Override
     public void removeEmployee(long id) {
         Assert.notNull(id, "Employee ID can't be NULL");
 
@@ -45,7 +44,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
-    @Override
     public void updateEmployee(Employee employee) {
 
         Assert.notNull(employee, "Employee can't be NULL");
@@ -68,14 +66,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeDao.updateEmployee(employee);
     }
 
-    @Override
     public List<Employee> getAllEmployees() {
         List<Employee> employees = employeeDao.getAllEmployees();
         Assert.notEmpty(employees, "Empty list of employees");
         return employees;
     }
 
-    @Override
     public Employee getEmployeeById(long id) {
         Assert.notNull(id, "Employee ID can't be NULL");
 

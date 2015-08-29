@@ -35,17 +35,19 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     @Override
-    public void addDepartment(Department department) {
+    public long addDepartment(Department department) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(department);
         String sql = "INSERT INTO departments ( NAME ) VALUES ( :name )";
         namedParameterJdbcTemplate.update( sql, parameterSource, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
     public void removeDepartment(long id) {
-        Map<String, Object> parameters = new HashMap<>(1);
+        Map<String, Object> parameters = new HashMap(1);
         parameters.put("id", id);
-        String sql = "DELETE FROM departments  WHERE ID = :id";
+        String sql = "DELETE FROM departments WHERE ID = :id";
         namedParameterJdbcTemplate.update( sql, parameters);
     }
 

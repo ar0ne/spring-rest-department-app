@@ -5,21 +5,24 @@ import com.ar0ne.model.Department;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+@Component
 public class DepartmentServiceImpl implements DepartmentService {
 
     private DepartmentDao departmentDao;
+
     private static final Logger LOGGER = LogManager.getLogger();
 
     public void setDepartmentDao(DepartmentDao departmentDao) {
         this.departmentDao = departmentDao;
     }
 
-    @Override
     public void addDepartment(Department department) {
         Assert.isNull(department.getId(), "Department ID must to be NULL");
         Assert.notNull(department.getName(), "Department NAME can't ne NULL");
@@ -34,7 +37,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    @Override
     public void removeDepartment(long id) {
         Assert.notNull(id, "Department ID can't be NULL");
 
@@ -49,7 +51,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         departmentDao.removeDepartment(id);
     }
 
-    @Override
     public void updateDepartment(Department department) {
         Assert.notNull(department, "Department can't be NULL");
         Assert.notNull(department.getId(), "Department ID can't be NULL");
@@ -67,7 +68,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     }
 
-    @Override
     public List<Department> getAllDepartments() {
 
         List<Department> departments = departmentDao.getAllDepartments();
@@ -75,7 +75,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departments;
     }
 
-    @Override
     public Department getDepartmentById(long id) {
 
         Assert.notNull(id, "Department ID can't be NULL");
@@ -89,7 +88,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         return department;
     }
 
-    @Override
     public Department getDepartmentByName(String name) {
         Assert.notNull(name, "Department NAME can't be NULL");
         Department department = null;

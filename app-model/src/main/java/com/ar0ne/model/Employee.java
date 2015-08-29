@@ -2,21 +2,28 @@ package com.ar0ne.model;
 
 import org.joda.time.LocalDateTime;
 
-public class Employee {
+import java.io.Serializable;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+public class Employee implements Serializable{
 
     private long            id;
     private long            department_id;
     private String          surname;
     private String          name;
     private String          patronymic;
-    private LocalDateTime   date_of_birthday;
     private long            salary;
 
-    public Employee(){
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    private LocalDateTime   date_of_birthday;
 
+    public Employee(){
     }
 
-    public Employee(long id, long department_id, String surname, String name, String patronymic, LocalDateTime date_of_birthday, long salary) {
+    public Employee(long id, long department_id, String surname, String name,
+                    String patronymic, LocalDateTime date_of_birthday, long salary) {
         this.id = id;
         this.department_id = department_id;
         this.surname = surname;
@@ -80,6 +87,23 @@ public class Employee {
 
     public void setSalary(long salary) {
         this.salary = salary;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Employee employee = (Employee) o;
+
+        if (id != employee.id) return false;
+        if (department_id != employee.department_id) return false;
+        if (salary != employee.salary) return false;
+        if (!surname.equals(employee.surname)) return false;
+        if (!name.equals(employee.name)) return false;
+        if (!patronymic.equals(employee.patronymic)) return false;
+        return date_of_birthday.equals(employee.date_of_birthday);
+
     }
 
     @Override

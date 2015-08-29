@@ -1,18 +1,19 @@
 package com.ar0ne.model;
 
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable{
 
     private long        id;
     private String      name;
 
+    public Department(){
+    }
+
     public Department(String name, long id) {
         this.name = name;
         this.id = id;
-    }
-
-    public Department(){
-
     }
 
     public long getId() {
@@ -29,6 +30,17 @@ public class Department {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Department that = (Department) o;
+
+        if (id != that.id) return false;
+        return name.equals(that.name);
     }
 
     @Override

@@ -41,10 +41,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
     }
 
     @Override
-    public void addEmployee(Employee employee) {
+    public long addEmployee(Employee employee) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(employee);
         String sql = "INSERT INTO employees ( DEPARTMENT_ID, SURNAME, NAME, PATRONYMIC, DATE_OF_BIRTHDAY, SALARY ) VALUES ( :department_id, :surname, :name, :patronymic, :date_of_birthday, :salary )";
         namedParameterJdbcTemplate.update( sql, parameterSource, keyHolder);
+
+        return keyHolder.getKey().longValue();
     }
 
     @Override
@@ -73,7 +75,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public List<Employee> getAllEmployees() {
-        String sql = "SELECT * FROM employee";
+        String sql = "SELECT * FROM employees";
         return namedParameterJdbcTemplate.query(sql, new EmployeeMapper());
     }
 
@@ -81,7 +83,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Employee getEmployeeById(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
-        String sql = "SELECT * FROM employee WHERE ID = :id";
+        String sql = "SELECT * FROM employees WHERE ID = :id";
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EmployeeMapper());
     }
 }

@@ -10,14 +10,123 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>rest</artifactId>
+    <packaging>war</packaging>
 
 
-    <!--
+    <properties>
+        <hsqldb.version>2.3.1</hsqldb.version>
+    </properties>
+
     <dependencies>
         <dependency>
-
+            <groupId>com.ar0ne</groupId>
+            <artifactId>model</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ar0ne</groupId>
+            <artifactId>dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ar0ne</groupId>
+            <artifactId>service</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <!--<version>${spring.version}</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <!--<version>${spring.version}</version>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <!--<version>${spring.version}</version>-->
+            <!--<type>jar</type>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <!--<version>${spring.version}</version>-->
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <!--<version>${junit.version}</version>-->
+            <!--<scope>test</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <!--<version>${jackson.version}</version>-->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-joda</artifactId>
+            <!--<version>${jackson.version}</version>-->
+        </dependency>
+
+        <!-- AspectJ -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <!--<version>${org.aspectj-version}</version>-->
+        </dependency>
+
+        <!-- @Inject -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <!--<version>${javax.inject.version}</version>-->
+        </dependency>
+
+        <!-- Servlet -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <!--<version>2.5</version>-->
+            <!--<scope>provided</scope>-->
+        </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <!--<version>${mysql.connector.version}</version>-->
+        </dependency>
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <!--<version>${hsqldb.version}</version>-->
+        </dependency>
+
+        <!--<dependency>-->
+            <!--<groupId>javax.servlet.jsp</groupId>-->
+            <!--<artifactId>jsp-api</artifactId>-->
+            <!--<version>2.1</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>javax.servlet</groupId>-->
+            <!--<artifactId>jstl</artifactId>-->
+            <!--<version>1.2</version>-->
+        <!--</dependency>-->
+
     </dependencies>
-    -->
+
+    <build>
+        <finalName>rest</finalName>
+    </build>
+
 
 </project>
