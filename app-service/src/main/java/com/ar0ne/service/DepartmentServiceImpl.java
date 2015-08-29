@@ -23,7 +23,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         this.departmentDao = departmentDao;
     }
 
-    public void addDepartment(Department department) {
+    public long addDepartment(Department department) {
         Assert.isNull(department.getId(), "Department ID must to be NULL");
         Assert.notNull(department.getName(), "Department NAME can't ne NULL");
 
@@ -33,7 +33,8 @@ public class DepartmentServiceImpl implements DepartmentService {
             throw new IllegalArgumentException("Department with this NAME exist");
         }
 
-        departmentDao.addDepartment(department);
+        long id = departmentDao.addDepartment(department);
+        return id;
 
     }
 

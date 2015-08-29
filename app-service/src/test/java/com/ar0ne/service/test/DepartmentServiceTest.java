@@ -20,7 +20,6 @@ import java.util.List;
 @ContextConfiguration(locations = {"classpath:/spring-service-test.xml"})
 @TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
 @Transactional
-
 public class DepartmentServiceTest {
 
     @Autowired

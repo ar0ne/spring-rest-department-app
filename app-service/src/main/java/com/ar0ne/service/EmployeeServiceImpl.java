@@ -20,7 +20,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employeeDao = employeeDao;
     }
 
-    public void addEmployee(Employee employee) {
+    public long addEmployee(Employee employee) {
         Assert.isNull(employee.getId(), "Employee ID must to be NULL");
         Assert.notNull(employee.getName(), "Employee NAME can't be NULL");
         Assert.notNull(employee.getSalary(), "Employee SALARY can't be NULL");
@@ -29,7 +29,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.notNull(employee.getDepartmentId(), "Employee Department ID can't be NULL");
         Assert.notNull(employee.getDateOfBirthday(), "Employee Date of Birthday can't be NULL");
 
-        employeeDao.addEmployee(employee);
+        long id = employeeDao.addEmployee(employee);
+        return id;
     }
 
     public void removeEmployee(long id) {
