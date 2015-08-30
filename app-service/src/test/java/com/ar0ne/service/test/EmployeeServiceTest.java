@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 public class EmployeeServiceTest {
 
-    private final static int INIT_SIZE = 15;
+    private final static int EMPLOYEE_INIT_SIZE = 15;
 
     @Autowired
     private EmployeeService employeeService;
@@ -28,7 +28,7 @@ public class EmployeeServiceTest {
     @Test
     public void getAllEmployees() {
         List<Employee> employeeList = employeeService.getAllEmployees();
-        assertEquals(INIT_SIZE, employeeList.size());
+        assertEquals(EMPLOYEE_INIT_SIZE, employeeList.size());
     }
 
 }

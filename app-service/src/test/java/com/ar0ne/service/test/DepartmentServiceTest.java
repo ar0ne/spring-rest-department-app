@@ -26,12 +26,12 @@ public class DepartmentServiceTest {
     private DepartmentService departmentService;
 
     private final static String DEPT_NAME = "Test dept.";
-    private final static int INIT_SIZE = 4;
+    private final static int DEPT_INIT_SIZE = 4;
 
     @Test
     public void getAllDepartments() {
         List<Department> departments = departmentService.getAllDepartments();
-        assertEquals(INIT_SIZE, departments.size());
+        assertEquals(DEPT_INIT_SIZE, departments.size());
     }
 
 

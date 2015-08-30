@@ -86,4 +86,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employee;
     }
+
+    public List<Employee> getEmployeesByDepartmentId(long id) {
+        Assert.notNull(id, "Department ID cant be NULL");
+
+        List<Employee> employees = null;
+        try {
+            employees = employeeDao.getEmployeesByDepartmentId(id);
+        } catch (Exception ex) {
+            LOGGER.error("Employee with DEPARTMENT_ID = {} doesn't exist", id);
+            throw new IllegalArgumentException("Employee with this DEPARTMENT_ID doesn't exist");
+        }
+
+        return employees;
+    }
 }

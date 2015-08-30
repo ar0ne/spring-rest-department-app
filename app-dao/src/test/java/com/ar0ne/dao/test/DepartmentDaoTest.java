@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import com.ar0ne.dao.DepartmentDao;
 import com.ar0ne.model.Department;
+import com.ar0ne.model.Employee;
 import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +28,7 @@ public class DepartmentDaoTest {
     private DepartmentDao departmentDao;
 
     private final static String DEPT_NAME = "Test dept.";
-    private final static int INIT_SIZE = 4;
+    private final static int DEPT_INIT_SIZE = 4;
 
     private Department createAndAddToDataBaseDepartment(){
         Department department = new Department();
@@ -41,7 +43,7 @@ public class DepartmentDaoTest {
     @Test
     public void getAllDepartments() {
         List<Department> departments = departmentDao.getAllDepartments();
-        assertEquals(INIT_SIZE, departments.size());
+        assertEquals(DEPT_INIT_SIZE, departments.size());
     }
 
     @Test
@@ -51,9 +53,12 @@ public class DepartmentDaoTest {
 
         Department department = createAndAddToDataBaseDepartment();
 
+        assertNotNull(department);
+
         int size_after  = departmentDao.getAllDepartments().size();
+
         assertEquals(size_before + 1, size_after);
-        assertEquals(INIT_SIZE, size_before);
+        assertEquals(DEPT_INIT_SIZE, size_before);
     }
 
     @Test

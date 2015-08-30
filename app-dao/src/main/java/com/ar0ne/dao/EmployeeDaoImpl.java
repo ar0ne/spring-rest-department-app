@@ -29,13 +29,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
         @Override
         public Employee mapRow(ResultSet rs, int i) throws SQLException {
             Employee employee = new Employee();
-            employee.setId(rs.getLong("ID"));
-            employee.setDepartmentId(rs.getLong("DEPARTMENT_ID"));
-            employee.setSurname(rs.getString("SURNAME"));
-            employee.setName(rs.getString("NAME"));
-            employee.setPatronymic(rs.getString("PATRONYMIC"));
-            employee.setDateOfBirthday(new LocalDateTime(rs.getTimestamp("DATE_OF_BIRTHDAY")));
-            employee.setSalary(rs.getLong("SALARY"));
+            employee.setId(rs.getLong("EMPLOYEE_ID"));
+            employee.setDepartmentId(rs.getLong("EMPLOYEE_DEPARTMENT_ID"));
+            employee.setSurname(rs.getString("EMPLOYEE_SURNAME"));
+            employee.setName(rs.getString("EMPLOYEE_NAME"));
+            employee.setPatronymic(rs.getString("EMPLOYEE_PATRONYMIC"));
+            employee.setDateOfBirthday(new LocalDateTime(rs.getTimestamp("EMPLOYEE_DATE_OF_BIRTHDAY")));
+            employee.setSalary(rs.getLong("EMPLOYEE_SALARY"));
             return employee;
         }
     }
@@ -43,7 +43,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     @Override
     public long addEmployee(Employee employee) {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(employee);
-        String sql = "INSERT INTO employees ( DEPARTMENT_ID, SURNAME, NAME, PATRONYMIC, DATE_OF_BIRTHDAY, SALARY ) VALUES ( :department_id, :surname, :name, :patronymic, :date_of_birthday, :salary )";
+        String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :department_id, :surname, :name, :patronymic, :date_of_birthday, :salary )";
         namedParameterJdbcTemplate.update( sql, parameterSource, keyHolder);
 
         return keyHolder.getKey().longValue();
@@ -53,7 +53,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public void removeEmployee(long id) {
         Map<String, Object> parameters = new HashMap(1);
         parameters.put("id", id);
-        String sql = "DELETE FROM employees  WHERE ID = :id";
+        String sql = "DELETE FROM employees  WHERE EMPLOYEE_ID = :id";
         namedParameterJdbcTemplate.update( sql, parameters);
     }
 
@@ -69,7 +69,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         parameters.put("date_of_birthday", employee.getDateOfBirthday());
         parameters.put("salary",        employee.getSalary());
 
-        String sql = "UPDATE employees SET DEPARTMENT_ID = :department_id, SURNAME = :surname, NAME = :name, PATRONYMIC = :patronymic, DATE_OF_BIRTHDAY = :date_of_birthday, SALARY = :salary WHERE ID = :id";
+        String sql = "UPDATE employees SET EMPLOYEE_DEPARTMENT_ID = :department_id, EMPLOYEE_SURNAME = :surname, EMPLOYEE_NAME = :name, EMPLOYEE_PATRONYMIC = :patronymic, EMPLOYEE_DATE_OF_BIRTHDAY = :date_of_birthday, EMPLOYEE_SALARY = :salary WHERE EMPLOYEE_ID = :id";
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
@@ -83,7 +83,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
     public Employee getEmployeeById(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
-        String sql = "SELECT * FROM employees WHERE ID = :id";
+        String sql = "SELECT * FROM employees WHERE EMPLOYEE_ID = :id";
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EmployeeMapper());
+    }
+
+    @Override
+    public List<Employee> getEmployeesByDepartmentId(long id){
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put("id", id);
+        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DEPARTMENT_ID = :id";
+        return namedParameterJdbcTemplate.query(sql, parameters, new EmployeeMapper());
     }
 }

@@ -2,18 +2,31 @@ package com.ar0ne.model;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Department implements Serializable{
 
-    private long        id;
-    private String      name;
+    private long            id;
+    private String          name;
+    private List<Employee>  employees;
 
     public Department(){
+        this.id = 0;
+        this.name = "";
+        this.employees = new ArrayList<Employee>();
     }
 
     public Department(String name, long id) {
         this.name = name;
         this.id = id;
+        this.employees = new ArrayList<Employee>();
+    }
+
+    public Department(long id, String name, List<Employee> employees) {
+        this.id = id;
+        this.name = name;
+        this.employees = employees;
     }
 
     public long getId() {
@@ -32,6 +45,21 @@ public class Department implements Serializable{
         this.name = name;
     }
 
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public void addEmployee(Employee employee) {
+        if (this.employees == null) {
+            this.employees = new ArrayList<>();
+        }
+        this.employees.add(employee);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -40,7 +68,17 @@ public class Department implements Serializable{
         Department that = (Department) o;
 
         if (id != that.id) return false;
-        return name.equals(that.name);
+        if (!name.equals(that.name)) return false;
+        return !(employees != null ? !employees.equals(that.employees) : that.employees != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (id ^ (id >>> 32));
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (employees != null ? employees.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -48,6 +86,7 @@ public class Department implements Serializable{
         return "Department{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", employees=" + employees +
                 '}';
     }
 }
