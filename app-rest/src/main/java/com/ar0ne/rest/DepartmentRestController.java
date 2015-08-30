@@ -55,8 +55,10 @@ public class DepartmentRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_CREATE, method = RequestMethod.POST)
-    public ResponseEntity addDepartment(@RequestBody Department department) {
-        LOGGER.debug("add department({})", department);
+    public ResponseEntity addDepartment(@RequestParam String  name) {
+        LOGGER.debug("add department with name = {}", name);
+        Department department = new Department();
+        department.setName(name);
         try {
             long id = departmentService.addDepartment(department);
             return new ResponseEntity(id, HttpStatus.CREATED);
@@ -81,8 +83,14 @@ public class DepartmentRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE, method = RequestMethod.POST)
-    public ResponseEntity updateDepartment(@RequestBody Department department) {
-        LOGGER.debug("update department({})", department);
+    public ResponseEntity updateDepartment(@RequestParam String  name,
+                                           @RequestParam long    id) {
+
+        LOGGER.debug("update department id = {}, name = {}", id, name);
+
+        Department department = new Department();
+        department.setName(name);
+        department.setId(id);
 
         try {
             departmentService.updateDepartment(department);

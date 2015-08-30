@@ -52,7 +52,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
             if (rs.getString("EMPLOYEE_NAME") != null       ||
                     rs.getLong("EMPLOYEE_ID") != 0          ||
-                    rs.getLong("EMPLOYEE_DEPARTMENT_ID") != 0) {
+                    rs.getLong("EMPLOYEE_DEPARTMENT_ID") == 0) {
 
                 Employee employee = new Employee();
                 employee.setId(rs.getLong("EMPLOYEE_ID"));

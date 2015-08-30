@@ -24,7 +24,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     public long addDepartment(Department department) {
-        Assert.isNull(department.getId(), "Department ID must to be NULL");
         Assert.notNull(department.getName(), "Department NAME can't ne NULL");
 
         Department existDepartment = departmentDao.getDepartmentByName(department.getName());

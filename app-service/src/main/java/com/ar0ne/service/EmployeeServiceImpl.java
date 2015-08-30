@@ -21,7 +21,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     public long addEmployee(Employee employee) {
-        Assert.isNull(employee.getId(), "Employee ID must to be NULL");
         Assert.notNull(employee.getName(), "Employee NAME can't be NULL");
         Assert.notNull(employee.getSalary(), "Employee SALARY can't be NULL");
         Assert.notNull(employee.getSurname(), "Employee SURNAME can't be NULL");

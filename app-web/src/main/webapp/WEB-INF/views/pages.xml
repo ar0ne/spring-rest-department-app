@@ -91,6 +91,15 @@
         <put-attribute name="title" value="Find Job | Freelance Platform"/>
     </definition>     -->
 
+    <definition name="web/department/all" extends="web">
+        <put-attribute name="content" value="fragment/web/department/all"/>
+    </definition>
+
+    <definition name="web/department/add" extends="web">
+        <put-attribute name="content" value="fragment/web/department/add"/>
+    </definition>
+
+
     <definition name="web/department/details" extends="web">
         <put-attribute name="content" value="fragment/web/department/details"/>
     </definition>
