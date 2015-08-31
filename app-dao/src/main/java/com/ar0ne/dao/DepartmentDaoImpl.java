@@ -3,7 +3,8 @@ package com.ar0ne.dao;
 import com.ar0ne.model.Department;
 
 import java.sql.Array;
-import org.joda.time.LocalDateTime;
+
+import org.joda.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +53,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
             if (rs.getString("EMPLOYEE_NAME") != null       ||
                     rs.getLong("EMPLOYEE_ID") != 0          ||
-                    rs.getLong("EMPLOYEE_DEPARTMENT_ID") == 0) {
+                    rs.getLong("EMPLOYEE_DEPARTMENT_ID") != 0) {
 
                 Employee employee = new Employee();
                 employee.setId(rs.getLong("EMPLOYEE_ID"));
@@ -60,7 +61,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 employee.setName(rs.getString("EMPLOYEE_NAME"));
                 employee.setSurname(rs.getString("EMPLOYEE_SURNAME"));
                 employee.setPatronymic(rs.getString("EMPLOYEE_PATRONYMIC"));
-                employee.setDateOfBirthday(new LocalDateTime(rs.getDate("EMPLOYEE_DATE_OF_BIRTHDAY")));
+                employee.setDateOfBirthday(new LocalDate(rs.getDate("EMPLOYEE_DATE_OF_BIRTHDAY")));
                 employee.setSalary(rs.getLong("EMPLOYEE_SALARY"));
 
                 this.department.addEmployee(employee);
@@ -79,7 +80,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
 
-    @Override
     public long addDepartment(Department department) {
 
         SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("name", department.getName());
@@ -89,7 +89,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return keyHolder.getKey().longValue();
     }
 
-    @Override
     public void removeDepartment(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
@@ -97,7 +96,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
-    @Override
     public void updateDepartment(Department department) {
         Map<String, Object> parameters = new HashMap<>(2);
 
@@ -108,7 +106,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
-    @Override
     public List<Department> getAllDepartments() {
         String sql = "SELECT departments.*, employees.* FROM departments LEFT JOIN employees ON departments.DEPARTMENT_ID = employees.EMPLOYEE_DEPARTMENT_ID";
         DepartmentMapper mapper = new DepartmentMapper();
@@ -117,7 +114,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return mapper.getAllDepartments();
     }
 
-    @Override
     public Department getDepartmentById(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
@@ -127,7 +123,6 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return mapper.getDepartment();
     }
 
-    @Override
     public Department getDepartmentByName(String name) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("name", name);

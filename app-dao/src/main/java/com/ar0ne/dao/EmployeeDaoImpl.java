@@ -5,12 +5,15 @@ import com.ar0ne.model.Employee;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -34,7 +37,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
             employee.setSurname(rs.getString("EMPLOYEE_SURNAME"));
             employee.setName(rs.getString("EMPLOYEE_NAME"));
             employee.setPatronymic(rs.getString("EMPLOYEE_PATRONYMIC"));
-            employee.setDateOfBirthday(new LocalDateTime(rs.getTimestamp("EMPLOYEE_DATE_OF_BIRTHDAY")));
+            employee.setDateOfBirthday(new LocalDate(rs.getTimestamp("EMPLOYEE_DATE_OF_BIRTHDAY")));
             employee.setSalary(rs.getLong("EMPLOYEE_SALARY"));
             return employee;
         }
@@ -42,9 +45,17 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     @Override
     public long addEmployee(Employee employee) {
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(employee);
-        String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :department_id, :surname, :name, :patronymic, :date_of_birthday, :salary )";
-        namedParameterJdbcTemplate.update( sql, parameterSource, keyHolder);
+        String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :departmentId, :surname, :name, :patronymic, :dateOfBirthday, :salary )";
+
+        MapSqlParameterSource parameterSource= new MapSqlParameterSource();
+        parameterSource.addValue("departmentId", employee.getDepartmentId());
+        parameterSource.addValue("surname", employee.getSurname());
+        parameterSource.addValue("name", employee.getName());
+        parameterSource.addValue("patronymic", employee.getPatronymic());
+        parameterSource.addValue("salary", employee.getSalary());
+        parameterSource.addValue("dateOfBirthday", employee.getDateOfBirthday().toString());
+
+        namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
 
         return keyHolder.getKey().longValue();
     }
@@ -66,7 +77,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         parameters.put("surname",       employee.getSurname());
         parameters.put("name",          employee.getName());
         parameters.put("patronymic",    employee.getPatronymic());
-        parameters.put("date_of_birthday", employee.getDateOfBirthday());
+        parameters.put("date_of_birthday", employee.getDateOfBirthday().toString());
         parameters.put("salary",        employee.getSalary());
 
         String sql = "UPDATE employees SET EMPLOYEE_DEPARTMENT_ID = :department_id, EMPLOYEE_SURNAME = :surname, EMPLOYEE_NAME = :name, EMPLOYEE_PATRONYMIC = :patronymic, EMPLOYEE_DATE_OF_BIRTHDAY = :date_of_birthday, EMPLOYEE_SALARY = :salary WHERE EMPLOYEE_ID = :id";

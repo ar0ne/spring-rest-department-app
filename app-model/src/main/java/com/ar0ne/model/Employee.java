@@ -1,5 +1,6 @@
 package com.ar0ne.model;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
@@ -15,15 +16,15 @@ public class Employee implements Serializable{
     private String          patronymic;
     private long            salary;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-    private LocalDateTime   date_of_birthday;
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate date_of_birthday;
 
     public Employee(){
     }
 
     public Employee(long id, long department_id, String surname, String name,
-                    String patronymic, LocalDateTime date_of_birthday, long salary) {
+                    String patronymic, LocalDate date_of_birthday, long salary) {
         this.id = id;
         this.department_id = department_id;
         this.surname = surname;
@@ -73,11 +74,11 @@ public class Employee implements Serializable{
         this.patronymic = patronymic;
     }
 
-    public LocalDateTime getDateOfBirthday() {
+    public LocalDate getDateOfBirthday() {
         return date_of_birthday;
     }
 
-    public void setDateOfBirthday(LocalDateTime date_of_birthday) {
+    public void setDateOfBirthday(LocalDate date_of_birthday) {
         this.date_of_birthday = date_of_birthday;
     }
 

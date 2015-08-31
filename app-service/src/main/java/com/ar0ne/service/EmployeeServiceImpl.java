@@ -42,6 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             LOGGER.error("Can't remove employee with ID = {}, because he doesn't exist.", id);
             throw new IllegalArgumentException("Employee with this ID doesn't exist");
         }
+
+        employeeDao.removeEmployee(id);
     }
 
     public void updateEmployee(Employee employee) {

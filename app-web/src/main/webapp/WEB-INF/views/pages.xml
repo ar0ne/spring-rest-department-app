@@ -104,6 +104,39 @@
         <put-attribute name="content" value="fragment/web/department/details"/>
     </definition>
 
+    <definition name="web/department/update" extends="web">
+        <put-attribute name="content" value="fragment/web/department/update"/>
+    </definition>
+
+
+    <definition name="web/employee/add" extends="web">
+        <put-attribute name="content" value="fragment/web/employee/add"/>
+        <put-list-attribute name="scripts" inherit="true">
+            <add-attribute value="/resources/js/bootstrap.min.js"/>
+            <add-attribute value="/resources/js/bootstrap-datetimepicker.min.js"/>
+            <add-attribute value="/resources/js/employee/add_employee.js"/>
+        </put-list-attribute>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/resources/css/bootstrap-datetimepicker.min.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="web/employee/update" extends="web">
+        <put-attribute name="content" value="fragment/web/employee/update"/>
+        <put-list-attribute name="scripts" inherit="true">
+            <add-attribute value="/resources/js/bootstrap.min.js"/>
+            <add-attribute value="/resources/js/bootstrap-datetimepicker.min.js"/>
+            <add-attribute value="/resources/js/employee/update_employee.js"/>
+        </put-list-attribute>
+        <put-list-attribute name="stylesheets" inherit="true">
+            <add-attribute value="/resources/css/bootstrap-datetimepicker.min.css"/>
+        </put-list-attribute>
+    </definition>
+
+    <definition name="web/employee/details" extends="web">
+        <put-attribute name="content" value="fragment/web/employee/details"/>
+    </definition>
+
 
     <definition name="web/error/404" extends="web">
         <put-attribute name="content" value="fragment/web/error/404"/>

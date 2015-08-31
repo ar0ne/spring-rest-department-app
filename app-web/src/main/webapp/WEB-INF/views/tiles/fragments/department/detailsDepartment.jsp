@@ -10,8 +10,16 @@
             <div class="error">${error}</div>
         </c:if>
 
+        <c:if test="${not empty message}">
+            <div class="message">${message}</div>
+        </c:if>
+
         <div class="col-md-8">
             <h3>Department Page | ${department.name}</h3>
+
+            <a href="<spring:url value='/department' ></spring:url>" class="btn btn-default">Back</a>
+
+            <a href="<spring:url value='/employee/create' ></spring:url>" class="btn btn-default">Add employee</a>
 
             <c:if test="${not empty department.employees}">
                 <table class="table table-bordered table-striped table-hover">
@@ -21,6 +29,8 @@
                         <th>Patronymic</th>
                         <th>Date of Birthday</th>
                         <th>Salary</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
 
                     <c:forEach items="${department.employees}" var="employee">
@@ -30,6 +40,8 @@
                             <td>${employee.patronymic}</td>
                             <td>${employee.dateOfBirthday}</td>
                             <td>${employee.salary}</td>
+                            <td><a href="<spring:url value='/employee/update/${employee.id}' ></spring:url>" class="btn btn-default">Edit</a></td>
+                            <td><a href="<spring:url value='/employee/delete/${employee.id}' ></spring:url>" class="btn btn-default">Delete</a></td>
                         </tr>
                     </c:forEach>
 

@@ -3,6 +3,7 @@ package com.ar0ne.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Department implements Serializable{
@@ -89,4 +90,11 @@ public class Department implements Serializable{
                 ", employees=" + employees +
                 '}';
     }
+
+    public class SortByDepartmentName implements Comparator<Department> {
+        public int compare(Department d1, Department d2) {
+            return d1.getName().compareTo(d2.getName());
+        }
+    }
+
 }

@@ -70,7 +70,7 @@ public class DepartmentRestController {
 
 
     @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_DELETE, method = RequestMethod.DELETE)
-    public ResponseEntity removeDepartment(@PathVariable Long id) {
+    public ResponseEntity removeDepartment(@PathVariable("id") Long id) {
         LOGGER.debug("remove department by id ({})", id);
 
         try {
@@ -83,21 +83,21 @@ public class DepartmentRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE, method = RequestMethod.POST)
-    public ResponseEntity updateDepartment(@RequestParam String  name,
-                                           @RequestParam long    id) {
+    public ResponseEntity updateDepartment(@RequestParam("name") String  name,
+                                           @RequestParam("id")   String  id) {
 
         LOGGER.debug("update department id = {}, name = {}", id, name);
 
         Department department = new Department();
         department.setName(name);
-        department.setId(id);
+        department.setId(new Long(id));
 
         try {
             departmentService.updateDepartment(department);
             return new ResponseEntity("", HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity("Check input data!", HttpStatus.BAD_REQUEST);
         }
     }
 

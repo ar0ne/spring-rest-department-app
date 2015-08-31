@@ -4,6 +4,7 @@ import com.ar0ne.model.Employee;
 import com.ar0ne.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,12 +43,12 @@ public class EmployeeRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
-    public ResponseEntity addEmployee(@RequestParam String  name,
-                                      @RequestParam String  surname,
-                                      @RequestParam String  patronymic,
-                                      @RequestParam long    salary,
-                                      @RequestParam long    department_id,
-                                      @RequestParam @DateTimeFormat Date date_of_birthday ){
+    public ResponseEntity addEmployee(@RequestParam("name")             String   name,
+                                      @RequestParam("surname")          String   surname,
+                                      @RequestParam("patronymic")       String   patronymic,
+                                      @RequestParam("department_id")    Long   department_id,
+                                      @RequestParam("salary")           Long   salary,
+                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday) {
 
         LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday );
@@ -56,7 +57,7 @@ public class EmployeeRestController {
         employee.setSurname(surname);
         employee.setPatronymic(patronymic);
         employee.setSalary(salary);
-        employee.setDateOfBirthday(new LocalDateTime(date_of_birthday));
+        employee.setDateOfBirthday(date_of_birthday);
         employee.setDepartmentId(department_id);
 
         try {
@@ -82,23 +83,24 @@ public class EmployeeRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
-    public ResponseEntity updateDepartment( @RequestParam long id,
+    public ResponseEntity updateEmployee(   @RequestParam Long id,
                                             @RequestParam String  name,
                                             @RequestParam String  surname,
                                             @RequestParam String  patronymic,
-                                            @RequestParam long    salary,
-                                            @RequestParam long    department_id,
-                                            @RequestParam @DateTimeFormat Date date_of_birthday ){
+                                            @RequestParam Long    salary,
+                                            @RequestParam Long    department_id,
+                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday ){
 
         LOGGER.debug("update employee to name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday );
+
         Employee employee = new Employee();
         employee.setId(id);
         employee.setName(name);
         employee.setSurname(surname);
         employee.setPatronymic(patronymic);
         employee.setSalary(salary);
-        employee.setDateOfBirthday(new LocalDateTime(date_of_birthday));
+        employee.setDateOfBirthday(date_of_birthday);
         employee.setDepartmentId(department_id);
 
         try {

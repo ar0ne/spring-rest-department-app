@@ -2,8 +2,6 @@ package com.ar0ne.web;
 
 import com.ar0ne.model.Department;
 import com.ar0ne.model.Employee;
-import com.sun.org.apache.xpath.internal.operations.Mod;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -18,10 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -49,17 +44,23 @@ public class DepartmentWebController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            Map<Department, Float> departmentMap = new HashMap<>();
+            Map<Long, Float> department_avg_salary_map = new HashMap<>();
 
             Department[] departments = restTemplate.getForObject(URL, Department[].class);
+            List<Department> departmentList = Arrays.asList(departments);
+
             Float avg_salary = 0.0f;
 
-            for(Department dep: departments) {
+            Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
+            Collections.sort(departmentList, sn);
+
+            for(Department dep: departmentList) {
                 avg_salary = calcAverageSalary(dep);
-                departmentMap.put(dep, avg_salary);
+                department_avg_salary_map.put(dep.getId(), avg_salary);
             }
 
-            view.addObject("departmentMap", departmentMap);
+            view.addObject("department_avg_salary_map", department_avg_salary_map);
+            view.addObject("departmentList", departmentList);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             view.addObject("error", "Database doesn't consist any departments yet.");
@@ -122,17 +123,76 @@ public class DepartmentWebController {
             MultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
             request.add("name", name);
 
-            restTemplate.postForObject("http://localhost:8080/rest/department/create", request, String.class);
+            restTemplate.postForObject(URL + "/create", request, String.class);
+            redirectAttributes.addFlashAttribute( "message", "New department added.");
             return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
 
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            redirectAttributes.addFlashAttribute( "error", "Check input data!");
+            redirectAttributes.addFlashAttribute( "error", "Can't add department! Check input data!");
             return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_CREATE);
         }
 
     }
 
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_DELETE, method = RequestMethod.GET)
+    public ModelAndView deleteDepartmentById(RedirectAttributes redirectAttributes,
+                                             @PathVariable long id) {
 
+        ModelAndView view = new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            restTemplate.delete(URL + "/delete/" + id);
+            redirectAttributes.addFlashAttribute( "message", "Department removed");
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            redirectAttributes.addFlashAttribute( "error", "Can't remove department with ID = " + id);
+        }
 
+        return view;
+    }
+
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE_PAGE, method = RequestMethod.GET)
+    public ModelAndView updateDepartmentByIdForm(RedirectAttributes redirectAttributes,
+                                                 @PathVariable long id) {
+
+        ModelAndView view = null;
+        RestTemplate restTemplate = new RestTemplate();
+        Department department = null;
+        try {
+            department = restTemplate.getForObject(URL + "/id/" + id, Department.class);
+            view = new ModelAndView("web/department/update");
+            view.addObject("department", department);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            view = new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+            view.addObject("error", "Can't get update page for this department! Check input data");
+        }
+
+        return view;
+    }
+
+    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE, method = RequestMethod.POST)
+    public ModelAndView updateDepartmentById(RedirectAttributes redirectAttributes,
+                                             @RequestParam("name") String   name,
+                                             @RequestParam("id")   String   id) {
+
+        ModelAndView view = null;
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+
+            MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
+            request.add("name", name);
+            request.add("id", id);
+
+            restTemplate.postForObject(URL + "/update", request, String.class);
+            redirectAttributes.addFlashAttribute("message", "Department updated.");
+            return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            redirectAttributes.addFlashAttribute( "error", "Can't update department! Check input data!");
+            return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_UPDATE_PAGE);
+        }
+
+    }
 }

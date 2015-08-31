@@ -8,6 +8,11 @@
     <definition name="fragment/web/department/details" template="/WEB-INF/views/tiles/fragments/department/detailsDepartment.jsp"/>
     <definition name="fragment/web/department/all" template="/WEB-INF/views/tiles/fragments/department/allDepartment.jsp"/>
     <definition name="fragment/web/department/add" template="/WEB-INF/views/tiles/fragments/department/addDepartment.jsp"/>
+    <definition name="fragment/web/department/update" template="/WEB-INF/views/tiles/fragments/department/updateDepartment.jsp"/>
+
+    <definition name="fragment/web/employee/details" template="/WEB-INF/views/tiles/fragments/employee/detailsEmployee.jsp"/>
+    <definition name="fragment/web/employee/add" template="/WEB-INF/views/tiles/fragments/employee/addEmployee.jsp"/>
+    <definition name="fragment/web/employee/update" template="/WEB-INF/views/tiles/fragments/employee/updateEmployee.jsp"/>
 
 
 </tiles-definitions>

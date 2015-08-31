@@ -10,21 +10,33 @@
             <div class="error">${error}</div>
         </c:if>
 
+        <c:if test="${not empty message}">
+            <div class="message">${message}</div>
+        </c:if>
+
         <div class="col-md-8">
             <h3>Departments</h3>
-            <c:if test="${not empty departmentMap}">
+            <c:if test="${not empty departmentList}">
                 <table class="table">
                     <tr>
                         <th>Department name</th>
                         <th>Average salary</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
-                    <c:forEach items="${departmentMap}" var="entry">
+                    <c:forEach items="${departmentList}" var="department">
                         <tr>
                             <td>
-                                <a href='<spring:url value="/department/id/${entry.key.id}"></spring:url>'>${entry.key.name}</a>
+                                <a href='<spring:url value="/department/id/${department.id}"></spring:url>'>${department.name}</a>
                             </td>
                             <td>
-                                ${entry.value}
+                                ${department_avg_salary_map[department.id]}
+                            </td>
+                            <td>
+                                <a href='<spring:url value="/department/update/${department.id}"></spring:url>' class="btn btn-default" id="update_department__button">Edit</a>
+                            </td>
+                            <td>
+                                <a href='<spring:url value="/department/delete/${department.id}"></spring:url>' class="btn btn-default" id="delete_department__button">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>
