@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import com.ar0ne.dao.DepartmentDao;
 import com.ar0ne.model.Department;
 import com.ar0ne.model.Employee;
-import org.joda.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -30,9 +30,9 @@ public class DepartmentDaoTest {
     private final static String DEPT_NAME = "Test dept.";
     private final static int DEPT_INIT_SIZE = 4;
 
-    private Department createAndAddToDataBaseDepartment(){
-        Department department = new Department();
-        department.setName(DEPT_NAME);
+    private Department createAndAddToDataBaseDepartment() {
+
+        Department department = new Department(DEPT_NAME, 1L);
 
         long id = departmentDao.addDepartment(department);
         department.setId(id);
@@ -44,10 +44,13 @@ public class DepartmentDaoTest {
     public void getAllDepartments() {
         List<Department> departments = departmentDao.getAllDepartments();
         assertEquals(DEPT_INIT_SIZE, departments.size());
+
+        departmentDao.removeDepartment(1L);
+        assertEquals(DEPT_INIT_SIZE - 1, departmentDao.getAllDepartments().size());
     }
 
     @Test
-    public void addDepartments() {
+    public void addDepartment() {
 
         int size_before = departmentDao.getAllDepartments().size();
 
@@ -93,10 +96,11 @@ public class DepartmentDaoTest {
         int size_after = departmentDao.getAllDepartments().size();
 
         assertEquals(size_before - 1, size_after);
-        try{
-            department = departmentDao.getDepartmentById(department.getId());
-            assertNull(department);
-        } catch (Exception ex) {}
+
+        department = departmentDao.getDepartmentById(department.getId());
+
+        assertNull(department);
+
     }
 
     @Test

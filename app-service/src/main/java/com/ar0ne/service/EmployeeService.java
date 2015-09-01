@@ -11,6 +11,5 @@ public interface EmployeeService {
     public void updateEmployee(Employee employee);
     public List<Employee> getAllEmployees();
     public Employee getEmployeeById(long id);
-    public List<Employee> getEmployeesByDepartmentId(long id);
 
 }

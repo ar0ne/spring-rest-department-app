@@ -96,7 +96,7 @@ public class EmployeeWebController {
 
             restTemplate.postForObject(URL + "/create", request, String.class);
             redirectAttributes.addFlashAttribute( "message", "New employee added.");
-            return new ModelAndView("redirect:" + SiteEndpointUrls.EMPLOYEE_CREATE);
+            return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
 
         } catch (Exception ex) {
             LOGGER.debug(ex);

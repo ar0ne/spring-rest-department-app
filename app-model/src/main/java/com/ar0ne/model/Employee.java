@@ -1,5 +1,7 @@
 package com.ar0ne.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 
@@ -10,12 +12,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 public class Employee implements Serializable{
 
     private long            id;
-    private long            department_id;
     private String          surname;
     private String          name;
     private String          patronymic;
     private long            salary;
 
+    private long            department_id;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate date_of_birthday;
@@ -46,6 +50,7 @@ public class Employee implements Serializable{
         return department_id;
     }
 
+    @JsonProperty("department_id")
     public void setDepartmentId(long department_id) {
         this.department_id = department_id;
     }
@@ -78,6 +83,7 @@ public class Employee implements Serializable{
         return date_of_birthday;
     }
 
+    @JsonProperty("date_of_birthday")
     public void setDateOfBirthday(LocalDate date_of_birthday) {
         this.date_of_birthday = date_of_birthday;
     }

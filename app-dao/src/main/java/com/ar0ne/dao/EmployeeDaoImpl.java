@@ -95,14 +95,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
         String sql = "SELECT * FROM employees WHERE EMPLOYEE_ID = :id";
-        return namedParameterJdbcTemplate.queryForObject(sql, parameters, new EmployeeMapper());
-    }
-
-    @Override
-    public List<Employee> getEmployeesByDepartmentId(long id){
-        Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("id", id);
-        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DEPARTMENT_ID = :id";
-        return namedParameterJdbcTemplate.query(sql, parameters, new EmployeeMapper());
+        EmployeeMapper mapper = new EmployeeMapper();
+        return namedParameterJdbcTemplate.queryForObject(sql, parameters, mapper);
     }
 }

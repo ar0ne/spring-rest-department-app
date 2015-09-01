@@ -3,7 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+       <import resource="classpath*:/Spring-Service.xml"/>
 
+       <bean id="departmentService" class="com.ar0ne.service.DepartmentServiceImpl">
+              <property name="departmentDao" ref="departmentDao"/>
+       </bean>
+
+       <bean id="employeeService" class="com.ar0ne.service.EmployeeServiceImpl">
+              <property name="employeeDao" ref="employeeDao"/>
+       </bean>
 
 
 </beans>   

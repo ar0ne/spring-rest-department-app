@@ -24,8 +24,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     public long addDepartment(Department department) {
-        Assert.notNull(department.getName(), "Department NAME can't ne NULL");
-
+        Assert.hasText(department.getName(), "Department NAME can't be NULL");
+        Assert.isTrue(department.getName().length() < 100, "Department NAME can't be more then 100 chars");
+        Assert.notNull(department.getEmployees(), "Department Employees can't be NULL");
         Department existDepartment = departmentDao.getDepartmentByName(department.getName());
         if (existDepartment != null) {
             LOGGER.error("Department with NAME = {} exists", department.getName());
@@ -43,6 +44,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department existDepartment = null;
         try{
             existDepartment = departmentDao.getDepartmentById(id);
+            Assert.notNull(existDepartment, "Can't remove not existed department");
         }catch (EmptyResultDataAccessException ex) {
             LOGGER.error("Can't remove department with ID = {}, because he doesn't exist.", id);
             throw new IllegalArgumentException("Department with this ID doesn't exist");
@@ -54,15 +56,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     public void updateDepartment(Department department) {
         Assert.notNull(department, "Department can't be NULL");
         Assert.notNull(department.getId(), "Department ID can't be NULL");
-        Assert.notNull(department.getName(), "Department NAME can't be NULL");
+        Assert.hasText(department.getName(), "Department NAME can't be NULL");
+        Assert.isTrue(department.getName().length() < 100, "Department NAME can't be more then 100 chars");
+        Assert.notNull(department.getEmployees(), "Department Employees can't be NULL");
 
         Department existDepartment = null;
-        try{
+        try {
             existDepartment = departmentDao.getDepartmentById(department.getId());
-        }catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Can't update department with ID = {}, because he doesn't exist.", department.getId());
-            throw new IllegalArgumentException("Department with this ID doesn't exist in DB");
+            Assert.notNull(existDepartment, "Can update not existed department. Or wrong ID!");
+        } catch (EmptyResultDataAccessException ex) {
+            LOGGER.error("Can't update employee with ID = {}, because he didn't exist!");
+            throw new IllegalArgumentException("Can't update employee what doesn't exist!");
         }
+
 
         departmentDao.updateDepartment(department);
 
@@ -89,7 +95,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     public Department getDepartmentByName(String name) {
-        Assert.notNull(name, "Department NAME can't be NULL");
+        Assert.hasText(name, "Department NAME can't be NULL");
+        Assert.isTrue(name.length() < 100, "Department NAME can't be more then 100 chars");
         Department department = null;
         try {
             department = departmentDao.getDepartmentByName(name);

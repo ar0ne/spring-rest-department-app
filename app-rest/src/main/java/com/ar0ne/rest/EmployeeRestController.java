@@ -43,12 +43,13 @@ public class EmployeeRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
-    public ResponseEntity addEmployee(@RequestParam("name")             String   name,
-                                      @RequestParam("surname")          String   surname,
-                                      @RequestParam("patronymic")       String   patronymic,
-                                      @RequestParam("department_id")    Long   department_id,
-                                      @RequestParam("salary")           Long   salary,
-                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday) {
+    public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long    id,
+                                      @RequestParam(value = "surname")          String      surname,
+                                      @RequestParam(value = "name")             String      name,
+                                      @RequestParam(value = "patronymic")       String      patronymic,
+                                      @RequestParam(value = "salary")           Long        salary,
+                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                      @RequestParam(value = "department_id")    Long        department_id ) {
 
         LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday );
@@ -61,8 +62,8 @@ public class EmployeeRestController {
         employee.setDepartmentId(department_id);
 
         try {
-            long id = employeeService.addEmployee(employee);
-            return new ResponseEntity(id, HttpStatus.CREATED);
+            long ret_id = employeeService.addEmployee(employee);
+            return new ResponseEntity(ret_id, HttpStatus.CREATED);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
@@ -84,12 +85,12 @@ public class EmployeeRestController {
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateEmployee(   @RequestParam Long id,
-                                            @RequestParam String  name,
                                             @RequestParam String  surname,
+                                            @RequestParam String  name,
                                             @RequestParam String  patronymic,
                                             @RequestParam Long    salary,
-                                            @RequestParam Long    department_id,
-                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday ){
+                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                            @RequestParam Long    department_id ){
 
         LOGGER.debug("update employee to name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday );
@@ -111,5 +112,20 @@ public class EmployeeRestController {
             return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
+//    public ResponseEntity addEmployee(@RequestBody Employee employee) {
+//
+//        LOGGER.debug("add employee {}", employee );
+//
+//        try {
+//            long ret_id = employeeService.addEmployee(employee);
+//            return new ResponseEntity(ret_id, HttpStatus.CREATED);
+//        } catch (Exception ex) {
+//            LOGGER.debug(ex);
+//            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
+//        }
+//
+//    }
 
 }

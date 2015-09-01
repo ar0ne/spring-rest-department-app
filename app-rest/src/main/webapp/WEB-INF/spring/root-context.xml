@@ -18,7 +18,7 @@
 
     <context:component-scan base-package="com.ar0ne.*"/>
 
-    <import resource="classpath:Spring-Service.xml"/>
+    <import resource="classpath*:/Spring-Service.xml"/>
 
     <bean id="departmentService" class="com.ar0ne.service.DepartmentServiceImpl">
         <property name="departmentDao" ref="departmentDao"/>
@@ -27,5 +27,6 @@
     <bean id="employeeService" class="com.ar0ne.service.EmployeeServiceImpl">
         <property name="employeeDao" ref="employeeDao"/>
     </bean>
+
 
 </beans>
