@@ -14,10 +14,10 @@
             <div class="message">${message}</div>
         </c:if>
 
-        <a href="<spring:url value='/department' ></spring:url>" class="btn btn-default">Back to All Departments</a>
-
         <div class="col-md-8">
             <h3>Employee details</h3>
+
+            <a href="<spring:url value='/department' ></spring:url>" class="btn btn-default">Back to All Departments</a>
 
             <c:if test="${not empty employee}">
                 <table class="table table-bordered table-striped table-hover">

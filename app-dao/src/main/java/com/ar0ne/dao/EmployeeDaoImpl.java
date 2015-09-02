@@ -98,4 +98,23 @@ public class EmployeeDaoImpl implements EmployeeDao {
         EmployeeMapper mapper = new EmployeeMapper();
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, mapper);
     }
+
+    @Override
+    public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
+        Map<String, Object> parametrs = new HashMap<>(1);
+        parametrs.put("date", date.toString());
+        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DATE_OF_BIRTHDAY = :date";
+        EmployeeMapper mapper = new EmployeeMapper();
+        return namedParameterJdbcTemplate.query(sql, parametrs, mapper);
+    }
+
+    @Override
+    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
+        Map<String, Object> parametrs = new HashMap<>(1);
+        parametrs.put("date_from", date_from.toString());
+        parametrs.put("date_to", date_to.toString());
+        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DATE_OF_BIRTHDAY BETWEEN :date_from AND :date_to";
+        EmployeeMapper mapper = new EmployeeMapper();
+        return namedParameterJdbcTemplate.query(sql, parametrs, mapper);
+    }
 }

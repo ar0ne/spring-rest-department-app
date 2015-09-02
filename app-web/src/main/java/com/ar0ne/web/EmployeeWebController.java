@@ -188,4 +188,61 @@ public class EmployeeWebController {
         return view;
     }
 
+
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_ALL, method = RequestMethod.GET)
+    public ModelAndView getAllEmployee() {
+
+        ModelAndView view = new ModelAndView("web/employee/all");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            Employee[] employees = restTemplate.getForObject(URL, Employee[].class);
+            view.addObject("employees", employees);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            view.addObject("error", "Database doesn't consist any employees yet.");
+        }
+
+        return view;
+    }
+
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_DATE, method = RequestMethod.GET)
+    public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
+                                          @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+
+        ModelAndView view = new ModelAndView("web/employee/all");
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            Employee[] employees = restTemplate.getForObject(URL + "/date/" + date.toString(), Employee[].class);
+            view.addObject("employees", employees);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            view.addObject("error", "Can't find employees for this date!");
+        }
+
+        return view;
+    }
+
+
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BETWEEN_DATES, method = RequestMethod.GET)
+    public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
+                                          @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+                                          @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
+
+        ModelAndView view = new ModelAndView("web/employee/all");
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+            Employee[] employees = restTemplate.getForObject(URL + "/date/" + from.toString() + "/" + to.toString(), Employee[].class);
+            view.addObject("employees", employees);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            view.addObject("error", "Can't find employees for this date!");
+        }
+
+        return view;
+    }
+
 }

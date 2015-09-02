@@ -25,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-import javax.activation.DataSource;
 import javax.annotation.Resource;
 
 import org.junit.After;
@@ -330,6 +329,72 @@ public class EmployeeRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void getEmployeesByDateOfBirthday() throws  Exception {
+
+        Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate("1972-02-09"), 4300l);
+        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
+
+        List<Employee> employeeList = new ArrayList<Employee>();
+        employeeList.add(employee);
+
+        employeeServiceMock.getEmployeeByDateOfBirthday(employee.getDateOfBirthday());
+        expectLastCall().andReturn(employeeList);
+        replay(employeeServiceMock);
+
+        this.mockMvc.perform(
+                get("/employee/date/" + employee.getDateOfBirthday().toString())
+                        .accept(MediaType.APPLICATION_JSON)
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string(mapper.writeValueAsString(employeeList)));
+
+
+    }
+
+    @Test
+    public void getEmployeesByDateOfBirthdayWithWrongDate() throws  Exception {
+
+        employeeServiceMock.getEmployeeByDateOfBirthday(new LocalDate("9999-09-09"));
+        expectLastCall().andThrow(new IllegalArgumentException("Employee can't be empty", null));
+
+        replay(employeeServiceMock);
+
+        this.mockMvc.perform(
+            get("/employee/date/"  + "9999-09-09" )
+                    .accept(MediaType.APPLICATION_JSON))
+            .andDo(print())
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string("\"Employee can't be empty\""));
+    }
+
+
+    @Test
+    public void getEmployeeBetweenDoB() throws Exception {
+
+        Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate("1972-02-09"), 4300l);
+        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
+
+        employeeServiceMock.getEmployeeBetweenDatesOfBirtday(new LocalDate("1972-02-09"), new LocalDate("1972-03-09"));
+
+        List<Employee> employeeList = new ArrayList<Employee>();
+        employeeList.add(employee);
+
+        expectLastCall().andReturn(employeeList);
+        replay(employeeServiceMock);
+
+        this.mockMvc.perform(
+            get("/employee/date/" + "1972-02-09" + "/" + "1972-03-09")
+                .accept(MediaType.APPLICATION_JSON)
+        )
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().string(mapper.writeValueAsString(employeeList)));
+
+    }
+
 
 
 }

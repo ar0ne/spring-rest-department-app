@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -359,8 +360,78 @@ public class EmployeeServiceTest {
     }
 
 
+    @Test
+    public void getEmployeeByDoBCorrect() {
+        List<Employee> employeeList = employeeService.getEmployeeByDateOfBirthday(new LocalDate("1990-04-05"));
+        assertNotNull(employeeList);
+        assertNotEquals(employeeList, new ArrayList<Employee>());
+        assertTrue(employeeList.size() > 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeByDoBIncorrect() {
+        List<Employee> employeeList = employeeService.getEmployeeByDateOfBirthday(new LocalDate("9999-04-05"));
+        assertNull(employeeList);
+        assertEquals(employeeList, new ArrayList<Employee>());
+        assertTrue(employeeList.size() == 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeByDoBIncorrectNull() {
+        List<Employee> employeeList = employeeService.getEmployeeByDateOfBirthday(null);
+        assertNull(employeeList);
+        assertEquals(employeeList, new ArrayList<Employee>());
+        assertTrue(employeeList.size() == 0);
+    }
 
 
+    @Test
+    public void getEmployeeBetweenTwoDatesCorrect() {
+        LocalDate start = new LocalDate("1995-01-01");
+        LocalDate end = new LocalDate("2005-01-01");
+        List<Employee> employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(start, end);
+
+        assertNotNull(employeeList);
+        assertNotEquals(employeeList, new ArrayList<Employee>());
+
+        for(Employee employee: employeeList) {
+            assertNotNull(employee.getDateOfBirthday());
+            assertTrue(start.isBefore(employee.getDateOfBirthday()));
+            assertTrue(end.isAfter(employee.getDateOfBirthday()));
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeBetweenTwoDatesWrongDatesNull1() {
+        LocalDate date = new LocalDate("1995-01-01");
+        List<Employee> employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(date, null);
+
+        assertNull(employeeList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeBetweenTwoDatesWrongDatesNull2() {
+        LocalDate date = new LocalDate("1995-01-01");
+        List<Employee> employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(null, date);
+
+        assertNull(employeeList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeBetweenTwoDatesWrongDatesNull3() {
+        List<Employee> employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(null, null);
+
+        assertNull(employeeList);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getEmployeeBetweenTwoDatesWrongDatesEndBeforeStart() {
+        LocalDate start = new LocalDate("1995-01-01");
+        LocalDate end = new LocalDate("2005-01-01");
+        List<Employee> employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(end, start);
+
+        assertNull(employeeList);
+    }
 
 
 }

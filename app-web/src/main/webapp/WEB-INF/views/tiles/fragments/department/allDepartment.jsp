@@ -16,6 +16,9 @@
 
         <div class="col-md-8">
             <h3>Departments</h3>
+
+            <a href="<spring:url value='/employee' ></spring:url>" class="btn btn-default">All employees</a>
+
             <c:if test="${not empty departmentList}">
                 <table class="table">
                     <tr>

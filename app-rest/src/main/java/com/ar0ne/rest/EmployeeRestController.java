@@ -44,7 +44,6 @@ public class EmployeeRestController {
     }
 
 
-
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeEmployee(@PathVariable Long id) {
         LOGGER.debug("remove employee by id ({})", id);
@@ -52,23 +51,23 @@ public class EmployeeRestController {
         try {
             employeeService.removeEmployee(id);
             return new ResponseEntity("Deleted", HttpStatus.OK);
-        }catch(Exception ex) {
+        } catch (Exception ex) {
             LOGGER.debug(ex);
             return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
-    public ResponseEntity updateEmployee(   @RequestParam Long id,
-                                            @RequestParam String  surname,
-                                            @RequestParam String  name,
-                                            @RequestParam String  patronymic,
-                                            @RequestParam Long    salary,
-                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
-                                            @RequestParam Long    department_id ){
+    public ResponseEntity updateEmployee(@RequestParam Long id,
+                                         @RequestParam String surname,
+                                         @RequestParam String name,
+                                         @RequestParam String patronymic,
+                                         @RequestParam Long salary,
+                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                         @RequestParam Long department_id) {
 
         LOGGER.debug("update employee to name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
-                name, surname, patronymic, salary, date_of_birthday );
+                name, surname, patronymic, salary, date_of_birthday);
 
         Employee employee = new Employee();
         employee.setId(id);
@@ -89,16 +88,16 @@ public class EmployeeRestController {
     }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
-    public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long    id,
-                                      @RequestParam(value = "surname")          String      surname,
-                                      @RequestParam(value = "name")             String      name,
-                                      @RequestParam(value = "patronymic")       String      patronymic,
-                                      @RequestParam(value = "salary")           Long        salary,
+    public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long id,
+                                      @RequestParam(value = "surname") String surname,
+                                      @RequestParam(value = "name") String name,
+                                      @RequestParam(value = "patronymic") String patronymic,
+                                      @RequestParam(value = "salary") Long salary,
                                       @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
-                                      @RequestParam(value = "department_id")    Long        department_id ) {
+                                      @RequestParam(value = "department_id") Long department_id) {
 
         LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
-                name, surname, patronymic, salary, date_of_birthday );
+                name, surname, patronymic, salary, date_of_birthday);
         Employee employee = new Employee();
         employee.setName(name);
         employee.setSurname(surname);
@@ -112,10 +111,42 @@ public class EmployeeRestController {
             return new ResponseEntity(ret_id, HttpStatus.CREATED);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_DATE, method = RequestMethod.GET)
+    public ResponseEntity getEmployeeByDateOfBirthday(
+            @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+
+        LOGGER.debug("get employees with date of birthday = {}", date.toString());
+
+        List<Employee> departmentList = null;
+        try {
+            departmentList = employeeService.getEmployeeByDateOfBirthday(date);
+            return new ResponseEntity(departmentList, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BETWEEN_DATES, method = RequestMethod.GET)
+    public ResponseEntity getEmployeeByDoBBetweenDates(
+            @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
+            @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
+
+        LOGGER.debug("get employees with date of birthday between {} and {}", from.toString(), to.toString());
+
+        List<Employee> departmentList = null;
+        try {
+            departmentList = employeeService.getEmployeeBetweenDatesOfBirtday(from, to);
+            return new ResponseEntity(departmentList, HttpStatus.OK);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
 
 }

@@ -5,6 +5,7 @@ import com.ar0ne.model.Department;
 import com.ar0ne.model.Employee;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.util.Assert;
@@ -99,4 +100,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
+        Assert.notNull(date, "Date of birthday can't be NULL");
+        List<Employee> employeeList = null;
+        try {
+            employeeList = employeeDao.getEmployeeByDateOfBirthday(date);
+            Assert.notNull(employeeList, "Employee can't be NULL");
+            Assert.notEmpty(employeeList, "Employee can't be empty");
+        } catch (EmptyResultDataAccessException ex) {
+            LOGGER.error("Employees with date = {} not exist", date.toString());
+            throw new IllegalArgumentException("Employee with this date doesn't exist!");
+        }
+
+        return employeeList;
+    }
+
+    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
+        Assert.notNull(date_from, "Date From cant be NULL");
+        Assert.notNull(date_to, "Date To cant be NULL");
+        Assert.isTrue(date_from.isBefore(date_to), "Date From can't be earlier then Date To");
+
+        List<Employee> employeeList = null;
+        try {
+            employeeList = employeeDao.getEmployeeBetweenDatesOfBirtday(date_from, date_to);
+            Assert.notNull(employeeList, "Employee can't be NULL");
+            Assert.notEmpty(employeeList, "Employee can't be empty");
+        } catch (EmptyResultDataAccessException ex) {
+            LOGGER.error("Employees between date_from = {} and date_to not exist", date_from.toString(), date_to.toString());
+            throw new IllegalArgumentException("Employee with this date doesn't exist!");
+        }
+
+        return employeeList;
+
+
+    }
 }

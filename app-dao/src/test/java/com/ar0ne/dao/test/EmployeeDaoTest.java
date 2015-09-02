@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -104,6 +105,89 @@ public class EmployeeDaoTest {
         Employee ret_employee = employeeDao.getEmployeeById(employee.getId());
 
         assertEquals(ret_employee.getName(), new_name);
+
+    }
+
+    @Test
+    public void getEmployeesByDateOfBirthday() {
+
+        LocalDate date_x = new LocalDate("2000-10-10");
+
+        List<Employee> employees = employeeDao.getEmployeeByDateOfBirthday(date_x);
+
+        assertEquals(employees, new ArrayList<Employee>());
+
+        Employee employee = new Employee(1L, 1L, "Surname", "Name", "Patronymic", date_x, 1000L);
+
+        Long id = employeeDao.addEmployee(employee);
+        assertNotNull(id);
+
+        employees = employeeDao.getEmployeeByDateOfBirthday(date_x);
+        assertNotNull(employees);
+        assertNotEquals(employees, new ArrayList<Employee>());
+        assertEquals(employees.size(), 1);
+
+        assertEquals(employees.get(0).getDateOfBirthday(), date_x);
+    }
+
+    @Test
+    public void getEmployeesByDateOfBirthdayFewRow() {
+
+        LocalDate date_x = new LocalDate("2000-10-10");
+
+        int size = 5;
+
+        List<Employee> employees = employeeDao.getEmployeeByDateOfBirthday(date_x);
+        assertNotNull(employees);
+        assertEquals(employees, new ArrayList<Employee>());
+
+        for(int i = 0; i < size; i++) {
+            Employee employee = new Employee(1L, 1L, "Surname", "Name", "Patronymic", date_x, 1000L);
+            Long id = employeeDao.addEmployee(employee);
+            assertNotNull(id);
+        }
+
+        employees = employeeDao.getEmployeeByDateOfBirthday(date_x);
+        assertNotNull(employees);
+        assertNotEquals(employees, new ArrayList<Employee>());
+        assertEquals(employees.size(), size);
+
+        for(int i = 0; i< size; i++) {
+            assertEquals(employees.get(i).getDateOfBirthday(), date_x);
+        }
+    }
+
+    @Test
+    public void getEmployeeBetweenDatesOfBirthday() {
+
+        LocalDate start = new LocalDate("1980-01-01");
+        LocalDate end = new LocalDate("1992-01-01");
+
+        int size = 9;
+
+        List<Employee> employees = employeeDao.getEmployeeBetweenDatesOfBirtday(start, end);
+        assertNotNull(employees);
+        assertNotEquals(employees, new ArrayList<Employee>());
+        assertEquals(size, employees.size());
+
+        for(Employee empl: employees) {
+            assertTrue(start.isBefore(empl.getDateOfBirthday()));
+            assertTrue(end.isAfter(empl.getDateOfBirthday()));
+        }
+
+        Employee employee = new Employee(1L, 1L, "Surname", "Name", "Patronymic", new LocalDate("1985-01-01"), 1000L);
+        Long id = employeeDao.addEmployee(employee);
+        assertNotNull(id);
+
+        employees = employeeDao.getEmployeeBetweenDatesOfBirtday(start, end);
+        assertNotNull(employees);
+        assertNotEquals(employees, new ArrayList<Employee>());
+        assertEquals(size + 1, employees.size());
+
+        for(Employee empl: employees) {
+            assertTrue(start.isBefore(empl.getDateOfBirthday()));
+            assertTrue(end.isAfter(empl.getDateOfBirthday()));
+        }
 
     }
 
