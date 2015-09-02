@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class EmployeeRestController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentRestController.class);
 
-    @Autowired
+    @Resource
     EmployeeService employeeService;
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_ALL, method = RequestMethod.GET)
@@ -42,33 +43,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
-    public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long    id,
-                                      @RequestParam(value = "surname")          String      surname,
-                                      @RequestParam(value = "name")             String      name,
-                                      @RequestParam(value = "patronymic")       String      patronymic,
-                                      @RequestParam(value = "salary")           Long        salary,
-                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
-                                      @RequestParam(value = "department_id")    Long        department_id ) {
 
-        LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
-                name, surname, patronymic, salary, date_of_birthday );
-        Employee employee = new Employee();
-        employee.setName(name);
-        employee.setSurname(surname);
-        employee.setPatronymic(patronymic);
-        employee.setSalary(salary);
-        employee.setDateOfBirthday(date_of_birthday);
-        employee.setDepartmentId(department_id);
-
-        try {
-            long ret_id = employeeService.addEmployee(employee);
-            return new ResponseEntity(ret_id, HttpStatus.CREATED);
-        } catch (Exception ex) {
-            LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeEmployee(@PathVariable Long id) {
@@ -76,7 +51,7 @@ public class EmployeeRestController {
 
         try {
             employeeService.removeEmployee(id);
-            return new ResponseEntity("", HttpStatus.OK);
+            return new ResponseEntity("Deleted", HttpStatus.OK);
         }catch(Exception ex) {
             LOGGER.debug(ex);
             return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
@@ -113,19 +88,34 @@ public class EmployeeRestController {
         }
     }
 
-//    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
-//    public ResponseEntity addEmployee(@RequestBody Employee employee) {
-//
-//        LOGGER.debug("add employee {}", employee );
-//
-//        try {
-//            long ret_id = employeeService.addEmployee(employee);
-//            return new ResponseEntity(ret_id, HttpStatus.CREATED);
-//        } catch (Exception ex) {
-//            LOGGER.debug(ex);
-//            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
-//        }
-//
-//    }
+    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
+    public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long    id,
+                                      @RequestParam(value = "surname")          String      surname,
+                                      @RequestParam(value = "name")             String      name,
+                                      @RequestParam(value = "patronymic")       String      patronymic,
+                                      @RequestParam(value = "salary")           Long        salary,
+                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                      @RequestParam(value = "department_id")    Long        department_id ) {
+
+        LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
+                name, surname, patronymic, salary, date_of_birthday );
+        Employee employee = new Employee();
+        employee.setName(name);
+        employee.setSurname(surname);
+        employee.setPatronymic(patronymic);
+        employee.setSalary(salary);
+        employee.setDateOfBirthday(date_of_birthday);
+        employee.setDepartmentId(department_id);
+
+        try {
+            long ret_id = employeeService.addEmployee(employee);
+            return new ResponseEntity(ret_id, HttpStatus.CREATED);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
 
 }

@@ -21,18 +21,6 @@
             <groupId>com.ar0ne</groupId>
             <artifactId>model</artifactId>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.ar0ne</groupId>-->
-            <!--<artifactId>dao</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.ar0ne</groupId>-->
-            <!--<artifactId>service</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.ar0ne</groupId>-->
-            <!--<artifactId>rest</artifactId>-->
-        <!--</dependency>-->
 
          <!-- Spring dependencies -->
         <dependency>

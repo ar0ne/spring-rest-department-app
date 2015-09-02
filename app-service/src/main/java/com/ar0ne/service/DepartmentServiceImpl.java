@@ -87,6 +87,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = null;
         try {
             department = departmentDao.getDepartmentById(id);
+            Assert.notNull(department, "Department can't be NULL");
+            Assert.hasText(department.getName(), "Department can't be without NAME");
         } catch (EmptyResultDataAccessException ex) {
             LOGGER.error("Department with ID = '{}' doesn't exist", id);
             throw new IllegalArgumentException("Department with this ID doesn't exist");
@@ -100,6 +102,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = null;
         try {
             department = departmentDao.getDepartmentByName(name);
+            Assert.notNull(department, "Department can't be NULL");
+            Assert.hasText(department.getName(), "Department can't be without NAME");
         } catch (EmptyResultDataAccessException ex) {
             LOGGER.error("Department with NAME = '{}' doesn't exist", name);
             throw new IllegalArgumentException("Department with this NAME doesn't exist");

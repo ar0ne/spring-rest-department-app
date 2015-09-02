@@ -47,19 +47,19 @@ public class DepartmentServiceTest {
         assertEquals(DEPT_INIT_SIZE, departments.size());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalNegativeId() {
         Department department = departmentService.getDepartmentById(-2L);
         assertNull(department);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalPositiveId() {
         Department department = departmentService.getDepartmentById(20000000L);
         assertNull(department);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalZeroId() {
         Department department = departmentService.getDepartmentById(0L);
         assertNull(department);
