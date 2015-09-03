@@ -11,9 +11,9 @@
     <modules>
         <module>app-model</module>
         <module>app-dao</module>
-        <module>app-web</module>
         <module>app-service</module>
         <module>app-rest</module>
+        <module>app-web</module>
     </modules>
 
     <properties>

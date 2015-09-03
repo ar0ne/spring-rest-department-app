@@ -38,6 +38,7 @@ public class DepartmentServiceTest {
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    private final String DEPT_FIRST_NAME = "Department of Energy";
 
 
     @Test
@@ -70,7 +71,7 @@ public class DepartmentServiceTest {
         Department department = departmentService.getDepartmentById(1);
         assertNotNull(department);
         assertEquals(department.getId(), 1L);
-        assertEquals(department.getName(), "Department A");
+        assertEquals(department.getName(), DEPT_FIRST_NAME);
         assertNotNull(department.getEmployees());
     }
 

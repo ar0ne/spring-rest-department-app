@@ -56,7 +56,7 @@ public class Department implements Serializable{
 
     public void addEmployee(Employee employee) {
         if (this.employees == null) {
-            this.employees = new ArrayList<>();
+            this.employees = new ArrayList<Employee>();
         }
         this.employees.add(employee);
     }

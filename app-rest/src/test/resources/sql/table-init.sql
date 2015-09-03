@@ -1,8 +1,8 @@
 INSERT INTO departments ( DEPARTMENT_ID, DEPARTMENT_NAME ) VALUES
-  (1, 'Department A'),
-  (2, 'Department B'),
-  (3, 'Department C'),
-  (4, 'Department D');
+(1, 'Department of Energy'),
+(2, 'Department of Homeland Security'),
+(3, 'Department of Veterinary and Food Control'),
+(4, 'Department of Defense');
 
 INSERT INTO employees ( EMPLOYEE_ID, EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY) VALUES
   (1, 1, 'Williamson', 'Precious', 'John', '1990-04-05', 3500),

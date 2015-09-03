@@ -87,7 +87,7 @@ public class DepartmentRestControllerTest {
 
 
     private static Department createDeparment() {
-        Department department = new Department("Department A", 1L);
+        Department department = new Department("Department of Energy", 1L);
         List<Employee> employees = new ArrayList<Employee>(
             Arrays.asList(
                 new Employee(1, 1, "Williamson", "Precious", "John", new LocalDate("1990-04-05"), 3500),
@@ -190,7 +190,7 @@ public class DepartmentRestControllerTest {
     @Test
     public void getDepartmentByName() throws Exception {
 
-        departmentServiceMock.getDepartmentByName("Department A");
+        departmentServiceMock.getDepartmentByName("Department of Energy");
         expectLastCall().andReturn(createDeparment());
 
         replay(departmentServiceMock);
@@ -200,7 +200,7 @@ public class DepartmentRestControllerTest {
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         this.mockMvc.perform(
-            get("/department/name/" + "Department A")
+            get("/department/name/" + "Department of Energy")
                     .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
