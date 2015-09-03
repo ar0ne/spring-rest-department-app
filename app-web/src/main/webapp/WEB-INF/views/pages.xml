@@ -10,7 +10,7 @@
         <put-attribute name="content" value="/WEB-INF/views/tiles/page_content.jsp" />
         <put-attribute name="footer" value="/WEB-INF/views/tiles/page_footer.jsp" />
 
-        <put-attribute name="title" value="Department Web Application"/>
+        <put-attribute name="title" value="Department Service Web Application"/>
 
         <put-list-attribute name="scripts">
             <add-attribute value="/resources/js/jquery.min.js"/>
@@ -20,97 +20,38 @@
             <add-attribute value="/resources/css/bootstrap.min.css" />
             <add-attribute value="/resources/css/custom.css" />
         </put-list-attribute>
-               
     </definition>
 
-    <definition name="web/index" template="/WEB-INF/views/tiles/fragments/landingPageContent.jsp">
-
+    <definition name="web/index" extends="web">
+        <put-attribute name="content" value="fragment/web/index"/>
+        <put-attribute name="title" value="Index page"/>
     </definition>
-    
-   <!--  <definition name="fp/landingpage" template="/WEB-INF/views/tiles/fragments/landingPageContent.jsp">
-        <put-attribute name="head" value="/WEB-INF/views/tiles/page_head.jsp" />
-        <put-attribute name="title" value="Home | Freelance Platform"/>
-
-        <put-list-attribute name="scripts">
-            <add-attribute value="/resources/js/jquery.min.js"/>
-            <add-attribute value="/resources/js/bootstrap.min.js"/>
-            <add-attribute value="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"/>
-            <add-attribute value="/resources/js/classie.js"/>
-            <add-attribute value="/resources/js/cbpAnimatedHeader.min.js"/>
-            <add-attribute value="/resources/js/jqBootstrapValidation.js"/>
-            <add-attribute value="/resources/js/agency.js"/>
-        </put-list-attribute>
-
-        <put-list-attribute name="stylesheets">
-            <add-attribute value="/resources/css/bootstrap.min.css" />
-            <add-attribute value="/resources/css/custom.css" />
-            <add-attribute value="/resources/css/agency.css" />
-            <add-attribute value="/resources/font-awesome/css/font-awesome.min.css" />
-            <add-attribute value="https://fonts.googleapis.com/css?family=Montserrat:400,700" />
-            <add-attribute value="https://fonts.googleapis.com/css?family=Kaushan+Script" />
-            <add-attribute value="https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic" />
-            <add-attribute value="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" />
-        </put-list-attribute>
-
-    </definition>
-
-    <definition name="fp/vacancy/add" extends="fp">
-        <put-attribute name="content" value="fragment/fp/vacancy/add"/>
-        <put-attribute name="title" value="Add Vacancy | Freelance Platform"/>
-    </definition>
-    
-    <definition name="fp/vacancy/details" extends="fp">
-        <put-attribute name="content" value="fragment/fp/vacancy/details"/>
-        <put-attribute name="title" value="Vacancy Details | Freelance Platform"/>
-        <put-list-attribute name="scripts" inherit="true">
-            <add-attribute value="/resources/js/vacancy.js"/>
-        </put-list-attribute>
-    </definition>
-    
-    <definition name="fp/user/login" extends="fp">
-        <put-attribute name="content" value="fragment/fp/user/login"/>
-        <put-attribute name="title" value="Login | Freelance Platform"/>
-    </definition>
-    
-    <definition name="fp/user/signUp" extends="fp">
-        <put-attribute name="content" value="fragment/fp/user/signUp"/>
-        <put-attribute name="title" value="Sign Up | Freelance Platform"/>
-    </definition>
-    
-    <definition name="fp/user/details" extends="fp">
-        <put-attribute name="content" value="fragment/fp/user/details"/>
-        <put-attribute name="title" value="User Details | Freelance Platform"/>
-        <put-list-attribute name="scripts" inherit="true">
-            <add-attribute value="/resources/js/bootstrap.min.js"/>
-            <add-attribute value="/resources/js/user_profile.js"/>
-        </put-list-attribute>
-    </definition>
- 
-    <definition name="fp/vacancy/list" extends="fp">
-        <put-attribute name="content" value="fragment/fp/vacancy/list"/>
-        <put-attribute name="title" value="Find Job | Freelance Platform"/>
-    </definition>     -->
 
     <definition name="web/department/all" extends="web">
         <put-attribute name="content" value="fragment/web/department/all"/>
+        <put-attribute name="title" value="All departments"/>
     </definition>
 
     <definition name="web/department/add" extends="web">
         <put-attribute name="content" value="fragment/web/department/add"/>
+        <put-attribute name="title" value="Add department"/>
     </definition>
 
 
     <definition name="web/department/details" extends="web">
         <put-attribute name="content" value="fragment/web/department/details"/>
+        <put-attribute name="title" value="Department detail"/>
     </definition>
 
     <definition name="web/department/update" extends="web">
         <put-attribute name="content" value="fragment/web/department/update"/>
+        <put-attribute name="title" value="Update department"/>
     </definition>
 
 
     <definition name="web/employee/add" extends="web">
         <put-attribute name="content" value="fragment/web/employee/add"/>
+        <put-attribute name="title" value="Add employee"/>
         <put-list-attribute name="scripts" inherit="true">
             <add-attribute value="/resources/js/bootstrap.min.js"/>
             <add-attribute value="/resources/js/bootstrap-datetimepicker.min.js"/>
@@ -123,6 +64,7 @@
 
     <definition name="web/employee/update" extends="web">
         <put-attribute name="content" value="fragment/web/employee/update"/>
+        <put-attribute name="title" value="Update employee"/>
         <put-list-attribute name="scripts" inherit="true">
             <add-attribute value="/resources/js/bootstrap.min.js"/>
             <add-attribute value="/resources/js/bootstrap-datetimepicker.min.js"/>
@@ -134,11 +76,13 @@
     </definition>
 
     <definition name="web/employee/details" extends="web">
+        <put-attribute name="title" value="Employee details"/>
         <put-attribute name="content" value="fragment/web/employee/details"/>
     </definition>
 
     <definition name="web/employee/all" extends="web">
         <put-attribute name="content" value="fragment/web/employee/all"/>
+        <put-attribute name="title" value="All employees"/>
         <put-list-attribute name="scripts" inherit="true">
             <add-attribute value="/resources/js/bootstrap.min.js"/>
             <add-attribute value="/resources/js/bootstrap-datetimepicker.min.js"/>
@@ -148,12 +92,5 @@
             <add-attribute value="/resources/css/bootstrap-datetimepicker.min.css"/>
         </put-list-attribute>
     </definition>
-
-
-    <definition name="web/error/404" extends="web">
-        <put-attribute name="content" value="fragment/web/error/404"/>
-        <put-attribute name="title" value="Page not found | Department Web Application "/>
-    </definition>    
-    
 
 </tiles-definitions>

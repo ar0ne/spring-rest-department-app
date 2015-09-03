@@ -33,6 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.isTrue(employee.getName().length() < 100, "Employee Name can't be much then 100 chars");
         Assert.isTrue(employee.getSurname().length() < 100, "Employee Surname can't be much then 100 chars");
         Assert.isTrue(employee.getPatronymic().length() < 100, "Employee Patronymic can't be much then 100 chars");
+        Assert.isTrue(employee.getSalary() >= 0l, "Employee Salary can't be negative");
 
         long id = employeeDao.addEmployee(employee);
         return id;
@@ -66,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.isTrue(employee.getName().length() < 100, "Employee Name can't be much then 100 chars");
         Assert.isTrue(employee.getSurname().length() < 100, "Employee Surname can't be much then 100 chars");
         Assert.isTrue(employee.getPatronymic().length() < 100, "Employee Patronymic can't be much then 100 chars");
-
+        Assert.isTrue(employee.getSalary() >= 0l, "Employee Salary can't be negative");
 
         Employee existEmployee = null;
         try {

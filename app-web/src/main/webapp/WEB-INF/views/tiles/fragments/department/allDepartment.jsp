@@ -15,9 +15,10 @@
         </c:if>
 
         <div class="col-md-8">
-            <h3>Departments</h3>
+            <h3>All Departments</h3>
 
-            <a href="<spring:url value='/employee' ></spring:url>" class="btn btn-default">All employees</a>
+            <a href="<spring:url value='/department/create' ></spring:url>" class="btn btn-default" role="button" id="add_department__button">Add department</a>
+            <br/>
 
             <c:if test="${not empty departmentList}">
                 <table class="table">
@@ -36,16 +37,15 @@
                                 ${department_avg_salary_map[department.id]}
                             </td>
                             <td>
-                                <a href='<spring:url value="/department/update/${department.id}"></spring:url>' class="btn btn-default" id="update_department__button">Edit</a>
+                                <a href='<spring:url value="/department/update/${department.id}"></spring:url>' class="btn btn-warning" id="update_department__button" role="button">Edit</a>
                             </td>
                             <td>
-                                <a href='<spring:url value="/department/delete/${department.id}"></spring:url>' class="btn btn-default" id="delete_department__button">Delete</a>
+                                <a href='<spring:url value="/department/delete/${department.id}"></spring:url>' class="btn btn-danger" id="delete_department__button" role="button">Delete</a>
                             </td>
                         </tr>
                     </c:forEach>
                 </table>
             </c:if>
-            <a href="<spring:url value='/department/create' ></spring:url>" class="btn btn-default" role="button" id="add_department__button">Add department</a>
         </div>
     </div>
 </div>

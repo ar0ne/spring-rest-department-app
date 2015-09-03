@@ -150,6 +150,16 @@ public class EmployeeServiceTest {
         assertNull(id);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void addEmployeesWithIncorrectDataNegativeSalary() {
+
+        Employee employee = new Employee(1L, 1L, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC,
+                new LocalDate("1980-02-02"), -2l);
+
+        Long id = employeeService.addEmployee(employee);
+        assertNull(id);
+    }
+
     @Test
     public void addEmployeesWithCorrectData() {
 
@@ -286,6 +296,16 @@ public class EmployeeServiceTest {
         Employee ret_employee = employeeService.getEmployeeById(1L);
         assertEquals(employee, ret_employee);
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void updateEmployeeWithIncorrectDataNegativeSalary() {
+
+        Employee employee = employeeService.getEmployeeById(1L);
+        employee.setSalary(-5l);
+        employeeService.updateEmployee(employee);
+        Employee ret_employee = employeeService.getEmployeeById(1L);
+        assertEquals(employee, ret_employee);
     }
 
 

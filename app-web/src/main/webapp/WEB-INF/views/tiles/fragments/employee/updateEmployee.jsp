@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="container">
+<div class="container" id="container">
     <div class="row">
 
         <c:if test="${not empty error}">
@@ -14,10 +14,12 @@
             <div class="message">${message}</div>
         </c:if>
 
-        <a href="<spring:url value='/department' ></spring:url>" class="btn btn-default">Back to All Departments</a>
 
         <div class="col-md-8">
             <h3>Update Department</h3>
+
+            <a href="<spring:url value='/department' ></spring:url>" class="btn btn-default">Back to All Departments</a>
+
             <form action="<spring:url value='/employee/update/' ></spring:url>" method="POST">
 
                 <label for="name">Name: </label>
@@ -47,12 +49,11 @@
                 </select>
 
                 <label for="datetimepicker__wrapper">Date of Birthday</label>
-                <div id="datetimepicker__wrapper" class="form-control">
-                    <div id="datetimepicker" class="input-append date">
-                        <input data-format="yyyy-MM-dd" type="text" name="date_of_birthday" value="${employee.dateOfBirthday}"/>
-                        <span class="add-on">
-                          <i data-time-icon="icon-time" data-date-icon="icon-calendar">
-                          </i>
+                <div id="datetimepicker__wrapper" class="">
+                    <div id="datetimepicker" class="input-append date input-group">
+                        <input data-format="yyyy-MM-dd" type="text" class="form-control" name="date_of_birthday" value="${employee.dateOfBirthday}"/>
+                        <span class="add-on input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
                         </span>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
         
 <tiles-definitions>
 
-    <definition name="fragment/error/404" template="/WEB-INF/views/tiles/fragments/error/404.jsp" />
+    <definition name="fragment/web/index" template="/WEB-INF/views/tiles/fragments/index.jsp" />
     <definition name="fragment/web/department/details" template="/WEB-INF/views/tiles/fragments/department/detailsDepartment.jsp"/>
     <definition name="fragment/web/department/all" template="/WEB-INF/views/tiles/fragments/department/allDepartment.jsp"/>
     <definition name="fragment/web/department/add" template="/WEB-INF/views/tiles/fragments/department/addDepartment.jsp"/>

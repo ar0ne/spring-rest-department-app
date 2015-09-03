@@ -1,9 +1,9 @@
 <html>
 <head>
-    <title>Error 400</title>
+  <title>Error 500</title>
 </head>
 <body>
-<h1>Error 404</h1>
+<h1>Error 500</h1>
 <h3>Page not found</h3>
 </body>
 </html>

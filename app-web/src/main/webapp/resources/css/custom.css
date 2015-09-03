@@ -1,3 +1,38 @@
 body {
-  
+    overflow-x: hidden;
+    font-family: "Gotham Medium",Helvetica,Arial,sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Gotham Medium",Helvetica,Arial,sans-serif;
+    font-weight: 700;
+}
+#container {
+    padding-bottom: 40px;
+    min-height: 430px;
+    padding-top: 5%;
+}
+.footer {
+    padding: 20px 0;
+    color: #999;
+    text-align: center;
+    background-color: #f9f9f9;
+    border-top: 1px solid #e5e5e5;
+}
+.error {
+    color: red;
+    border-radius: 5%;
+    background-color: #e5e5e5;
+}
+.message {
+    color: greenyellow;
+    border-radius: 5%;
+    background-color: #e5e5e5;
+}
+#search__button {
+    margin: 1em 0;
 }

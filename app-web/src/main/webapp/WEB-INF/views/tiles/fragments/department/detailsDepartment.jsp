@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="container">
+<div class="container" id="container">
     <div class="row">
 
         <c:if test="${not empty error}">
@@ -40,8 +40,8 @@
                             <td>${employee.patronymic}</td>
                             <td>${employee.dateOfBirthday}</td>
                             <td>${employee.salary}</td>
-                            <td><a href="<spring:url value='/employee/update/${employee.id}' ></spring:url>" class="btn btn-default">Edit</a></td>
-                            <td><a href="<spring:url value='/employee/delete/${employee.id}' ></spring:url>" class="btn btn-default">Delete</a></td>
+                            <td><a href="<spring:url value='/employee/update/${employee.id}' ></spring:url>" class="btn btn-warning">Edit</a></td>
+                            <td><a href="<spring:url value='/employee/delete/${employee.id}' ></spring:url>" class="btn btn-danger">Delete</a></td>
                         </tr>
                     </c:forEach>
 
