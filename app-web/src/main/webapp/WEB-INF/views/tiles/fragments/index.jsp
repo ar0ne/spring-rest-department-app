@@ -19,9 +19,9 @@
                 <li>
                     <p>Then you must create war-files:<br/><code>mvn install</code></p></li>
                 <li>
-                    <p>Copy war-files what you can find in <code>/app-rest/target/rest.war</code> and <code>/app-web/target/web.war</code> to your tomcat server <code>webapps</code> folder.</p></li>
+                    <p>Copy war-files which you can find in <code>/app-rest/target/rest.war</code> and <code>/app-web/target/web.war</code> to your tomcat server <code>webapps</code> folder.</p></li>
                 <li>
-                    <p>And now you can see result in browser:<br/><code>http://localhost:8080/web/index</code><br/>For REST service: <code>http://localhost:8080/rest/department</code></p></li>
+                    <p>And then you can see result in browser:<br/><code>http://localhost:8080/web/index</code><br/>For REST service: <code>http://localhost:8080/rest/department</code></p></li>
             </ol>
             <h2><a href="#rest-api" name="rest-api">REST api</a></h2>
             <table class="table table-bordered">

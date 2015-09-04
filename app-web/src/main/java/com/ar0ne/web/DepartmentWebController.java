@@ -27,22 +27,6 @@ public class DepartmentWebController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentWebController.class);
 
-    /**
-     * Calculate average salary of employees from one department
-     * @param department Department object with field of the list of Employees
-     * @return float value of average salary of employees
-     */
-    private float calcAverageSalary(Department department) {
-        int size = department.getEmployees().size();
-        if(size == 0) {
-            return 0.0f;
-        }
-        float sum = 0.0f;
-        for (Employee employee: department.getEmployees()) {
-            sum += employee.getSalary();
-        }
-        return sum / size;
-    }
 
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ModelAndView getAllDepartments() {
@@ -62,7 +46,7 @@ public class DepartmentWebController {
             Collections.sort(departmentList, sn);
 
             for(Department dep: departmentList) {
-                avg_salary = calcAverageSalary(dep);
+                avg_salary = dep.calcAverageSalary();
                 department_avg_salary_map.put(dep.getId(), avg_salary);
             }
 

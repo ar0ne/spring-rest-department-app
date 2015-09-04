@@ -126,13 +126,13 @@ public class EmployeeWebController {
             request.add("salary", salary.toString());
             request.add("date_of_birthday", date_of_birthday.toString());
 
-            String id = restTemplate.postForObject(
+            restTemplate.postForObject(
                 URL_EMPLOYEE + "/create",
                 request,
                 String.class
             );
             redirectAttributes.addFlashAttribute( "message", "New employee added.");
-            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_BY_ID + id);
+            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
 
         } catch (Exception ex) {
             LOGGER.debug(ex);

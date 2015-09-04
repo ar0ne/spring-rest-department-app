@@ -14,8 +14,6 @@
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -96,7 +94,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>

@@ -61,6 +61,22 @@ public class Department implements Serializable{
         this.employees.add(employee);
     }
 
+    /**
+     * Calculate average salary of employees from one department
+     * @return float value of average salary of employees
+     */
+    public float calcAverageSalary() {
+        int size = this.employees.size();
+        if(size == 0) {
+            return 0.0f;
+        }
+        float sum = 0.0f;
+        for (Employee employee: this.employees) {
+            sum += employee.getSalary();
+        }
+        return sum / size;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,7 +109,7 @@ public class Department implements Serializable{
 
     /**
      * Custom sort in alphabet order by name.
-     * From A to Z
+     * Ex: From A to Z
      */
     public class SortByDepartmentName implements Comparator<Department> {
         public int compare(Department d1, Department d2) {

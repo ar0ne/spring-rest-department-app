@@ -17,9 +17,9 @@ In this example we have two entity: departments and employees. And we can get in
 3. Then you must create war-files:
 `mvn install`
 
-4. Copy war-files what you can find in `/app-rest/target/rest.war` and `/app-web/target/web.war` to your tomcat server `webapps` folder.
+4. Copy war-files which you can find in `/app-rest/target/rest.war` and `/app-web/target/web.war` to your tomcat server `webapps` folder.
 
-5. And now you can see result in browser:
+5. And then you can see result in browser:
 `http://localhost:8080/web/index`
 For REST service: `http://localhost:8080/rest/department`
 
