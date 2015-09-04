@@ -18,7 +18,7 @@
 
             <h3>All Employees</h3>
 
-            <a href="#" id="search_wrapper__button" class="btn btn-default" role="button">Search</a>
+            <a href="#" id="search_wrapper__button" class="btn btn-info" role="button">Search</a>
 
             <a href="<spring:url value='/employee/create' ></spring:url>" class="btn btn-default">Add employee</a>
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping(value = "/employee")
 public class EmployeeRestController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentRestController.class);
@@ -25,14 +26,14 @@ public class EmployeeRestController {
     @Resource
     EmployeeService employeeService;
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_ALL, method = RequestMethod.GET)
+    @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ResponseEntity<List<Employee>> getAllEmployees() {
         LOGGER.debug("get all employees()");
         List<Employee> departmentList = employeeService.getAllEmployees();
         return new ResponseEntity(departmentList, HttpStatus.OK);
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_ID, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
         LOGGER.debug("get employee by id ({})", id);
         try {
@@ -44,7 +45,7 @@ public class EmployeeRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_DELETE, method = RequestMethod.DELETE)
+    @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeEmployee(@PathVariable Long id) {
         LOGGER.debug("remove employee by id ({})", id);
 
@@ -57,7 +58,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateEmployee(@RequestParam Long id,
                                          @RequestParam String surname,
                                          @RequestParam String name,
@@ -87,7 +88,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long id,
                                       @RequestParam(value = "surname") String surname,
                                       @RequestParam(value = "name") String name,
@@ -98,15 +99,17 @@ public class EmployeeRestController {
 
         LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday);
-        Employee employee = new Employee();
-        employee.setName(name);
-        employee.setSurname(surname);
-        employee.setPatronymic(patronymic);
-        employee.setSalary(salary);
-        employee.setDateOfBirthday(date_of_birthday);
-        employee.setDepartmentId(department_id);
 
         try {
+
+            Employee employee = new Employee();
+            employee.setName(name);
+            employee.setSurname(surname);
+            employee.setPatronymic(patronymic);
+            employee.setSalary(salary);
+            employee.setDateOfBirthday(date_of_birthday);
+            employee.setDepartmentId(department_id);
+
             long ret_id = employeeService.addEmployee(employee);
             return new ResponseEntity(ret_id, HttpStatus.CREATED);
         } catch (Exception ex) {
@@ -115,7 +118,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_DATE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_DATE, method = RequestMethod.GET)
     public ResponseEntity getEmployeeByDateOfBirthday(
             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
@@ -131,7 +134,7 @@ public class EmployeeRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BETWEEN_DATES, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BETWEEN_DATES, method = RequestMethod.GET)
     public ResponseEntity getEmployeeByDoBBetweenDates(
             @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
             @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {

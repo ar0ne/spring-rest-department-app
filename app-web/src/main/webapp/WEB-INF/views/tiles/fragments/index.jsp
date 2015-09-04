@@ -34,67 +34,67 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>"/department" </td>
+                    <td>"/rest/department" </td>
                     <td>GET </td>
                     <td>Return all departments </td>
                 </tr>
                 <tr>
-                    <td>"/department/id/{id}" </td>
+                    <td>"/rest/department/id/{id}" </td>
                     <td>GET </td>
                     <td>Return department by ID </td>
                 </tr>
                 <tr>
-                    <td>"/department/name/{name}" </td>
+                    <td>"/rest/department/name/{name}" </td>
                     <td>GET </td>
                     <td>Return department by NAME </td>
                 </tr>
                 <tr>
-                    <td>"/department/create" </td>
+                    <td>"/rest/department/create" </td>
                     <td>POST </td>
                     <td>Create new department </td>
                 </tr>
                 <tr>
-                    <td>"/department/update" </td>
+                    <td>"/rest/department/update" </td>
                     <td>POST </td>
                     <td>Update department </td>
                 </tr>
                 <tr>
-                    <td>"/department/delete/{id}" </td>
+                    <td>"/rest/department/delete/{id}" </td>
                     <td>DELETE </td>
                     <td>Remove department by ID </td>
                 </tr>
                 <tr>
-                    <td>"/employee" </td>
+                    <td>"/rest/employee" </td>
                     <td>GET </td>
                     <td>Return all employees </td>
                 </tr>
                 <tr>
-                    <td>"/employee/id/{id}" </td>
+                    <td>"/rest/employee/id/{id}" </td>
                     <td>GET </td>
                     <td>Return employee by ID </td>
                 </tr>
                 <tr>
-                    <td>"/employee/create" </td>
+                    <td>"/rest/employee/create" </td>
                     <td>POST </td>
                     <td>Create new employee </td>
                 </tr>
                 <tr>
-                    <td>"/employee/update" </td>
+                    <td>"/rest/employee/update" </td>
                     <td>POST </td>
                     <td>Update employee </td>
                 </tr>
                 <tr>
-                    <td>"/employee/delete/{id}" </td>
+                    <td>"/rest/employee/delete/{id}" </td>
                     <td>DELETE </td>
                     <td>Remove employee by ID </td>
                 </tr>
                 <tr>
-                    <td>"/employee/date/{date}" </td>
+                    <td>"/rest/employee/date/{date}" </td>
                     <td>GET </td>
                     <td>Return employees by Date of Birthday </td>
                 </tr>
                 <tr>
-                    <td>"/employee/date/{from}/{to}" </td>
+                    <td>"/rest/employee/date/{from}/{to}" </td>
                     <td>GET </td>
                     <td>Return employees with Date of Birthday in interval </td>
                 </tr>

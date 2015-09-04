@@ -197,7 +197,7 @@ public class EmployeeRestControllerTest {
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         this.mockMvc.perform(
-            get("/employee")
+            get("/employee/")
                 .accept(MediaType.APPLICATION_JSON)
             )
             .andDo(print())

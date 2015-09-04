@@ -6,10 +6,10 @@
    <bean id="dataSource"
          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 
-          <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-          <property name="url" value="jdbc:mysql://localhost:3306/spring_department_rest_app?useEncoding=true&amp;characterEncoding=UTF-8" />
-          <property name="username" value="root" />
-          <property name="password" value="yourpassword" />
+          <property name="driverClassName" value="${jdbc.driverClassName}" />
+          <property name="url" value="${jdbc.url}" />
+          <property name="username" value="${jdbc.name}" />
+          <property name="password" value="${jdbc.password}" />
    </bean>
 
 </beans>

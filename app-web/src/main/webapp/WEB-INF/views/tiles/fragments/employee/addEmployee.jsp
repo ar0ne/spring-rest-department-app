@@ -22,16 +22,16 @@
         <form action="<spring:url value='/employee/create' ></spring:url>" method="POST">
 
             <label for="name">Name: </label>
-            <input type="text" name="name" class="form-control" maxlength="255" minlength="2" required autofocus /><br/>
+            <input type="text" name="name" class="form-control" maxlength="255" minlength="2" required autofocus placeholder="Jhon"/><br/>
 
             <label for="surname">Surname: </label>
-            <input type="text" name="surname" class="form-control" maxlength="255" minlength="2" required /><br/>
+            <input type="text" name="surname" class="form-control" maxlength="255" minlength="2" required placeholder="Connar"/><br/>
 
             <label for="patronymic">Patronymic: </label>
-            <input type="text" name="patronymic" class="form-control" maxlength="255" minlength="2" required /><br/>
+            <input type="text" name="patronymic" class="form-control" maxlength="255" minlength="2" required placeholder="Arnold"/><br/>
 
             <label for="salary">Salary: </label>
-            <input type="number" name="salary" class="form-control" maxlength="255" minlength="2" required /><br/>
+            <input type="number" name="salary" class="form-control" maxlength="255" minlength="2" required placeholder="100500"/><br/>
 
             <label for="department__select">Department</label>
             <select id="department__select" class="form-control" name="department_id">
@@ -50,7 +50,7 @@
             <label for="datetimepicker__wrapper">Date of Birthday</label>
             <div id="datetimepicker__wrapper" class="">
               <div id="datetimepicker" class="input-append date input-group">
-                  <input data-format="yyyy-MM-dd" type="text" name="date_of_birthday" class="form-control"/>
+                  <input data-format="yyyy-MM-dd" type="text" name="date_of_birthday" class="form-control" placeholder="1997-09-29"/>
                   <span class="add-on input-group-addon">
                       <span class="glyphicon glyphicon-calendar"></span>
                 </span>

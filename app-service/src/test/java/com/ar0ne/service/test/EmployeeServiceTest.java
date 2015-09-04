@@ -27,6 +27,9 @@ public class EmployeeServiceTest {
     private final static String EMPLOYEE_NAME = "Name";
     private final static String EMPLOYEE_PATRONYMIC = "Patronymic";
     private final static long EMPLOYEE_SALARY = 100l;
+    private final static long NEGATIVE_LONG = -2L;
+    private final static long BIG_LONG = 20000000L;
+    private final static long ZERO_LONG = 0l;
     private final String BIG_TEXT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
@@ -154,7 +157,7 @@ public class EmployeeServiceTest {
     public void addEmployeesWithIncorrectDataNegativeSalary() {
 
         Employee employee = new Employee(1L, 1L, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC,
-                new LocalDate("1980-02-02"), -2l);
+                new LocalDate("1980-02-02"), NEGATIVE_LONG);
 
         Long id = employeeService.addEmployee(employee);
         assertNull(id);
@@ -291,7 +294,7 @@ public class EmployeeServiceTest {
     public void updateEmployeeWithIncorrectDataWrongId() {
 
         Employee employee = employeeService.getEmployeeById(1L);
-        employee.setId(100000L);
+        employee.setId(BIG_LONG);
         employeeService.updateEmployee(employee);
         Employee ret_employee = employeeService.getEmployeeById(1L);
         assertEquals(employee, ret_employee);
@@ -302,7 +305,7 @@ public class EmployeeServiceTest {
     public void updateEmployeeWithIncorrectDataNegativeSalary() {
 
         Employee employee = employeeService.getEmployeeById(1L);
-        employee.setSalary(-5l);
+        employee.setSalary(NEGATIVE_LONG);
         employeeService.updateEmployee(employee);
         Employee ret_employee = employeeService.getEmployeeById(1L);
         assertEquals(employee, ret_employee);
@@ -323,19 +326,19 @@ public class EmployeeServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void removeEmployeeWithWrongNegativeID() {
-        employeeService.removeEmployee(-1L);
+        employeeService.removeEmployee(NEGATIVE_LONG);
         assertEquals(EMPLOYEE_INIT_SIZE, employeeService.getAllEmployees().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeEmployeeWithWrongPositiveID() {
-        employeeService.removeEmployee(10000L);
+        employeeService.removeEmployee(BIG_LONG);
         assertEquals(EMPLOYEE_INIT_SIZE, employeeService.getAllEmployees().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeEmployeeWithWrongZeroID() {
-        employeeService.removeEmployee(0L);
+        employeeService.removeEmployee(ZERO_LONG);
         assertEquals(EMPLOYEE_INIT_SIZE, employeeService.getAllEmployees().size());
     }
 
@@ -362,20 +365,20 @@ public class EmployeeServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getEmployeeByIdWrongIdNegative() {
-        Employee employee = employeeService.getEmployeeById(-1l);
+        Employee employee = employeeService.getEmployeeById(NEGATIVE_LONG);
         assertNull(employee);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void getEmployeeByIdWrongIdPositive() {
-        Employee employee = employeeService.getEmployeeById(10000l);
+        Employee employee = employeeService.getEmployeeById(BIG_LONG);
         assertNull(employee);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getEmployeeByIdWrongIdZero() {
-        Employee employee = employeeService.getEmployeeById(0l);
+        Employee employee = employeeService.getEmployeeById(ZERO_LONG);
         assertNull(employee);
     }
 

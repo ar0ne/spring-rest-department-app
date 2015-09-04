@@ -28,6 +28,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
+    /**
+     * RowMapper for NamedParameterJdbcTemplate for table of Employees.
+     */
     public class EmployeeMapper implements RowMapper<Employee> {
         @Override
         public Employee mapRow(ResultSet rs, int i) throws SQLException {
@@ -43,6 +46,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
         }
     }
 
+    /**
+     * Insert specified employee to the database
+     * @param employee employee to be inserted to the database
+     * @return id of employee in database
+     */
     @Override
     public long addEmployee(Employee employee) {
         String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :departmentId, :surname, :name, :patronymic, :dateOfBirthday, :salary )";
@@ -60,14 +68,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return keyHolder.getKey().longValue();
     }
 
+    /**
+     * Remove employee from database
+     * @param id of employee
+     */
     @Override
     public void removeEmployee(long id) {
-        Map<String, Object> parameters = new HashMap(1);
+        Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
         String sql = "DELETE FROM employees  WHERE EMPLOYEE_ID = :id";
         namedParameterJdbcTemplate.update( sql, parameters);
     }
 
+    /**
+     * Replaces the employee in the database with the specified employee.
+     * @param employee to be employee in the database
+     */
     @Override
     public void updateEmployee(Employee employee) {
         Map<String, Object> parameters = new HashMap<>(2);
@@ -84,12 +100,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
+    /**
+     * Returns a list containing all of the employees in the database.
+     * @return a list containing all of the employees in the database
+     */
     @Override
     public List<Employee> getAllEmployees() {
         String sql = "SELECT * FROM employees";
         return namedParameterJdbcTemplate.query(sql, new EmployeeMapper());
     }
 
+    /**
+     * Returns the employee with the specified employeetId from database.
+     * @param id id of the employee to return
+     * @return the employee with the specified employeeId from the database
+     */
     @Override
     public Employee getEmployeeById(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
@@ -99,6 +124,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return namedParameterJdbcTemplate.queryForObject(sql, parameters, mapper);
     }
 
+    /**
+     * Returns list of employees with the specified dateOfBirthday from database
+     * @param date Date of Birthday of the employees to return
+     * @return list of the employees in the database
+     */
     @Override
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
         Map<String, Object> parametrs = new HashMap<>(1);
@@ -108,6 +138,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
         return namedParameterJdbcTemplate.query(sql, parametrs, mapper);
     }
 
+    /**
+     * Returns list of employees with the specified dateOfBirthday in interval from-to from database
+     * @param date_from start date of interval for searching
+     * @param date_to end date of interval for searching
+     * @return list of the employees in the database
+     */
     @Override
     public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
         Map<String, Object> parametrs = new HashMap<>(1);

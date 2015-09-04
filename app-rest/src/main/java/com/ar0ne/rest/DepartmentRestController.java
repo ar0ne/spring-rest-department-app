@@ -16,6 +16,7 @@ import java.util.List;
 
 
 @RestController
+@RequestMapping(value = "/department")
 public class DepartmentRestController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentRestController.class);
@@ -23,7 +24,11 @@ public class DepartmentRestController {
     @Autowired
     DepartmentService departmentService;
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_ALL, method = RequestMethod.GET)
+    /**
+     *
+     * @return
+     */
+    @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ResponseEntity<List<Department>> getAllDepartments() {
         LOGGER.debug("get all departments()");
         List<Department> departmentList = departmentService.getAllDepartments();
@@ -31,7 +36,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_BY_ID, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentById(@PathVariable("id") long id) {
         LOGGER.debug("get department by id ({})", id);
         try {
@@ -43,7 +48,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_GET_BY_NAME, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_NAME, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentByName(@PathVariable("name") String name) {
         LOGGER.debug("get department by name ({})", name);
         try {
@@ -54,7 +59,7 @@ public class DepartmentRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_CREATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ResponseEntity addDepartment(@RequestParam String  name) {
         LOGGER.debug("add department with name = {}", name);
         Department department = new Department();
@@ -69,7 +74,7 @@ public class DepartmentRestController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_DELETE, method = RequestMethod.DELETE)
+    @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeDepartment(@PathVariable("id") Long id) {
         LOGGER.debug("remove department by id ({})", id);
 
@@ -82,7 +87,7 @@ public class DepartmentRestController {
         }
     }
 
-    @RequestMapping(value = SiteEndpointUrls.DEPARTMENT_UPDATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateDepartment(@RequestParam("name") String  name,
                                            @RequestParam("id")   String  id) {
 

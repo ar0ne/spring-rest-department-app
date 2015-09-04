@@ -25,18 +25,18 @@ For REST service: `http://localhost:8080/rest/department`
 
 ## REST api
 
-| URL                          | Method | Description                                        |
-|------------------------------|--------|----------------------------------------------------|
-| "/department"                | GET    | Return all departments                             |
-| "/department/id/{id}"        | GET    | Return department by ID                            |
-| "/department/name/{name}"    | GET    | Return department by NAME                          |
-| "/department/create"         | POST   | Create new department                              |
-| "/department/update"         | POST   | Update department                                  |
-| "/department/delete/{id}"    | DELETE | Remove department by ID                            |
-| "/employee"                  | GET    | Return all employees                               |
-| "/employee/id/{id}"          | GET    | Return employee by ID                              |
-| "/employee/create"           | POST   | Create new employee                                |
-| "/employee/update"           | POST   | Update employee                                    |
-| "/employee/delete/{id}"      | DELETE | Remove employee by ID                              |
-| "/employee/date/{date}"      | GET    | Return employees by Date of Birthday               |
-| "/employee/date/{from}/{to}" | GET    | Return employees with Date of Birthday in interval |
+| URL                               | Method | Description                                        |
+|-----------------------------------|--------|----------------------------------------------------|
+| "/rest/department"                | GET    | Return all departments                             |
+| "/rest/department/id/{id}"        | GET    | Return department by ID                            |
+| "/rest/department/name/{name}"    | GET    | Return department by NAME                          |
+| "/rest/department/create"         | POST   | Create new department                              |
+| "/rest/department/update"         | POST   | Update department                                  |
+| "/rest/department/delete/{id}"    | DELETE | Remove department by ID                            |
+| "/rest/employee"                  | GET    | Return all employees                               |
+| "/rest/employee/id/{id}"          | GET    | Return employee by ID                              |
+| "/rest/employee/create"           | POST   | Create new employee                                |
+| "/rest/employee/update"           | POST   | Update employee                                    |
+| "/rest/employee/delete/{id}"      | DELETE | Remove employee by ID                              |
+| "/rest/employee/date/{date}"      | GET    | Return employees by Date of Birthday               |
+| "/rest/employee/date/{from}/{to}" | GET    | Return employees with Date of Birthday in interval |

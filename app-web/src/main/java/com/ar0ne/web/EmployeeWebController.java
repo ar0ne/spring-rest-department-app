@@ -24,14 +24,40 @@ import java.util.Date;
 import java.util.List;
 
 @Controller
+@RequestMapping("/employee")
 public class EmployeeWebController {
 
 
-    public final static String URL = "http://localhost:8080/rest/employee";
+    public final static String URL_EMPLOYEE   = "http://localhost:8080/rest/employee";
+    public final static String URL_DEPARTMENT = "http://localhost:8080/rest/department";
+
     private static final Logger LOGGER = LogManager.getLogger(EmployeeWebController.class);
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_ID, method = RequestMethod.GET)
+    @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
+    public ModelAndView getAllEmployee() {
+
+        ModelAndView view = new ModelAndView("web/employee/all");
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        try {
+
+            Employee[] employees = restTemplate.getForObject(
+                    URL_EMPLOYEE,
+                    Employee[].class
+            );
+
+            view.addObject("employees", employees);
+        } catch (Exception ex) {
+            LOGGER.debug(ex);
+            view.addObject("error", "Database doesn't consist any employees yet.");
+        }
+
+        return view;
+    }
+
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ModelAndView getEmployeeById(@PathVariable long id) {
 
         ModelAndView view = new ModelAndView("web/employee/details");
@@ -39,7 +65,10 @@ public class EmployeeWebController {
         RestTemplate restTemplate = new RestTemplate();
         Employee employee = null;
         try {
-            employee = restTemplate.getForObject(URL + "/id/" + id, Employee.class);
+            employee = restTemplate.getForObject(
+                URL_EMPLOYEE + "/id/" + id,
+                Employee.class
+            );
             view.addObject("employee", employee);
         } catch (Exception ex) {
             LOGGER.debug(ex);
@@ -50,7 +79,7 @@ public class EmployeeWebController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.GET)
     public ModelAndView addDepartmentForm() {
 
         ModelAndView view = new ModelAndView("web/employee/add");
@@ -58,7 +87,10 @@ public class EmployeeWebController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            Department[] departments = restTemplate.getForObject("http://localhost:8080/rest/department", Department[].class);
+            Department[] departments = restTemplate.getForObject(
+                URL_DEPARTMENT,
+                Department[].class
+            );
             List<Department> departmentList = Arrays.asList(departments);
 
             Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
@@ -73,7 +105,7 @@ public class EmployeeWebController {
         return view;
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_CREATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ModelAndView addDepartment(RedirectAttributes redirectAttributes,
                                       @RequestParam("name")             String   name,
                                       @RequestParam("surname")          String   surname,
@@ -94,30 +126,37 @@ public class EmployeeWebController {
             request.add("salary", salary.toString());
             request.add("date_of_birthday", date_of_birthday.toString());
 
-            restTemplate.postForObject(URL + "/create", request, String.class);
+            String id = restTemplate.postForObject(
+                URL_EMPLOYEE + "/create",
+                request,
+                String.class
+            );
             redirectAttributes.addFlashAttribute( "message", "New employee added.");
-            return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_BY_ID + id);
 
         } catch (Exception ex) {
             LOGGER.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't add employee! Check input data!");
-            return new ModelAndView("redirect:" + SiteEndpointUrls.EMPLOYEE_CREATE);
+            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.CREATE);
         }
 
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE_PAGE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.UPDATE_PAGE, method = RequestMethod.GET)
     public ModelAndView updateEmployeeByIdForm(RedirectAttributes redirectAttributes,
-                                                 @PathVariable long id) {
+                                               @PathVariable long id) {
 
         ModelAndView view = null;
         RestTemplate restTemplate = new RestTemplate();
         Employee employee = null;
         try {
-            employee = restTemplate.getForObject(URL + "/id/" + id, Employee.class);
+            employee = restTemplate.getForObject(
+                URL_EMPLOYEE + "/id/" + id,
+                Employee.class
+            );
 
-            Department[] departments = restTemplate.getForObject("http://localhost:8080/rest/department", Department[].class);
+            Department[] departments = restTemplate.getForObject(URL_DEPARTMENT, Department[].class);
             List<Department> departmentList = Arrays.asList(departments);
 
             Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
@@ -129,7 +168,7 @@ public class EmployeeWebController {
 
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            view = new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+            view = new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
             view.addObject("error", "Can't get update page for this employee! Check input data");
         }
 
@@ -137,7 +176,7 @@ public class EmployeeWebController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_UPDATE, method = RequestMethod.POST)
+    @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ModelAndView    updateEmployee(  RedirectAttributes redirectAttributes,
                                             @RequestParam Long    id,
                                             @RequestParam String    name,
@@ -160,25 +199,29 @@ public class EmployeeWebController {
             request.add("date_of_birthday", date_of_birthday.toString());
             request.add("id", id.toString());
 
-            restTemplate.postForObject(URL + "/update", request, String.class);
+            restTemplate.postForObject(
+                URL_EMPLOYEE + "/update",
+                request,
+                String.class
+            );
             redirectAttributes.addFlashAttribute("message", "Employee updated.");
-            return new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't update employee! Check input data!");
-            return new ModelAndView("redirect:" + SiteEndpointUrls.EMPLOYEE_UPDATE_PAGE);
+            return new ModelAndView("redirect:/employee" + SiteEndpointUrls.UPDATE_PAGE);
         }
 
     }
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_DELETE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.GET)
     public ModelAndView deleteDepartmentById(RedirectAttributes redirectAttributes,
                                              @PathVariable long id) {
 
-        ModelAndView view = new ModelAndView("redirect:" + SiteEndpointUrls.DEPARTMENT_GET_ALL);
+        ModelAndView view = new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
         try {
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.delete(URL + "/delete/" + id);
+            restTemplate.delete(URL_EMPLOYEE + "/delete/" + id);
             redirectAttributes.addFlashAttribute( "message", "Employee removed");
         } catch (Exception ex) {
             LOGGER.debug(ex);
@@ -189,25 +232,9 @@ public class EmployeeWebController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_ALL, method = RequestMethod.GET)
-    public ModelAndView getAllEmployee() {
 
-        ModelAndView view = new ModelAndView("web/employee/all");
 
-        RestTemplate restTemplate = new RestTemplate();
-
-        try {
-            Employee[] employees = restTemplate.getForObject(URL, Employee[].class);
-            view.addObject("employees", employees);
-        } catch (Exception ex) {
-            LOGGER.debug(ex);
-            view.addObject("error", "Database doesn't consist any employees yet.");
-        }
-
-        return view;
-    }
-
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BY_DATE, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BY_DATE, method = RequestMethod.GET)
     public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
                                           @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
@@ -215,7 +242,10 @@ public class EmployeeWebController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            Employee[] employees = restTemplate.getForObject(URL + "/date/" + date.toString(), Employee[].class);
+            Employee[] employees = restTemplate.getForObject(
+                URL_EMPLOYEE + "/date/" + date.toString(),
+                Employee[].class
+            );
             view.addObject("employees", employees);
         } catch (Exception ex) {
             LOGGER.debug(ex);
@@ -226,16 +256,21 @@ public class EmployeeWebController {
     }
 
 
-    @RequestMapping(value = SiteEndpointUrls.EMPLOYEE_GET_BETWEEN_DATES, method = RequestMethod.GET)
+    @RequestMapping(value = SiteEndpointUrls.GET_BETWEEN_DATES, method = RequestMethod.GET)
     public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
                                           @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
-                                          @PathVariable("to") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
+                                          @PathVariable("to")   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
 
         ModelAndView view = new ModelAndView("web/employee/all");
         RestTemplate restTemplate = new RestTemplate();
 
         try {
-            Employee[] employees = restTemplate.getForObject(URL + "/date/" + from.toString() + "/" + to.toString(), Employee[].class);
+
+            Employee[] employees = restTemplate.getForObject(
+                URL_EMPLOYEE + "/date/" + from.toString() + "/" + to.toString(),
+                Employee[].class
+            );
+
             view.addObject("employees", employees);
         } catch (Exception ex) {
             LOGGER.debug(ex);

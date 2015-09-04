@@ -33,6 +33,12 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
+    /**
+     * Mapper for NamedParameterJdbcTemplate for union tables of Departments and Employees.
+     * In case when we can have only one entity of Department we return department from @department field.
+     * Every iteration we check if departmentId exist in map, and add it if not. We do it because in union tables we
+     * get few row with one Id of departments but different from Employee part.
+     */
     public class DepartmentMapper implements RowMapper<Department> {
 
         private Department department;
@@ -69,17 +75,29 @@ public class DepartmentDaoImpl implements DepartmentDao {
             return null;
         }
 
+        /**
+         * In case when we have only one entity of Department(ex. getById()) we use this function.
+         * @return Department object with field of List<Employee> from ResultSet of SQL query.
+         */
         public final Department getDepartment() {
             return department;
         }
 
+        /**
+         * In case when we can have more then one entity of Department(ex. getAll()) we use this function.
+         * @return List of Departments with field of List<Employee> from ResultSet of SQL query.
+         */
         public final List<Department> getAllDepartments() {
             return new ArrayList<Department>(map.values());
         }
 
     }
 
-
+    /**
+     * Insert specified department to the database
+     * @param department department to be inserted to the database
+     * @return id of department in database
+     */
     public long addDepartment(Department department) {
 
         SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("name", department.getName());
@@ -89,6 +107,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return keyHolder.getKey().longValue();
     }
 
+    /**
+     * Remove department from database
+     * @param id of department
+     */
     public void removeDepartment(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
@@ -96,6 +118,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
+    /**
+     * Replaces the department in the database with the specified department.
+     * @param department to be updated in the database
+     */
     public void updateDepartment(Department department) {
         Map<String, Object> parameters = new HashMap<>(2);
 
@@ -106,6 +132,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate.update(sql, parameters);
     }
 
+    /**
+     * Returns a list containing all of the departments in the database.
+     * @return a list containing all of the departments in the database
+     */
     public List<Department> getAllDepartments() {
         String sql = "SELECT departments.*, employees.* FROM departments LEFT JOIN employees ON departments.DEPARTMENT_ID = employees.EMPLOYEE_DEPARTMENT_ID";
         DepartmentMapper mapper = new DepartmentMapper();
@@ -114,6 +144,11 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return mapper.getAllDepartments();
     }
 
+    /**
+     * Returns the department with the specified departmentId from database.
+     * @param id id of the department to return
+     * @return the department with the specified departmentId from the database
+     */
     public Department getDepartmentById(long id) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
@@ -123,6 +158,11 @@ public class DepartmentDaoImpl implements DepartmentDao {
         return mapper.getDepartment();
     }
 
+    /**
+     * Returns the department with the specified departmentName from database.
+     * @param name name of the department to return
+     * @return the department with the specified departmentName from the database
+     */
     public Department getDepartmentByName(String name) {
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("name", name);

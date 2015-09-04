@@ -29,9 +29,9 @@ h6 {
     background-color: #e5e5e5;
 }
 .message {
-    color: greenyellow;
+    color: green;
     border-radius: 5%;
-    background-color: #e5e5e5;
+    background-color: #efeffe;
 }
 #search__button {
     margin: 1em 0;

@@ -91,6 +91,10 @@ public class Department implements Serializable{
                 '}';
     }
 
+    /**
+     * Custom sort in alphabet order by name.
+     * From A to Z
+     */
     public class SortByDepartmentName implements Comparator<Department> {
         public int compare(Department d1, Department d2) {
             return d1.getName().compareTo(d2.getName());

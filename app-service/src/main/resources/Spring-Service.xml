@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <import resource="classpath:Spring-Dao-Module.xml"/>
+    <import resource="classpath*:/Spring-Dao-Module.xml"/>
 
     <bean id="departmentDao" class="com.ar0ne.dao.DepartmentDaoImpl">
         <property name="dataSource" ref="dataSource"/>
@@ -12,6 +12,5 @@
     <bean id="employeeDao" class="com.ar0ne.dao.EmployeeDaoImpl">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
 
 </beans>

@@ -27,7 +27,11 @@ public class DepartmentServiceTest {
     private DepartmentService departmentService;
 
     private final static String DEPT_NAME = "Test dept.";
+    private final String DEPT_FIRST_NAME = "Department of Energy";
     private final static int DEPT_INIT_SIZE = 4;
+    private final static long NEGATIVE_LONG = -2L;
+    private final static long BIG_LONG = 20000000L;
+    private final static long ZERO_LONG = 0l;
     private final String BIG_TEXT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
@@ -38,7 +42,6 @@ public class DepartmentServiceTest {
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    private final String DEPT_FIRST_NAME = "Department of Energy";
 
 
     @Test
@@ -50,19 +53,19 @@ public class DepartmentServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalNegativeId() {
-        Department department = departmentService.getDepartmentById(-2L);
+        Department department = departmentService.getDepartmentById(NEGATIVE_LONG);
         assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalPositiveId() {
-        Department department = departmentService.getDepartmentById(20000000L);
+        Department department = departmentService.getDepartmentById(BIG_LONG);
         assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalZeroId() {
-        Department department = departmentService.getDepartmentById(0L);
+        Department department = departmentService.getDepartmentById(ZERO_LONG);
         assertNull(department);
     }
 
@@ -117,19 +120,19 @@ public class DepartmentServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongNegativeId() {
-        departmentService.removeDepartment(-2L);
+        departmentService.removeDepartment(NEGATIVE_LONG);
         assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongPositiveId() {
-        departmentService.removeDepartment(20000L);
+        departmentService.removeDepartment(BIG_LONG);
         assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongZeroId() {
-        departmentService.removeDepartment(0L);
+        departmentService.removeDepartment(ZERO_LONG);
         assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
 
@@ -167,7 +170,7 @@ public class DepartmentServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void updateDepartmentWithNotExistedId() {
-        Department department = new Department(DEPT_NAME, 10000L);
+        Department department = new Department(DEPT_NAME, BIG_LONG);
         departmentService.updateDepartment(department);
     }
 
