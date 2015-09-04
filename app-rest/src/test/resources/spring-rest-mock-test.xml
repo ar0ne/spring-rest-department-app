@@ -11,8 +11,8 @@
     http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
     <context:component-scan base-package="com.ar0ne.rest"/>
-
-    <import resource="classpath*:/Spring-Rest-Module.xml"/>
+    <context:component-scan base-package="com.ar0ne.service"/>
+    <context:component-scan base-package="com.ar0ne.dao"/>
 
     <bean id="employeeServiceMock" class="org.easymock.EasyMock" factory-method="createMock">
         <constructor-arg value="com.ar0ne.service.EmployeeService"/>
@@ -25,7 +25,7 @@
     <bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
         <property name="locations">
             <list>
-                <value>classpath:application.properties</value>
+                <value>classpath:test_db.properties</value>
             </list>
         </property>
     </bean>
@@ -44,6 +44,10 @@
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg type="javax.sql.DataSource" ref="dataSource"/>
     </bean>
 
 </beans>

@@ -2,7 +2,7 @@ package com.ar0ne.web;
 
 public final class SiteEndpointUrls {
 
-    public static final String INDEX = "/index";
+    public static final String INDEX             = "/index";
     public static final String GET_ALL           = "/";
     public static final String GET_BY_ID         = "/id/{id}";
     public static final String GET_BY_NAME       = "/name/{name}";

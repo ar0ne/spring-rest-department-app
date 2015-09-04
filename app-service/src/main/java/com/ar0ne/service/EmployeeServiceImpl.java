@@ -1,26 +1,24 @@
 package com.ar0ne.service;
 
 import com.ar0ne.dao.EmployeeDao;
-import com.ar0ne.model.Department;
 import com.ar0ne.model.Employee;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
 
+@Component
 public class EmployeeServiceImpl implements EmployeeService {
 
+    @Autowired
     private EmployeeDao employeeDao;
 
-    private static final Logger LOGGER = LogManager.getLogger();
-
-    public void setEmployeeDao(EmployeeDao employeeDao) {
-        this.employeeDao = employeeDao;
-    }
+    private static final Logger LOGGER = LogManager.getLogger(EmployeeServiceImpl.class);
 
     /**
      * Insert specified employee to the database

@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeWebController {
 
-    @RequestMapping(value = SiteEndpointUrls.INDEX, method = RequestMethod.GET)
+    @RequestMapping(value = {SiteEndpointUrls.INDEX, ""}, method = RequestMethod.GET)
     public ModelAndView indexPage() {
 
         ModelAndView view = new ModelAndView("web/index");

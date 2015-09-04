@@ -12,7 +12,8 @@ In this example we have two entity: departments and employees. And we can get in
 1. Download source code:
 `git clone https://github.com/ar0ne/spring-rest-department-app.git`
 
-2. In folder you can find `demo_init.sql`. First you must create database on your server `spring_department_rest_app`. And then run it for initialization of tables.
+2. In folder you can find `demo_init.sql`. First you must create database on your server (in this example `spring_department_rest_app`). And then run query for initialization of tables.
+Add your login and password from server to `app-dao/src/main/resources/prod_db.properties`. 
 
 3. Then you must create war-files:
 `mvn install`

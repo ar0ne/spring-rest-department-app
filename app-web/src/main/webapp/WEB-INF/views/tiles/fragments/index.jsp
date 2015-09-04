@@ -15,7 +15,7 @@
                 <li>
                     <p>Download source code:<br/><code>git clone https://github.com/ar0ne/spring-rest-department-app.git</code></p></li>
                 <li>
-                    <p>In folder you can find <code>demo_init.sql</code>. First you must create database on your server <code>spring_department_rest_app</code>. And then run it for initialization of tables.</p></li>
+                    <p>In folder you can find <code>demo_init.sql</code>. First you must create database on your server (in this example <code>spring_department_rest_app</code>). And then run query for initialization of tables.<br/>Add your login and password from server to <code>app-dao/src/main/resources/prod_db.properties</code>. </p></li>
                 <li>
                     <p>Then you must create war-files:<br/><code>mvn install</code></p></li>
                 <li>

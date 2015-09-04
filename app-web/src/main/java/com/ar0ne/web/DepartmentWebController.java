@@ -27,7 +27,9 @@ public class DepartmentWebController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentWebController.class);
 
-
+    /**
+     * Show page of all departments with average salary for every departments
+     */
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ModelAndView getAllDepartments() {
 
@@ -36,16 +38,17 @@ public class DepartmentWebController {
 
         try {
             Map<Long, Float> department_avg_salary_map = new HashMap<>();
-
+            // get departments and convert array to list
             Department[] departments = restTemplate.getForObject(URL, Department[].class);
             List<Department> departmentList = Arrays.asList(departments);
 
             Float avg_salary = 0.0f;
-
+            // sort list for better appearance
             Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
             Collections.sort(departmentList, sn);
 
             for(Department dep: departmentList) {
+                // calculate average salary for department and then place value in map with key == departmentId
                 avg_salary = dep.calcAverageSalary();
                 department_avg_salary_map.put(dep.getId(), avg_salary);
             }

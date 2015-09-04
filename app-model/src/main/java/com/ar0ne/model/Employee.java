@@ -3,7 +3,6 @@ package com.ar0ne.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

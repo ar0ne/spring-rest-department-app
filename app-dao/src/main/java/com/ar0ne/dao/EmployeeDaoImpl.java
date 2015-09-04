@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -18,15 +22,17 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class EmployeeDaoImpl implements EmployeeDao {
 
-    NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    @Autowired
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
     KeyHolder keyHolder = new GeneratedKeyHolder();
 
-    public void setDataSource(DataSource dataSource) {
-        namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
+    private static final Logger LOGGER = LogManager.getLogger(DepartmentDaoImpl.class);
 
     /**
      * RowMapper for NamedParameterJdbcTemplate for table of Employees.
@@ -53,6 +59,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public long addEmployee(Employee employee) {
+
+        LOGGER.debug("addEmployee(employee = {})", employee);
+
         String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :departmentId, :surname, :name, :patronymic, :dateOfBirthday, :salary )";
 
         MapSqlParameterSource parameterSource= new MapSqlParameterSource();
@@ -65,7 +74,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
 
-        return keyHolder.getKey().longValue();
+        long id = keyHolder.getKey().longValue();
+        LOGGER.debug("addEmployee(employee): id = {}", id);
+        return id;
     }
 
     /**
@@ -74,6 +85,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public void removeEmployee(long id) {
+        LOGGER.debug("removeEmployee(id = {})", id);
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
         String sql = "DELETE FROM employees  WHERE EMPLOYEE_ID = :id";
@@ -86,6 +98,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public void updateEmployee(Employee employee) {
+        LOGGER.debug("updateEmployee(employee = {})", employee);
+
         Map<String, Object> parameters = new HashMap<>(2);
 
         parameters.put("id",            employee.getId());
@@ -106,6 +120,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getAllEmployees() {
+        LOGGER.debug("getAllEmployees()");
         String sql = "SELECT * FROM employees";
         return namedParameterJdbcTemplate.query(sql, new EmployeeMapper());
     }
@@ -117,11 +132,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public Employee getEmployeeById(long id) {
+        LOGGER.debug("getEmployeeById(id = {})", id);
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
         String sql = "SELECT * FROM employees WHERE EMPLOYEE_ID = :id";
-        EmployeeMapper mapper = new EmployeeMapper();
-        return namedParameterJdbcTemplate.queryForObject(sql, parameters, mapper);
+        Employee employee = namedParameterJdbcTemplate.queryForObject(sql, parameters, new EmployeeMapper());
+        LOGGER.debug("getEmployeeById(id) : employee = {}" , employee);
+        return employee;
     }
 
     /**
@@ -131,6 +148,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
+        LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
         Map<String, Object> parametrs = new HashMap<>(1);
         parametrs.put("date", date.toString());
         String sql = "SELECT * FROM employees WHERE EMPLOYEE_DATE_OF_BIRTHDAY = :date";
@@ -146,6 +164,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     @Override
     public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
+        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
         Map<String, Object> parametrs = new HashMap<>(1);
         parametrs.put("date_from", date_from.toString());
         parametrs.put("date_to", date_to.toString());

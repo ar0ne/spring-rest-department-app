@@ -15,13 +15,11 @@ import java.util.List;
 @Component
 public class DepartmentServiceImpl implements DepartmentService {
 
+    @Autowired
     private DepartmentDao departmentDao;
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger(DepartmentServiceImpl.class);
 
-    public void setDepartmentDao(DepartmentDao departmentDao) {
-        this.departmentDao = departmentDao;
-    }
 
     /**
      * Insert specified department to the database

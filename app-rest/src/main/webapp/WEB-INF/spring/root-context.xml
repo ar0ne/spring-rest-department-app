@@ -16,17 +16,9 @@
 
     <!--<mvc:annotation-driven/>-->
 
-    <context:component-scan base-package="com.ar0ne.*"/>
+    <import resource="classpath*:/Spring-Dao-Module.xml" />
 
-    <import resource="classpath*:/Spring-Service.xml"/>
-
-    <bean id="departmentService" class="com.ar0ne.service.DepartmentServiceImpl">
-        <property name="departmentDao" ref="departmentDao"/>
-    </bean>
-
-    <bean id="employeeService" class="com.ar0ne.service.EmployeeServiceImpl">
-        <property name="employeeDao" ref="employeeDao"/>
-    </bean>
-
+    <context:component-scan base-package="com.ar0ne.dao" />
+    <context:component-scan base-package="com.ar0ne.service" />
 
 </beans>

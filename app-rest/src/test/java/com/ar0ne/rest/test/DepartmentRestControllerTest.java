@@ -47,13 +47,11 @@ public class DepartmentRestControllerTest {
 
     private MockMvc mockMvc;
 
-    @Autowired
-    DepartmentService departmentServiceMock;
-
     @Resource
     DepartmentRestController departmentRestController;
 
-    public final static int DEP_INIT_SIZE = 4;
+    @Autowired
+    DepartmentService departmentServiceMock;
 
     @After
     public void down(){

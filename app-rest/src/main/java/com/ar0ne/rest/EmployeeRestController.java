@@ -7,24 +7,27 @@ import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
-
+@Component
 @RestController
 @RequestMapping(value = "/employee")
 public class EmployeeRestController {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentRestController.class);
 
-    @Resource
-    EmployeeService employeeService;
+    @Autowired
+    @Qualifier("employeeServiceImpl")
+    private EmployeeService employeeService;
 
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ResponseEntity<List<Employee>> getAllEmployees() {

@@ -44,8 +44,8 @@ public class EmployeeWebController {
         try {
 
             Employee[] employees = restTemplate.getForObject(
-                    URL_EMPLOYEE,
-                    Employee[].class
+                URL_EMPLOYEE,
+                Employee[].class
             );
 
             view.addObject("employees", employees);
@@ -178,12 +178,12 @@ public class EmployeeWebController {
 
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ModelAndView    updateEmployee(  RedirectAttributes redirectAttributes,
-                                            @RequestParam Long    id,
+                                            @RequestParam Long      id,
                                             @RequestParam String    name,
                                             @RequestParam String    surname,
                                             @RequestParam String    patronymic,
-                                            @RequestParam Long    salary,
-                                            @RequestParam Long    department_id,
+                                            @RequestParam Long      salary,
+                                            @RequestParam Long      department_id,
                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday ){
 
         ModelAndView view = null;
