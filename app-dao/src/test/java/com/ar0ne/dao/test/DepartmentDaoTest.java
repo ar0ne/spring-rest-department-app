@@ -40,6 +40,9 @@ public class DepartmentDaoTest {
         return department;
     }
 
+    /**
+     * Test getAllDepartments: Check count of departments before and after delete
+     */
     @Test
     public void getAllDepartments() {
         List<Department> departments = departmentDao.getAllDepartments();
@@ -49,6 +52,9 @@ public class DepartmentDaoTest {
         assertEquals(DEPT_INIT_SIZE - 1, departmentDao.getAllDepartments().size());
     }
 
+    /**
+     * Test addDepartment: Check count of departments before and after add
+     */
     @Test
     public void addDepartment() {
 
@@ -64,6 +70,9 @@ public class DepartmentDaoTest {
         assertEquals(DEPT_INIT_SIZE, size_before);
     }
 
+    /**
+     * Test getDepartmentById: Check equals of departments
+     */
     @Test
     public void getDepartmentById() {
 
@@ -75,6 +84,9 @@ public class DepartmentDaoTest {
         assertEquals(department, ret_department);
     }
 
+    /**
+     * Test getDepartmentByName: Check equals of departments
+     */
     @Test
     public void getDepartmentByName(){
 
@@ -84,6 +96,9 @@ public class DepartmentDaoTest {
         assertEquals(department, ret_department);
     }
 
+    /**
+     * Test removeDepartment: Check count of departments before and after delete
+     */
     @Test
     public void removeDepartment() {
 
@@ -103,6 +118,9 @@ public class DepartmentDaoTest {
 
     }
 
+    /**
+     * Test updateDepartment: check changed name after update
+     */
     @Test
     public void updateDepartment() {
 

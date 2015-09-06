@@ -1,5 +1,8 @@
 package com.ar0ne.rest;
 
+/**
+ * All endpoint URLs of REST service
+ */
 public final class SiteEndpointUrls {
 
     public static final String GET_ALL           = "/";

@@ -38,6 +38,9 @@ public class EmployeeDaoTest {
         return employee;
     }
 
+    /**
+     * Test getAllEmployees: check count of departments before and after delete
+     */
     @Test
     public void getAllEmployees() {
         List<Employee> employeeList = employeeDao.getAllEmployees();
@@ -47,6 +50,9 @@ public class EmployeeDaoTest {
         assertEquals(EMPL_INIT_SIZE - 1, employeeDao.getAllEmployees().size());
     }
 
+    /**
+     * Test getEmployeeById: Check equals of departments
+     */
     @Test
     public void getEmployeeById() {
         Employee employee = createAndAddToDataBaseEmployee();
@@ -57,6 +63,9 @@ public class EmployeeDaoTest {
         assertEquals(employee, ret_employee);
     }
 
+    /**
+     * Test addEmployee: check count of departments before and after add
+     */
     @Test
     public void addEmployee() {
 
@@ -72,7 +81,9 @@ public class EmployeeDaoTest {
         assertEquals(EMPL_INIT_SIZE, size_before);
     }
 
-
+    /**
+     * Test removeEmployee: check count of departments before and after delete
+     */
     @Test(expected = EmptyResultDataAccessException.class)
     public void removeEmployee() {
 
@@ -91,6 +102,9 @@ public class EmployeeDaoTest {
         assertNull(employee);
     }
 
+    /**
+     * Test updateDepartment: check equals of department name before and after update
+     */
     @Test
     public void updateDepartment() {
 
@@ -108,6 +122,9 @@ public class EmployeeDaoTest {
 
     }
 
+    /**
+     * Test getEmployeesByDateOfBirthday: check count of departments for different intervals of dateOfBirtday
+     */
     @Test
     public void getEmployeesByDateOfBirthday() {
 
@@ -130,6 +147,9 @@ public class EmployeeDaoTest {
         assertEquals(employees.get(0).getDateOfBirthday(), date_x);
     }
 
+    /**
+     * Test getEmployeesByDateOfBirthdayFewRow: check count of departments for different intervals of dateOfBirtday
+     */
     @Test
     public void getEmployeesByDateOfBirthdayFewRow() {
 
@@ -157,6 +177,9 @@ public class EmployeeDaoTest {
         }
     }
 
+    /**
+     * Test getEmployeeBetweenDatesOfBirthday: check count of departments for different intervals of dateOfBirtday
+     */
     @Test
     public void getEmployeeBetweenDatesOfBirthday() {
 

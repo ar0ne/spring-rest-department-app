@@ -17,6 +17,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * Department REST controller for department entity
+ */
 @Component
 @RestController
 @RequestMapping(value = "/department")
@@ -29,7 +32,8 @@ public class DepartmentRestController {
     DepartmentService departmentService;
 
     /**
-     * Get list of all departments in JSON format
+     *  Get list of all departments from database
+     * @return list of all departments in JSON format
      */
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ResponseEntity<List<Department>> getAllDepartments() {
@@ -38,7 +42,11 @@ public class DepartmentRestController {
         return new ResponseEntity(departmentList, HttpStatus.OK);
     }
 
-
+    /**
+     * Get department by ID field from database
+     * @param id of department in database
+     * @return department from database in JSON format
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentById(@PathVariable("id") long id) {
         LOGGER.debug("get department by id ({})", id);
@@ -50,7 +58,11 @@ public class DepartmentRestController {
         }
     }
 
-
+    /**
+     * Get department by NAME field from database
+     * @param name of department in database
+     * @return department from database in JSON format
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_NAME, method = RequestMethod.GET)
     public ResponseEntity<Department> getDepartmentByName(@PathVariable("name") String name) {
         LOGGER.debug("get department by name ({})", name);
@@ -62,6 +74,11 @@ public class DepartmentRestController {
         }
     }
 
+    /**
+     * Create new department in database
+     * @param name of new department
+     * @return id of new department
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ResponseEntity addDepartment(@RequestParam String  name) {
         LOGGER.debug("add department with name = {}", name);
@@ -76,7 +93,11 @@ public class DepartmentRestController {
         }
     }
 
-
+    /**
+     * Delete department in database
+     * @param id of department for delete
+     * @return status 200 if all right
+     */
     @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeDepartment(@PathVariable("id") Long id) {
         LOGGER.debug("remove department by id ({})", id);
@@ -90,6 +111,12 @@ public class DepartmentRestController {
         }
     }
 
+    /**
+     * Replaces the departments in the database with the specified department.
+     * @param name new name for department
+     * @param id of department for update
+     * @return status 200 if all right
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateDepartment(@RequestParam("name") String  name,
                                            @RequestParam("id")   String  id) {

@@ -18,6 +18,9 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Employee REST controller for employee entity
+ */
 @Component
 @RestController
 @RequestMapping(value = "/employee")
@@ -29,13 +32,22 @@ public class EmployeeRestController {
     @Qualifier("employeeServiceImpl")
     private EmployeeService employeeService;
 
+    /**
+     * Get list of all employee in database
+     * @return list of employee in JSON format
+     */
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ResponseEntity<List<Employee>> getAllEmployees() {
         LOGGER.debug("get all employees()");
-        List<Employee> departmentList = employeeService.getAllEmployees();
-        return new ResponseEntity(departmentList, HttpStatus.OK);
+        List<Employee> employeeList = employeeService.getAllEmployees();
+        return new ResponseEntity(employeeList, HttpStatus.OK);
     }
 
+    /**
+     * Get employee from database with specified id.
+     * @param id of employee in database
+     * @return employee in JSON format
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long id) {
         LOGGER.debug("get employee by id ({})", id);
@@ -48,6 +60,11 @@ public class EmployeeRestController {
     }
 
 
+    /**
+     * Delete employee in database
+     * @param id of employee in database
+     * @return status 200 if all right
+     */
     @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.DELETE)
     public ResponseEntity removeEmployee(@PathVariable Long id) {
         LOGGER.debug("remove employee by id ({})", id);
@@ -61,6 +78,17 @@ public class EmployeeRestController {
         }
     }
 
+    /**
+     * Replaces the employees in the database with the specified employee.
+     * @param id of employee in database
+     * @param surname new surname of employee
+     * @param name new name of employee
+     * @param patronymic new patronymic of employee
+     * @param salary new salary of employee
+     * @param date_of_birthday new date_of_birthday of employee
+     * @param department_id new department_id of employee
+     * @return status 200 if all right
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ResponseEntity updateEmployee(@RequestParam Long id,
                                          @RequestParam String surname,
@@ -91,6 +119,17 @@ public class EmployeeRestController {
         }
     }
 
+    /**
+     * Create new employee in database
+     * @param id of new employee in database
+     * @param surname of new employee in database
+     * @param name of new employee in database
+     * @param patronymic of new employee in database
+     * @param salary of new employee in database
+     * @param date_of_birthday of new employee in database
+     * @param department_id of new employee in database
+     * @return id of created employee in database
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ResponseEntity addEmployee(@RequestParam(value = "id", required = false) Long id,
                                       @RequestParam(value = "surname") String surname,
@@ -121,22 +160,33 @@ public class EmployeeRestController {
         }
     }
 
+    /**
+     * Get employees from database by date of birthday criteria.
+     * @param date of birthday in format "yyyy-MM-dd"
+     * @return list of employees with specified date of birthday from database in JSON format.
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_DATE, method = RequestMethod.GET)
     public ResponseEntity getEmployeeByDateOfBirthday(
             @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         LOGGER.debug("get employees with date of birthday = {}", date.toString());
 
-        List<Employee> departmentList = null;
+        List<Employee> employeeList = null;
         try {
-            departmentList = employeeService.getEmployeeByDateOfBirthday(date);
-            return new ResponseEntity(departmentList, HttpStatus.OK);
+            employeeList = employeeService.getEmployeeByDateOfBirthday(date);
+            return new ResponseEntity(employeeList, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
+    /**
+     * Get employees by date of birthday criteria in interval from-to from database.
+     * @param from begin of interval
+     * @param to end of interval
+     * @return list of employees in JSON format
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BETWEEN_DATES, method = RequestMethod.GET)
     public ResponseEntity getEmployeeByDoBBetweenDates(
             @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
@@ -144,10 +194,10 @@ public class EmployeeRestController {
 
         LOGGER.debug("get employees with date of birthday between {} and {}", from.toString(), to.toString());
 
-        List<Employee> departmentList = null;
+        List<Employee> employeeList = null;
         try {
-            departmentList = employeeService.getEmployeeBetweenDatesOfBirtday(from, to);
-            return new ResponseEntity(departmentList, HttpStatus.OK);
+            employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(from, to);
+            return new ResponseEntity(employeeList, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);

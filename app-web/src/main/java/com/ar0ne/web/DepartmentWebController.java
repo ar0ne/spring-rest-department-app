@@ -18,7 +18,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.*;
 
-
+/**
+ * Web controller for Department entity.
+ */
 @Controller
 @RequestMapping("/department")
 public class DepartmentWebController {
@@ -28,7 +30,8 @@ public class DepartmentWebController {
     private static final Logger LOGGER = LogManager.getLogger(DepartmentWebController.class);
 
     /**
-     * Show page of all departments with average salary for every departments
+     * Get page of all departments with average salary for every departments
+     * @return ModelAndView of all departments page
      */
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ModelAndView getAllDepartments() {
@@ -63,6 +66,11 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Get page for department with specified ID from database
+     * @param id of department in database
+     * @return ModelAndView of page for department with specified ID.
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ModelAndView getDepartmentsById(@PathVariable long id) {
 
@@ -87,6 +95,11 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Get page for department with specified NAME from database
+     * @param name of department in database
+     * @return ModelAndView of page for department with specified ID.
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_NAME, method = RequestMethod.GET)
     public ModelAndView getDepartmentsByName(@PathVariable String name) {
 
@@ -110,6 +123,10 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Get page with form for creating new department
+     * @return ModelAndView of page with form for creating new department
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.GET)
     public ModelAndView addDepartmentForm() {
 
@@ -117,6 +134,12 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Post request for create new department
+     * @param redirectAttributes redirectAttributes for notify users.
+     * @param name name of new department
+     * @return ModelAndView of all departments page if all right, or notify message.
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ModelAndView addDepartment(RedirectAttributes redirectAttributes,
                                       @RequestParam("name") String name) {
@@ -145,6 +168,12 @@ public class DepartmentWebController {
 
     }
 
+    /**
+     * Delete department in database by ID.
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param id id of department in database
+     * @return ModelAndView of all departments page with notify message.
+     */
     @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.GET)
     public ModelAndView deleteDepartmentById(RedirectAttributes redirectAttributes,
                                              @PathVariable long id) {
@@ -168,6 +197,12 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Get page with form for updating department
+     * @param redirectAttributes redirectAttributes for notify user
+     * @param id id of department in database
+     * @return ModelAndView of page with update form for department
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE_PAGE, method = RequestMethod.GET)
     public ModelAndView updateDepartmentByIdForm(RedirectAttributes redirectAttributes,
                                                  @PathVariable long id) {
@@ -194,6 +229,13 @@ public class DepartmentWebController {
         return view;
     }
 
+    /**
+     * Update department in database
+     * @param redirectAttributes redirectAttributes for notify user
+     * @param name new name for department
+     * @param id id of department in database
+     * @return ModelAndView of all departments page with redirect attributes
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ModelAndView updateDepartmentById(RedirectAttributes redirectAttributes,
                                              @RequestParam("name") String   name,

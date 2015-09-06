@@ -64,6 +64,10 @@ public class DepartmentRestControllerTest {
                 setMessageConverters(createJacksonMessageConverter()).build();
     }
 
+    /**
+     * Create message converters for mock tests
+     * @return MappingJackson2HttpMessageConverter with custom object mapper
+     */
     private static MappingJackson2HttpMessageConverter createJacksonMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
@@ -74,6 +78,10 @@ public class DepartmentRestControllerTest {
         return messageConverter;
     }
 
+    /**
+     * Create object mapper with custom org.joda.time.LocalDate serializer from org.ar0ne.model.LocalDateSerializer
+     * @return object mapper with serializer for org.joda.time.LocalDate;
+     */
     private static ObjectMapper createObjectMapperWithJacksonConverter() {
         ObjectMapper mapper = new ObjectMapper();
 
@@ -82,7 +90,6 @@ public class DepartmentRestControllerTest {
         mapper.registerModule(simpleModule);
         return mapper;
     }
-
 
     private static Department createDeparment() {
         Department department = new Department("Department of Energy", 1L);
@@ -99,6 +106,10 @@ public class DepartmentRestControllerTest {
         return department;
     }
 
+    /**
+     * Test getDepartmentById: check equals results from service and REST service
+     * @throws Exception
+     */
     @Test
     public void getDepartmentById() throws Exception {
 
@@ -119,6 +130,10 @@ public class DepartmentRestControllerTest {
 
     }
 
+    /**
+     * Test getDepartmentByIdWithIncorrectId: check equals results from service and REST service with incorrect data
+     * @throws Exception
+     */
     @Test
     public void getDepartmentByIdWithIncorrectId() throws Exception {
         departmentServiceMock.getDepartmentById(20000L);
@@ -135,7 +150,10 @@ public class DepartmentRestControllerTest {
 
     }
 
-
+    /**
+     * Test getDepartmentByIdWithIncorrectIdNegativeId: check equals results from service and REST service with incorrect data
+     * @throws Exception
+     */
     @Test
     public void getDepartmentByIdWithIncorrectIdNegativeId() throws Exception {
         departmentServiceMock.getDepartmentById(-2L);
@@ -152,7 +170,10 @@ public class DepartmentRestControllerTest {
 
     }
 
-
+    /**
+     * Test getDepartmentByIdWithIncorrectIdZeroId: check equals results from service and REST service with incorrect data
+     * @throws Exception
+     */
     @Test
     public void getDepartmentByIdWithIncorrectIdZeroId() throws Exception {
         departmentServiceMock.getDepartmentById(0L);
@@ -169,6 +190,10 @@ public class DepartmentRestControllerTest {
 
     }
 
+    /**
+     * Test addDepartmentWithIncorrectData: check equals results from service and REST service with incorrect data
+     * @throws Exception
+     */
     @Test
     public void addDepartmentWithIncorrectData() throws Exception {
 
@@ -185,6 +210,10 @@ public class DepartmentRestControllerTest {
 
     }
 
+    /**
+     * Test getDepartmentByName: check equals results from service and REST service
+     * @throws Exception
+     */
     @Test
     public void getDepartmentByName() throws Exception {
 

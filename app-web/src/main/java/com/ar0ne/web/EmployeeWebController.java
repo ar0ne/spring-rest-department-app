@@ -23,6 +23,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Web controller for employee entity
+ */
 @Controller
 @RequestMapping("/employee")
 public class EmployeeWebController {
@@ -34,6 +37,10 @@ public class EmployeeWebController {
     private static final Logger LOGGER = LogManager.getLogger(EmployeeWebController.class);
 
 
+    /**
+     * Get page of all employees
+     * @return ModelAndView of get all employees page
+     */
     @RequestMapping(value = {SiteEndpointUrls.GET_ALL, ""}, method = RequestMethod.GET)
     public ModelAndView getAllEmployee() {
 
@@ -57,6 +64,11 @@ public class EmployeeWebController {
         return view;
     }
 
+    /**
+     * Get page of employee by id field from database
+     * @param id id of employee in database
+     * @return ModelAndView of page for employee with specified ID.
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
     public ModelAndView getEmployeeById(@PathVariable long id) {
 
@@ -79,6 +91,10 @@ public class EmployeeWebController {
     }
 
 
+    /**
+     * Get page with form for creating new employee
+     * @return ModelAndView of page with form for creating new employee
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.GET)
     public ModelAndView addDepartmentForm() {
 
@@ -105,6 +121,17 @@ public class EmployeeWebController {
         return view;
     }
 
+    /**
+     * Post request for create new employee
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param name name of new employee
+     * @param surname surname of new employee
+     * @param patronymic patronymic of new employee
+     * @param department_id department_id of new employee
+     * @param salary salary of new employee
+     * @param date_of_birthday date_of_birthday of new employee
+     * @return ModelAndView of all employee page if all right.
+     */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
     public ModelAndView addDepartment(RedirectAttributes redirectAttributes,
                                       @RequestParam("name")             String   name,
@@ -142,7 +169,12 @@ public class EmployeeWebController {
 
     }
 
-
+    /**
+     * Get page with form for updating employee
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param id id of employee in database
+     * @return ModelAndview of page
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE_PAGE, method = RequestMethod.GET)
     public ModelAndView updateEmployeeByIdForm(RedirectAttributes redirectAttributes,
                                                @PathVariable long id) {
@@ -175,7 +207,18 @@ public class EmployeeWebController {
         return view;
     }
 
-
+    /**
+     * Update employee in database
+     * @param redirectAttributes  redirectAttributes for notify users
+     * @param id id of employee in database
+     * @param name new name of employee
+     * @param surname new surname of employee
+     * @param patronymic new patronymic of employee
+     * @param salary new salary of employee
+     * @param department_id new department_id of employee
+     * @param date_of_birthday new date_of_birthday of employee
+     * @return ModelAndView of page get all employees if all right
+     */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
     public ModelAndView    updateEmployee(  RedirectAttributes redirectAttributes,
                                             @RequestParam Long      id,
@@ -214,6 +257,12 @@ public class EmployeeWebController {
 
     }
 
+    /**
+     *
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param id id of employee in database
+     * @return  ModelAndview of page
+     */
     @RequestMapping(value = SiteEndpointUrls.DELETE, method = RequestMethod.GET)
     public ModelAndView deleteDepartmentById(RedirectAttributes redirectAttributes,
                                              @PathVariable long id) {
@@ -232,8 +281,12 @@ public class EmployeeWebController {
     }
 
 
-
-
+    /**
+     * Get page with employees with date of birthday with specified date of birthday
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param date date of birthday
+     * @return ModelAndview of page
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_DATE, method = RequestMethod.GET)
     public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
                                           @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
@@ -255,9 +308,15 @@ public class EmployeeWebController {
         return view;
     }
 
-
+    /**
+     * Get page with employees with dates of birthday from specified interval
+     * @param redirectAttributes redirectAttributes for notify users
+     * @param from begin of interval
+     * @param to end of interval
+     * @return ModelAndview of page get all employees with list of employees from interval
+     */
     @RequestMapping(value = SiteEndpointUrls.GET_BETWEEN_DATES, method = RequestMethod.GET)
-    public ModelAndView getEmployeeByDate(RedirectAttributes redirectAttributes,
+    public ModelAndView getEmployeeByDatesFromInterval(RedirectAttributes redirectAttributes,
                                           @PathVariable("from") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate from,
                                           @PathVariable("to")   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
 

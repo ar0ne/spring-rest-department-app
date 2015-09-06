@@ -1,5 +1,8 @@
 package com.ar0ne.web;
 
+/**
+ * All endpoint URLs of Web controllers
+ */
 public final class SiteEndpointUrls {
 
     public static final String INDEX             = "/index";
