@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping(value = "/employee")
 public class EmployeeRestController {
 
-    private static final Logger LOGGER = LogManager.getLogger(DepartmentRestController.class);
+    private static final Logger LOGGER = LogManager.getLogger(EmployeeRestController.class);
 
     @Autowired
     @Qualifier("employeeServiceImpl")
