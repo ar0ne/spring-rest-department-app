@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
@@ -19,8 +18,7 @@ import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/spring-dao-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
-@Transactional
+@Transactional(transactionManager="transactionManager")
 public class EmployeeDaoTest {
 
     private final static int EMPL_INIT_SIZE = 15;

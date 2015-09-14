@@ -4,24 +4,19 @@ import static org.junit.Assert.*;
 
 import com.ar0ne.dao.DepartmentDao;
 import com.ar0ne.model.Department;
-import com.ar0ne.model.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/spring-dao-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
-@Transactional
+@Transactional(transactionManager="transactionManager")
 public class DepartmentDaoTest {
 
     @Autowired

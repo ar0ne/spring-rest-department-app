@@ -31,8 +31,6 @@
         <javax.servlet-api.version>2.5</javax.servlet-api.version>
         <jackson.version>2.6.1</jackson.version>
         <hsqldb.version>2.3.1</hsqldb.version>
-        <org.aspectj-version>1.7.4</org.aspectj-version>
-        <javax.inject.version>1</javax.inject.version>
         <tiles.version>3.0.5</tiles.version>
         <taglibs.standard.version>1.1.2</taglibs.standard.version>
         <javax.servlet.jstl.version>1.2</javax.servlet.jstl.version>
@@ -160,20 +158,6 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-joda</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-
-            <!-- AspectJ -->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${org.aspectj-version}</version>
-            </dependency>
-
-            <!-- @Inject -->
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>${javax.inject.version}</version>
             </dependency>
 
             <!-- Servlet -->
