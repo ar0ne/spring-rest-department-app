@@ -252,20 +252,20 @@ public class DepartmentRestControllerTest {
 
     }
 
-    @Test
-    public void removeDepartmentById() throws Exception {
-
-        departmentServiceMock.removeDepartment(1L);
-        expectLastCall();
-        replay(departmentServiceMock);
-
-        this.mockMvc.perform(
-            delete("/department/delete/" + 1)
-        )
-            .andDo(print())
-            .andExpect(status().isOk());
-
-    }
+//    @Test
+//    public void removeDepartmentById() throws Exception {
+//
+//        departmentServiceMock.removeDepartment(1L);
+//        expectLastCall();
+//        replay(departmentServiceMock);
+//
+//        this.mockMvc.perform(
+//            delete("/department/delete/" + 1)
+//        )
+//            .andDo(print())
+//            .andExpect(status().isOk());
+//
+//    }
 
     @Test
     public void removeDepartmentByIncorrectId() throws Exception {

@@ -45,7 +45,6 @@ public class EmployeeWebController {
     public ModelAndView getAllEmployee() {
 
         ModelAndView view = new ModelAndView("web/employee/all");
-
         RestTemplate restTemplate = new RestTemplate();
 
         try {
@@ -56,7 +55,9 @@ public class EmployeeWebController {
             );
 
             view.addObject("employees", employees);
+
         } catch (Exception ex) {
+
             LOGGER.debug(ex);
             view.addObject("error", "Database doesn't consist any employees yet.");
         }
@@ -76,12 +77,15 @@ public class EmployeeWebController {
 
         RestTemplate restTemplate = new RestTemplate();
         Employee employee = null;
+
         try {
+
             employee = restTemplate.getForObject(
                 URL_EMPLOYEE + "/id/" + id,
                 Employee.class
             );
             view.addObject("employee", employee);
+
         } catch (Exception ex) {
             LOGGER.debug(ex);
             view.addObject("error", "Can't find this employee");
@@ -104,15 +108,11 @@ public class EmployeeWebController {
 
         try {
             Department[] departments = restTemplate.getForObject(
-                URL_DEPARTMENT,
+                URL_DEPARTMENT + SiteEndpointUrls.GET_ONLY,
                 Department[].class
             );
-            List<Department> departmentList = Arrays.asList(departments);
 
-            Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
-            Collections.sort(departmentList, sn);
-
-            view.addObject("departments", departmentList);
+            view.addObject("departments", departments);
         } catch (Exception ex) {
             LOGGER.debug(ex);
             view.addObject("error", "Can't create new employee");
@@ -158,6 +158,7 @@ public class EmployeeWebController {
                 request,
                 String.class
             );
+
             redirectAttributes.addFlashAttribute( "message", "New employee added.");
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
 
@@ -188,15 +189,14 @@ public class EmployeeWebController {
                 Employee.class
             );
 
-            Department[] departments = restTemplate.getForObject(URL_DEPARTMENT, Department[].class);
-            List<Department> departmentList = Arrays.asList(departments);
-
-            Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
-            Collections.sort(departmentList, sn);
+            Department[] departments = restTemplate.getForObject(
+                    URL_DEPARTMENT + SiteEndpointUrls.GET_ONLY,
+                    Department[].class
+            );
 
             view = new ModelAndView("web/employee/update");
             view.addObject("employee", employee);
-            view.addObject("departments", departmentList);
+            view.addObject("departments", departments);
 
         } catch (Exception ex) {
             LOGGER.debug(ex);
@@ -231,6 +231,7 @@ public class EmployeeWebController {
 
         ModelAndView view = null;
         RestTemplate restTemplate = new RestTemplate();
+
         try {
 
             MultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
@@ -247,9 +248,12 @@ public class EmployeeWebController {
                 request,
                 String.class
             );
+
             redirectAttributes.addFlashAttribute("message", "Employee updated.");
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
+
         } catch (Exception ex) {
+
             LOGGER.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't update employee! Check input data!");
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.UPDATE_PAGE);
@@ -268,10 +272,14 @@ public class EmployeeWebController {
                                              @PathVariable long id) {
 
         ModelAndView view = new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
+
         try {
+
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.delete(URL_EMPLOYEE + "/delete/" + id);
+
             redirectAttributes.addFlashAttribute( "message", "Employee removed");
+
         } catch (Exception ex) {
             LOGGER.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't remove employee with ID = " + id);
@@ -295,14 +303,18 @@ public class EmployeeWebController {
         RestTemplate restTemplate = new RestTemplate();
 
         try {
+
             Employee[] employees = restTemplate.getForObject(
                 URL_EMPLOYEE + "/date/" + date.toString(),
                 Employee[].class
             );
             view.addObject("employees", employees);
+
         } catch (Exception ex) {
+
             LOGGER.debug(ex);
             view.addObject("error", "Can't find employees for this date!");
+
         }
 
         return view;
@@ -331,9 +343,12 @@ public class EmployeeWebController {
             );
 
             view.addObject("employees", employees);
+
         } catch (Exception ex) {
+
             LOGGER.debug(ex);
             view.addObject("error", "Can't find employees for this date!");
+
         }
 
         return view;

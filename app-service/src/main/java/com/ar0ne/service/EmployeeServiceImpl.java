@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      */
     public long addEmployee(Employee employee) {
 
-        LOGGER.debug("EmployeeServiceImpl.addEmployee(employee = {})", employee);
+        LOGGER.debug("addEmployee(employee = {})", employee);
         Assert.hasText(employee.getName(), "Employee NAME can't be NULL");
         Assert.notNull(employee.getSalary(), "Employee SALARY can't be NULL");
         Assert.hasText(employee.getSurname(), "Employee SURNAME can't be NULL");
@@ -40,7 +40,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.isTrue(employee.getSalary() >= 0l, "Employee Salary can't be negative");
 
         long id = employeeDao.addEmployee(employee);
-        LOGGER.debug("EmployeeServiceImpl.addEmployee(employee) : id = {}", id);
+        LOGGER.debug("addEmployee(employee) : id = {}", id);
         return id;
     }
 
@@ -49,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param id of employee
      */
     public void removeEmployee(long id) {
-        LOGGER.debug("EmployeeServiceImpl.removeEmployee(id = {})", id);
+        LOGGER.debug("removeEmployee(id = {})", id);
                 Assert.notNull(id, "Employee ID can't be NULL");
 
         Employee existEmployee = null;
@@ -69,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param employee to be employee in the database
      */
     public void updateEmployee(Employee employee) {
-        LOGGER.debug("EmployeeServiceImpl.updateEmployee(employee = {})", employee);
+        LOGGER.debug("updateEmployee(employee = {})", employee);
         Assert.notNull(employee, "Employee can't be NULL");
         Assert.notNull(employee.getId(), "Employee ID cant be NULL");
         Assert.hasText(employee.getName(), "Employee NAME cant be NULL");
@@ -100,10 +100,10 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return a list containing all of the employees in the database
      */
     public List<Employee> getAllEmployees() {
-        LOGGER.debug("EmployeeServiceImpl.getAllEmployees()");
+        LOGGER.debug("getAllEmployees()");
         List<Employee> employees = employeeDao.getAllEmployees();
         Assert.notEmpty(employees, "Empty list of employees");
-        LOGGER.debug("EmployeeServiceImpl.getAllEmployees() : employees = {}", employees);
+        LOGGER.debug("getAllEmployees() : employees = {}", employees);
         return employees;
     }
 
@@ -113,7 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return the employee with the specified employeeId from the database
      */
     public Employee getEmployeeById(long id) {
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeById(id = {})", id);
+        LOGGER.debug("getEmployeeById(id = {})", id);
         Assert.notNull(id, "Employee ID can't be NULL");
 
         Employee employee = null;
@@ -123,7 +123,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             LOGGER.error("Employee with ID = '{}' doesn't exist", id);
             throw new IllegalArgumentException("Employee with this ID doesn't exist");
         }
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeById(id) : employee = {}", employee);
+        LOGGER.debug("getEmployeeById(id) : employee = {}", employee);
         return employee;
     }
 
@@ -133,7 +133,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return list of the employees in the database
      */
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeByDateOfBirthday(date = {})", date);
+        LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
         Assert.notNull(date, "Date of birthday can't be NULL");
         List<Employee> employeeList = null;
         try {
@@ -145,7 +145,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new IllegalArgumentException("Employee with this date doesn't exist!");
         }
 
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeByDateOfBirthday(date}) : employeeList = {}", employeeList);
+        LOGGER.debug("getEmployeeByDateOfBirthday(date}) : employeeList = {}", employeeList);
         return employeeList;
     }
 
@@ -156,7 +156,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return list of the employees in the database
      */
     public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
+        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
         Assert.notNull(date_from, "Date From cant be NULL");
         Assert.notNull(date_to, "Date To cant be NULL");
         Assert.isTrue(date_from.isBefore(date_to), "Date From can't be earlier then Date To");
@@ -171,7 +171,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new IllegalArgumentException("Employee with this date doesn't exist!");
         }
 
-        LOGGER.debug("EmployeeServiceImpl.getEmployeeBetweenDatesOfBirtday(date_from, date_to) : employeeList = {}", employeeList);
+        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from, date_to) : employeeList = {}", employeeList);
         return employeeList;
 
 

@@ -48,6 +48,31 @@ public class DepartmentDaoTest {
     }
 
     /**
+     * Count of all departments in database must to be the same after executing function and demo init,
+     * and after remove one element
+     */
+    @Test
+    public void getAllDepartmentsWithoutEmployees() {
+        List<Department> departments = departmentDao.getAllDepartmentsWithoutEmployees();
+        assertEquals(DEPT_INIT_SIZE, departments.size());
+
+        departmentDao.removeDepartment(1L);
+        assertEquals(DEPT_INIT_SIZE - 1, departmentDao.getAllDepartments().size());
+    }
+
+    /**
+     * Lists of Employees must to be empty
+     */
+    @Test
+    public void getAllDepartmentsWithoutEmployeesNullEmployee() {
+        List<Department> departments = departmentDao.getAllDepartmentsWithoutEmployees();
+        for(Department department: departments) {
+            assertNotNull(department.getEmployees());
+            assertEquals(department.getEmployees().size(), 0);
+        }
+    }
+
+    /**
      * Test addDepartment: Check count of departments before and after add
      */
     @Test
@@ -110,7 +135,6 @@ public class DepartmentDaoTest {
         department = departmentDao.getDepartmentById(department.getId());
 
         assertNull(department);
-
     }
 
     /**

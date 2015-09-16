@@ -59,8 +59,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
                 map.put(id, department);
             }
 
-            if (rs.getString("EMPLOYEE_NAME") != null       ||
-                    rs.getLong("EMPLOYEE_ID") != 0          ||
+            if (rs.getString("EMPLOYEE_NAME") != null ||
+                    rs.getLong("EMPLOYEE_ID") != 0 ||
                     rs.getLong("EMPLOYEE_DEPARTMENT_ID") != 0) {
 
                 Employee employee = new Employee();
@@ -74,8 +74,10 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
                 this.department.addEmployee(employee);
             }
+
             return null;
         }
+
 
         /**
          * In case when we have only one entity of Department(ex. getById()) we use this function.
@@ -94,6 +96,23 @@ public class DepartmentDaoImpl implements DepartmentDao {
         }
 
     }
+
+    /**
+     * Mapper for NamedParameterJdbcTemplate only for Departments entity without employees
+     */
+    public class DepartmentOnlyMapper implements RowMapper<Department> {
+
+        @Override
+        public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Department department = new Department();
+            department.setId(rs.getLong("DEPARTMENT_ID"));
+            department.setName(rs.getString("DEPARTMENT_NAME"));
+            department.setEmployees(new ArrayList<Employee>());
+            return department;
+        }
+
+    }
+
 
     /**
      * Insert specified department to the database
@@ -116,15 +135,18 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     /**
-     * Remove department from database
+     * Remove department from database and specified employees for this department
      * @param id of department
      */
     public void removeDepartment(long id) {
         LOGGER.debug("removeDepartment(id) : id = {}", id);
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put("id", id);
-        String sql = "DELETE FROM departments WHERE DEPARTMENT_ID = :id";
-        namedParameterJdbcTemplate.update(sql, parameters);
+        String sql_1 = "DELETE FROM departments WHERE DEPARTMENT_ID = :id";
+        namedParameterJdbcTemplate.update(sql_1, parameters);
+
+        String sql_2 = "DELETE FROM employees WHERE EMPLOYEE_DEPARTMENT_ID = :id";
+        namedParameterJdbcTemplate.update(sql_2, parameters);
     }
 
     /**
@@ -143,8 +165,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
     }
 
     /**
-     * Returns a list containing all of the departments in the database.
-     * @return a list containing all of the departments in the database
+     * Returns a list containing all of the departments with specified employees in the database.
+     * @return a list containing all of the departments with specified employees in the database
      */
     public List<Department> getAllDepartments() {
         LOGGER.debug("getAllDepartments()");
@@ -153,6 +175,17 @@ public class DepartmentDaoImpl implements DepartmentDao {
         namedParameterJdbcTemplate.query(sql, mapper);
 
         return mapper.getAllDepartments();
+    }
+
+
+    /**
+     * Returns a list containing all of the departments, but without specified employees in the database.
+     * @return a list containing all of the departments, but without specified employees in the database
+     */
+    public List<Department> getAllDepartmentsWithoutEmployees() {
+        LOGGER.debug("getAllDepartmentsWithoutEmployees()");
+        String sql = "SELECT * FROM departments ORDER BY DEPARTMENT_NAME";
+        return namedParameterJdbcTemplate.query(sql, new DepartmentOnlyMapper());
     }
 
     /**

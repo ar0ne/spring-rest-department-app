@@ -270,8 +270,7 @@ public class EmployeeRestControllerTest {
         )
             .andDo(print())
             .andExpect(status().isOk())
-            .andExpect(content().string("\"Deleted\"")
-            );
+            .andExpect(content().string("\"Deleted\""));
     }
 
     @Test

@@ -16,7 +16,7 @@ public interface DepartmentDao {
     public long addDepartment(Department department);
 
     /**
-     * Remove department from database
+     * Remove department from database and specified employees for this department
      * @param id of department
      */
     public void removeDepartment(long id);
@@ -28,10 +28,16 @@ public interface DepartmentDao {
     public void updateDepartment(Department department);
 
     /**
-     * Returns a list containing all of the departments in the database.
-     * @return a list containing all of the departments in the database
+     * Returns a list containing all of the departments with specified employees in the database.
+     * @return a list containing all of the departments with specified employees in the database
      */
     public List<Department> getAllDepartments();
+
+    /**
+     * Returns a list containing all of the departments, but without specified employees in the database.
+     * @return a list containing all of the departments, but without specified employees in the database
+     */
+    public List<Department> getAllDepartmentsWithoutEmployees();
 
     /**
      * Returns the department with the specified departmentId from database.

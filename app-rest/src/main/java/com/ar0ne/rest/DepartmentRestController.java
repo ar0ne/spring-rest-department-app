@@ -43,6 +43,17 @@ public class DepartmentRestController {
     }
 
     /**
+     *  Get list of all departments, but without employees from database
+     * @return list of all departments, but without employees in JSON format
+     */
+    @RequestMapping(value = SiteEndpointUrls.GET_ONLY, method = RequestMethod.GET)
+    public ResponseEntity<List<Department>> getAllDepartmentsWithoutEmployees() {
+        LOGGER.debug("get all departments without employees()");
+        List<Department> departmentList = departmentService.getAllDepartmentsWithoutEmployees();
+        return new ResponseEntity(departmentList, HttpStatus.OK);
+    }
+
+    /**
      * Get department by ID field from database
      * @param id of department in database
      * @return department from database in JSON format

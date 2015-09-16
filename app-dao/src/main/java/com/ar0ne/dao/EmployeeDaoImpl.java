@@ -57,7 +57,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param employee employee to be inserted to the database
      * @return id of employee in database
      */
-    @Override
     public long addEmployee(Employee employee) {
 
         LOGGER.debug("addEmployee(employee = {})", employee);
@@ -83,7 +82,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * Remove employee from database
      * @param id of employee
      */
-    @Override
     public void removeEmployee(long id) {
         LOGGER.debug("removeEmployee(id = {})", id);
         Map<String, Object> parameters = new HashMap<>(1);
@@ -96,7 +94,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * Replaces the employee in the database with the specified employee.
      * @param employee to be employee in the database
      */
-    @Override
     public void updateEmployee(Employee employee) {
         LOGGER.debug("updateEmployee(employee = {})", employee);
 
@@ -118,7 +115,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * Returns a list containing all of the employees in the database.
      * @return a list containing all of the employees in the database
      */
-    @Override
     public List<Employee> getAllEmployees() {
         LOGGER.debug("getAllEmployees()");
         String sql = "SELECT * FROM employees";
@@ -130,7 +126,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param id id of the employee to return
      * @return the employee with the specified employeeId from the database
      */
-    @Override
     public Employee getEmployeeById(long id) {
         LOGGER.debug("getEmployeeById(id = {})", id);
         Map<String, Object> parameters = new HashMap<>(1);
@@ -146,7 +141,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param date Date of Birthday of the employees to return
      * @return list of the employees in the database
      */
-    @Override
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
         LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
         Map<String, Object> parametrs = new HashMap<>(1);
@@ -162,7 +156,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param date_to end date of interval for searching
      * @return list of the employees in the database
      */
-    @Override
     public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
         LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
         Map<String, Object> parametrs = new HashMap<>(1);

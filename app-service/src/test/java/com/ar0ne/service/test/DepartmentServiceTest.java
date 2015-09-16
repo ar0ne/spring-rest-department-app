@@ -25,12 +25,12 @@ public class DepartmentServiceTest {
     private DepartmentService departmentService;
 
     private final static String DEPT_NAME = "Test dept.";
-    private final String DEPT_FIRST_NAME = "Department of Energy";
+    private final static String DEPT_FIRST_NAME = "Department of Energy";
     private final static int DEPT_INIT_SIZE = 4;
     private final static long NEGATIVE_LONG = -2L;
     private final static long BIG_LONG = 20000000L;
     private final static long ZERO_LONG = 0l;
-    private final String BIG_TEXT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
+    private final static String BIG_TEXT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
             "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
@@ -47,6 +47,22 @@ public class DepartmentServiceTest {
         List<Department> departments = departmentService.getAllDepartments();
         assertNotNull(departments);
         assertEquals(DEPT_INIT_SIZE, departments.size());
+    }
+
+    @Test
+    public void getAllDepartmentsWithoutEmployees() {
+        List<Department> departments = departmentService.getAllDepartmentsWithoutEmployees();
+        assertNotNull(departments);
+        assertEquals(DEPT_INIT_SIZE, departments.size());
+    }
+
+    @Test
+    public void getAllDepartmentsWithoutEmployeesEmptyEmployees() {
+        List<Department> departments = departmentService.getAllDepartmentsWithoutEmployees();
+        for(Department department: departments) {
+            assertNotNull(department.getEmployees());
+            assertEquals(department.getEmployees().size(), 0);
+        }
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -151,6 +167,7 @@ public class DepartmentServiceTest {
         assertEquals(size_after + 1, size_before);
     }
 
+
     @Test(expected = IllegalArgumentException.class)
     public void updateDepartmentWithIncorrectDataNull() {
         departmentService.updateDepartment(null);
@@ -200,6 +217,7 @@ public class DepartmentServiceTest {
         Department department = departmentService.getDepartmentByName(BIG_TEXT);
         assertNull(department);
     }
+
 
 
 

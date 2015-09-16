@@ -27,7 +27,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return id of department in database
      */
     public long addDepartment(Department department) {
-        LOGGER.debug("DepartmentServiceImpl.addDepartment(department = {})", department);
+        LOGGER.debug("addDepartment(department = {})", department);
         Assert.hasText(department.getName(), "Department NAME can't be NULL");
         Assert.isTrue(department.getName().length() < 100, "Department NAME can't be more then 100 chars");
         Assert.notNull(department.getEmployees(), "Department Employees can't be NULL");
@@ -38,7 +38,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         }
 
         long id = departmentDao.addDepartment(department);
-        LOGGER.debug("DepartmentServiceImpl.addDepartment() : id = {}", id);
+        LOGGER.debug("addDepartment() : id = {}", id);
         return id;
     }
 
@@ -47,7 +47,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param id of department
      */
     public void removeDepartment(long id) {
-        LOGGER.debug("DepartmentServiceImpl.removeDepartment(id = {})", id);
+        LOGGER.debug("removeDepartment(id = {})", id);
         Assert.notNull(id, "Department ID can't be NULL");
 
         Department existDepartment = null;
@@ -67,7 +67,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @param department to be updated in the database
      */
     public void updateDepartment(Department department) {
-        LOGGER.debug("DepartmentServiceImpl.updateDepartment(department = {})", department);
+        LOGGER.debug("updateDepartment(department = {})", department);
         Assert.notNull(department, "Department can't be NULL");
         Assert.notNull(department.getId(), "Department ID can't be NULL");
         Assert.hasText(department.getName(), "Department NAME can't be NULL");
@@ -87,8 +87,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
-     * Returns a list containing all of the departments in the database.
-     * @return a list containing all of the departments in the database
+     * Returns a list containing all of the departments with specified employees in the database.
+     * @return a list containing all of the departments with specified employees in the database
      */
     public List<Department> getAllDepartments() {
         LOGGER.debug("DepartmentServiceImpl.getAllDepartments()");
@@ -99,12 +99,24 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
+     * Returns a list containing all of the departments, but without specified employees in the database.
+     * @return a list containing all of the departments, but without specified employees in the database
+     */
+    public List<Department> getAllDepartmentsWithoutEmployees() {
+        LOGGER.debug("getAllDepartmentsWithoutEmployees()");
+        List<Department> departments = departmentDao.getAllDepartmentsWithoutEmployees();
+        Assert.notEmpty(departments, "Empty list of departments");
+        LOGGER.debug("getAllDepartmentsWithoutEmployees() : departments = {}", departments);
+        return departments;
+    }
+
+    /**
      * Returns the department with the specified departmentId from database.
      * @param id id of the department to return
      * @return the department with the specified departmentId from the database
      */
     public Department getDepartmentById(long id) {
-        LOGGER.debug("DepartmentServiceImpl.getDepartmentById(id = {})", id);
+        LOGGER.debug("getDepartmentById(id = {})", id);
                 Assert.notNull(id, "Department ID can't be NULL");
         Department department = null;
         try {
@@ -115,7 +127,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             LOGGER.error("Department with ID = '{}' doesn't exist", id);
             throw new IllegalArgumentException("Department with this ID doesn't exist");
         }
-        LOGGER.debug("DepartmentServiceImpl.getDepartmentById(id) : department = {}", department);
+        LOGGER.debug("getDepartmentById(id) : department = {}", department);
         return department;
     }
 
@@ -125,7 +137,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      * @return the department with the specified departmentName from the database
      */
     public Department getDepartmentByName(String name) {
-        LOGGER.debug("DepartmentServiceImpl.getDepartmentByName(name = {})", name);
+        LOGGER.debug("getDepartmentByName(name = {})", name);
         Assert.hasText(name, "Department NAME can't be NULL");
         Assert.isTrue(name.length() < 100, "Department NAME can't be more then 100 chars");
         Department department = null;
@@ -137,7 +149,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             LOGGER.error("Department with NAME = '{}' doesn't exist", name);
             throw new IllegalArgumentException("Department with this NAME doesn't exist");
         }
-        LOGGER.debug("DepartmentServiceImpl.getDepartmentByName(name) : department = {}", department);
+        LOGGER.debug("getDepartmentByName(name) : department = {}", department);
         return department;
     }
 }
