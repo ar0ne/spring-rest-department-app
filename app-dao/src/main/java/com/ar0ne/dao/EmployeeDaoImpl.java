@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -34,6 +35,78 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentDaoImpl.class);
 
+    @Value("${parameters.id}")
+    private String PARAMETER_ID;
+
+    @Value("${parameters.name}")
+    private String PARAMETER_NAME;
+
+    @Value("${parameters.surname}")
+    private String PARAMETER_SURNAME;
+
+    @Value("${parameters.department_id}")
+    private String PARAMETER_DEPARTMENT_ID;
+
+    @Value("${parameters.patronymic}")
+    private String PARAMETER_PATRONYMIC;
+
+    @Value("${parameters.date_of_birthday}")
+    private String PARAMETER_DATE_OF_BIRTHDAY;
+
+    @Value("${parameters.date}")
+    private String PARAMETER_DATE;
+
+    @Value("${parameters.date_to}")
+    private String PARAMETER_DATE_TO;
+
+    @Value("${parameters.date_from}")
+    private String PARAMETER_DATE_FROM;
+
+    @Value("${parameters.salary}")
+    private String PARAMETER_SALARY;
+
+    @Value("${employee.EMPLOYEE_ID_COLUMN}")
+    private String EMPLOYEE_ID;
+
+    @Value("${employee.EMPLOYEE_NAME_COLUMN}")
+    private String EMPLOYEE_NAME;
+
+    @Value("${employee.EMPLOYEE_DEPARTMENT_ID_COLUMN}")
+    private String EMPLOYEE_DEPARTMENT_ID;
+
+    @Value("${employee.EMPLOYEE_SURNAME_COLUMN}")
+    private String EMPLOYEE_SURNAME;
+
+    @Value("${employee.EMPLOYEE_PATRONYMIC_COLUMN}")
+    private String EMPLOYEE_PATRONYMIC;
+
+    @Value("${employee.EMPLOYEE_DATE_OF_BIRTHDAY_COLUMN}")
+    private String EMPLOYEE_DATE_OF_BIRTHDAY;
+
+    @Value("${employee.EMPLOYEE_SALARY_COLUMN}")
+    private String EMPLOYEE_SALARY;
+
+    @Value("${employee.ADD_EMPLOYEE}")
+    private String ADD_EMPLOYEE;
+
+    @Value("${employee.DELETE_EMPLOYEE_BY_ID}")
+    private String DELETE_EMPLOYEE_BY_ID;
+
+    @Value("${employee.UPDATE_EMPLOYEE}")
+    private String UPDATE_EMPLOYEE;
+
+    @Value("${employee.GET_ALL_EMPLOYEES}")
+    private String GET_ALL_EMPLOYEES;
+
+    @Value("${employee.GET_EMPLOYEE_BY_ID}")
+    private String GET_EMPLOYEE_BY_ID;
+
+    @Value("${employee.GET_EMPLOYEE_BY_DATE_OF_BIRTHDAY}")
+    private String GET_EMPLOYEE_BY_DATE_OF_BIRTHDAY;
+
+    @Value("${employee.GET_EMPLOYEE_BETWEEN_DATES_OF_BIRTHDAY}")
+    private String GET_EMPLOYEE_BETWEEN_DATES_OF_BIRTHDAY;
+
     /**
      * RowMapper for NamedParameterJdbcTemplate for table of Employees.
      */
@@ -41,13 +114,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
         @Override
         public Employee mapRow(ResultSet rs, int i) throws SQLException {
             Employee employee = new Employee();
-            employee.setId(rs.getLong("EMPLOYEE_ID"));
-            employee.setDepartmentId(rs.getLong("EMPLOYEE_DEPARTMENT_ID"));
-            employee.setSurname(rs.getString("EMPLOYEE_SURNAME"));
-            employee.setName(rs.getString("EMPLOYEE_NAME"));
-            employee.setPatronymic(rs.getString("EMPLOYEE_PATRONYMIC"));
-            employee.setDateOfBirthday(new LocalDate(rs.getTimestamp("EMPLOYEE_DATE_OF_BIRTHDAY")));
-            employee.setSalary(rs.getLong("EMPLOYEE_SALARY"));
+            employee.setId(rs.getLong(EMPLOYEE_ID));
+            employee.setDepartmentId(rs.getLong(EMPLOYEE_DEPARTMENT_ID));
+            employee.setSurname(rs.getString(EMPLOYEE_SURNAME));
+            employee.setName(rs.getString(EMPLOYEE_NAME));
+            employee.setPatronymic(rs.getString(EMPLOYEE_PATRONYMIC));
+            employee.setDateOfBirthday(new LocalDate(rs.getTimestamp(EMPLOYEE_DATE_OF_BIRTHDAY)));
+            employee.setSalary( rs.getLong( EMPLOYEE_SALARY ) );
             return employee;
         }
     }
@@ -61,17 +134,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         LOGGER.debug("addEmployee(employee = {})", employee);
 
-        String sql = "INSERT INTO employees ( EMPLOYEE_DEPARTMENT_ID, EMPLOYEE_SURNAME, EMPLOYEE_NAME, EMPLOYEE_PATRONYMIC, EMPLOYEE_DATE_OF_BIRTHDAY, EMPLOYEE_SALARY ) VALUES ( :departmentId, :surname, :name, :patronymic, :dateOfBirthday, :salary )";
-
         MapSqlParameterSource parameterSource= new MapSqlParameterSource();
-        parameterSource.addValue("departmentId", employee.getDepartmentId());
-        parameterSource.addValue("surname", employee.getSurname());
-        parameterSource.addValue("name", employee.getName());
-        parameterSource.addValue("patronymic", employee.getPatronymic());
-        parameterSource.addValue("salary", employee.getSalary());
-        parameterSource.addValue("dateOfBirthday", employee.getDateOfBirthday().toString());
+        parameterSource.addValue(PARAMETER_DEPARTMENT_ID,       employee.getDepartmentId());
+        parameterSource.addValue(PARAMETER_SURNAME,             employee.getSurname());
+        parameterSource.addValue(PARAMETER_NAME,                employee.getName());
+        parameterSource.addValue(PARAMETER_PATRONYMIC,          employee.getPatronymic());
+        parameterSource.addValue(PARAMETER_SALARY,              employee.getSalary());
+        parameterSource.addValue(PARAMETER_DATE_OF_BIRTHDAY,    employee.getDateOfBirthday().toString());
 
-        namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
+        namedParameterJdbcTemplate.update(ADD_EMPLOYEE, parameterSource, keyHolder);
 
         long id = keyHolder.getKey().longValue();
         LOGGER.debug("addEmployee(employee): id = {}", id);
@@ -84,10 +155,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     public void removeEmployee(long id) {
         LOGGER.debug("removeEmployee(id = {})", id);
+
         Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("id", id);
-        String sql = "DELETE FROM employees  WHERE EMPLOYEE_ID = :id";
-        namedParameterJdbcTemplate.update( sql, parameters);
+        parameters.put(PARAMETER_ID, id);
+
+        namedParameterJdbcTemplate.update( DELETE_EMPLOYEE_BY_ID, parameters);
     }
 
     /**
@@ -99,16 +171,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
         Map<String, Object> parameters = new HashMap<>(2);
 
-        parameters.put("id",            employee.getId());
-        parameters.put("department_id", employee.getDepartmentId());
-        parameters.put("surname",       employee.getSurname());
-        parameters.put("name",          employee.getName());
-        parameters.put("patronymic",    employee.getPatronymic());
-        parameters.put("date_of_birthday", employee.getDateOfBirthday().toString());
-        parameters.put("salary",        employee.getSalary());
+        parameters.put(PARAMETER_ID,                employee.getId());
+        parameters.put(PARAMETER_DEPARTMENT_ID,     employee.getDepartmentId());
+        parameters.put(PARAMETER_SURNAME,           employee.getSurname());
+        parameters.put(PARAMETER_NAME,              employee.getName());
+        parameters.put(PARAMETER_PATRONYMIC,        employee.getPatronymic());
+        parameters.put(PARAMETER_DATE_OF_BIRTHDAY,  employee.getDateOfBirthday().toString());
+        parameters.put(PARAMETER_SALARY,            employee.getSalary());
 
-        String sql = "UPDATE employees SET EMPLOYEE_DEPARTMENT_ID = :department_id, EMPLOYEE_SURNAME = :surname, EMPLOYEE_NAME = :name, EMPLOYEE_PATRONYMIC = :patronymic, EMPLOYEE_DATE_OF_BIRTHDAY = :date_of_birthday, EMPLOYEE_SALARY = :salary WHERE EMPLOYEE_ID = :id";
-        namedParameterJdbcTemplate.update(sql, parameters);
+        namedParameterJdbcTemplate.update(UPDATE_EMPLOYEE, parameters);
     }
 
     /**
@@ -117,21 +188,21 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     public List<Employee> getAllEmployees() {
         LOGGER.debug("getAllEmployees()");
-        String sql = "SELECT * FROM employees";
-        return namedParameterJdbcTemplate.query(sql, new EmployeeMapper());
+        return namedParameterJdbcTemplate.query(GET_ALL_EMPLOYEES, new EmployeeMapper());
     }
 
     /**
-     * Returns the employee with the specified employeetId from database.
+     * Returns the employee with the specified employeeId from database.
      * @param id id of the employee to return
      * @return the employee with the specified employeeId from the database
      */
     public Employee getEmployeeById(long id) {
         LOGGER.debug("getEmployeeById(id = {})", id);
+
         Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("id", id);
-        String sql = "SELECT * FROM employees WHERE EMPLOYEE_ID = :id";
-        Employee employee = namedParameterJdbcTemplate.queryForObject(sql, parameters, new EmployeeMapper());
+        parameters.put(PARAMETER_ID, id);
+        Employee employee = namedParameterJdbcTemplate.queryForObject(GET_EMPLOYEE_BY_ID, parameters, new EmployeeMapper());
+
         LOGGER.debug("getEmployeeById(id) : employee = {}" , employee);
         return employee;
     }
@@ -143,11 +214,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
         LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
-        Map<String, Object> parametrs = new HashMap<>(1);
-        parametrs.put("date", date.toString());
-        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DATE_OF_BIRTHDAY = :date";
+
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put(PARAMETER_DATE, date.toString());
         EmployeeMapper mapper = new EmployeeMapper();
-        return namedParameterJdbcTemplate.query(sql, parametrs, mapper);
+
+        return namedParameterJdbcTemplate.query(GET_EMPLOYEE_BY_DATE_OF_BIRTHDAY, parameters, mapper);
     }
 
     /**
@@ -158,11 +230,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
         LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
+
         Map<String, Object> parametrs = new HashMap<>(1);
-        parametrs.put("date_from", date_from.toString());
-        parametrs.put("date_to", date_to.toString());
-        String sql = "SELECT * FROM employees WHERE EMPLOYEE_DATE_OF_BIRTHDAY BETWEEN :date_from AND :date_to";
+        parametrs.put(PARAMETER_DATE_FROM, date_from.toString());
+        parametrs.put(PARAMETER_DATE_TO, date_to.toString());
         EmployeeMapper mapper = new EmployeeMapper();
-        return namedParameterJdbcTemplate.query(sql, parametrs, mapper);
+
+        return namedParameterJdbcTemplate.query(GET_EMPLOYEE_BETWEEN_DATES_OF_BIRTHDAY, parametrs, mapper);
     }
 }

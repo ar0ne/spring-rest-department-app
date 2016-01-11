@@ -11,6 +11,7 @@
               <property name="locations">
                      <list>
                             <value>classpath:prod_db.properties</value>
+                            <value>classpath:sql.properties</value>
                      </list>
               </property>
         </bean>

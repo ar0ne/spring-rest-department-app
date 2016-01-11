@@ -14,10 +14,8 @@ import java.sql.SQLException;
 
 import com.ar0ne.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -35,6 +33,65 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentDaoImpl.class);
 
+
+    @Value("${parameters.id}")
+    private String PARAMETER_ID;
+
+    @Value("${parameters.name}")
+    private String PARAMETER_NAME;
+
+    @Value("${department.DEPARTMENT_ID_COLUMN}")
+    private String DEPARTMENT_ID;
+
+    @Value("${department.DEPARTMENT_NAME_COLUMN}")
+    private String DEPARTMENT_NAME;
+
+    @Value("${department.ADD_DEPARTMENT}")
+    private String ADD_DEPARTMENT;
+
+    @Value("${department.UPDATE_DEPARTMENT}")
+    private String UPDATE_DEPARTMENT;
+
+    @Value("${department.GET_ALL_DEPARTMENTS}")
+    private String GET_ALL_DEPARTMENTS;
+
+    @Value("${department.DELETE_DEPARTMENT_BY_ID}")
+    private String DELETE_DEPARTMENT_BY_ID;
+
+    @Value("${department.GET_DEPARTMENT_BY_ID}")
+    private String GET_DEPARTMENT_BY_ID;
+
+    @Value("${department.GET_DEPARTMENT_BY_NAME}")
+    private String GET_DEPARTMENT_BY_NAME;
+
+    @Value("${department.GET_ALL_DEPARTMENTS_WITHOUT_EMPLOYEES}")
+    private String GET_ALL_DEPARTMENTS_WITHOUT_EMPLOYEES;
+
+    @Value("${employee.EMPLOYEE_ID_COLUMN}")
+    private String EMPLOYEE_ID;
+
+    @Value("${employee.EMPLOYEE_NAME_COLUMN}")
+    private String EMPLOYEE_NAME;
+
+    @Value("${employee.EMPLOYEE_DEPARTMENT_ID_COLUMN}")
+    private String EMPLOYEE_DEPARTMENT_ID;
+
+    @Value("${employee.EMPLOYEE_SURNAME_COLUMN}")
+    private String EMPLOYEE_SURNAME;
+
+    @Value("${employee.EMPLOYEE_PATRONYMIC_COLUMN}")
+    private String EMPLOYEE_PATRONYMIC;
+
+    @Value("${employee.EMPLOYEE_DATE_OF_BIRTHDAY_COLUMN}")
+    private String EMPLOYEE_DATE_OF_BIRTHDAY;
+
+    @Value("${employee.EMPLOYEE_SALARY_COLUMN}")
+    private String EMPLOYEE_SALARY;
+
+    @Value("${employee.DELETE_EMPLOYEE_BY_DEPARTMENT_ID}")
+    private String DELETE_EMPLOYEE_BY_DEPARTMENT_ID;
+
+
     /**
      * Mapper for NamedParameterJdbcTemplate for union tables of Departments and Employees.
      * In case when we can have only one entity of Department we return department from @department field.
@@ -48,29 +105,29 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
         public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            Long id = rs.getLong("DEPARTMENT_ID");
+            Long id = rs.getLong(DEPARTMENT_ID);
 
             department = map.get(id);
 
             if (department == null) {
                 this.department = new Department ();
-                department.setId(rs.getLong("DEPARTMENT_ID"));
-                department.setName(rs.getString("DEPARTMENT_NAME"));
-                map.put(id, department);
+                department.setId(rs.getLong(DEPARTMENT_ID));
+                department.setName(rs.getString(DEPARTMENT_NAME));
+                map.put( id, department );
             }
 
-            if (rs.getString("EMPLOYEE_NAME") != null ||
-                    rs.getLong("EMPLOYEE_ID") != 0 ||
-                    rs.getLong("EMPLOYEE_DEPARTMENT_ID") != 0) {
+            if (rs.getString(EMPLOYEE_NAME) != null ||
+                    rs.getLong(EMPLOYEE_ID) != 0 ||
+                    rs.getLong(EMPLOYEE_DEPARTMENT_ID) != 0) {
 
                 Employee employee = new Employee();
-                employee.setId(rs.getLong("EMPLOYEE_ID"));
-                employee.setDepartmentId(rs.getLong("EMPLOYEE_DEPARTMENT_ID"));
-                employee.setName(rs.getString("EMPLOYEE_NAME"));
-                employee.setSurname(rs.getString("EMPLOYEE_SURNAME"));
-                employee.setPatronymic(rs.getString("EMPLOYEE_PATRONYMIC"));
-                employee.setDateOfBirthday(new LocalDate(rs.getDate("EMPLOYEE_DATE_OF_BIRTHDAY")));
-                employee.setSalary(rs.getLong("EMPLOYEE_SALARY"));
+                employee.setId(rs.getLong(EMPLOYEE_ID));
+                employee.setDepartmentId(rs.getLong(EMPLOYEE_DEPARTMENT_ID));
+                employee.setName( rs.getString(EMPLOYEE_NAME));
+                employee.setSurname(rs.getString(EMPLOYEE_SURNAME));
+                employee.setPatronymic(rs.getString(EMPLOYEE_PATRONYMIC));
+                employee.setDateOfBirthday(new LocalDate(rs.getDate(EMPLOYEE_DATE_OF_BIRTHDAY)));
+                employee.setSalary( rs.getLong( EMPLOYEE_SALARY ) );
 
                 this.department.addEmployee(employee);
             }
@@ -105,9 +162,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
         @Override
         public Department mapRow(ResultSet rs, int rowNum) throws SQLException {
             Department department = new Department();
-            department.setId(rs.getLong("DEPARTMENT_ID"));
-            department.setName(rs.getString("DEPARTMENT_NAME"));
-            department.setEmployees(new ArrayList<Employee>());
+            department.setId(rs.getLong(DEPARTMENT_ID));
+            department.setName(rs.getString(DEPARTMENT_NAME));
+            department.setEmployees( new ArrayList<Employee>() );
             return department;
         }
 
@@ -124,8 +181,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
         LOGGER.debug("addDepartment(department = {})", department);
 
         SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("name", department.getName());
-        String sql = "INSERT INTO departments ( DEPARTMENT_NAME ) VALUES ( :name )";
-        namedParameterJdbcTemplate.update(sql, parameterSource, keyHolder);
+
+        namedParameterJdbcTemplate.update( ADD_DEPARTMENT, parameterSource, keyHolder);
 
         long id = keyHolder.getKey().longValue();
 
@@ -140,13 +197,12 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public void removeDepartment(long id) {
         LOGGER.debug("removeDepartment(id) : id = {}", id);
-        Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("id", id);
-        String sql_1 = "DELETE FROM departments WHERE DEPARTMENT_ID = :id";
-        namedParameterJdbcTemplate.update(sql_1, parameters);
 
-        String sql_2 = "DELETE FROM employees WHERE EMPLOYEE_DEPARTMENT_ID = :id";
-        namedParameterJdbcTemplate.update(sql_2, parameters);
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put(PARAMETER_ID, id);
+
+        namedParameterJdbcTemplate.update( DELETE_DEPARTMENT_BY_ID, parameters);
+        namedParameterJdbcTemplate.update( DELETE_EMPLOYEE_BY_DEPARTMENT_ID, parameters);
     }
 
     /**
@@ -155,13 +211,12 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public void updateDepartment(Department department) {
         LOGGER.debug("updateDepartment(department = {})", department);
+
         Map<String, Object> parameters = new HashMap<>(2);
+        parameters.put(PARAMETER_ID,    department.getId());
+        parameters.put(PARAMETER_NAME,  department.getName());
 
-        parameters.put("id",    department.getId());
-        parameters.put("name",  department.getName());
-
-        String sql = "UPDATE departments SET DEPARTMENT_NAME = :name WHERE DEPARTMENT_ID = :id";
-        namedParameterJdbcTemplate.update(sql, parameters);
+        namedParameterJdbcTemplate.update( UPDATE_DEPARTMENT, parameters );
     }
 
     /**
@@ -170,9 +225,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public List<Department> getAllDepartments() {
         LOGGER.debug("getAllDepartments()");
-        String sql = "SELECT departments.*, employees.* FROM departments LEFT JOIN employees ON departments.DEPARTMENT_ID = employees.EMPLOYEE_DEPARTMENT_ID";
+
         DepartmentMapper mapper = new DepartmentMapper();
-        namedParameterJdbcTemplate.query(sql, mapper);
+        namedParameterJdbcTemplate.query( GET_ALL_DEPARTMENTS, mapper);
 
         return mapper.getAllDepartments();
     }
@@ -184,8 +239,8 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public List<Department> getAllDepartmentsWithoutEmployees() {
         LOGGER.debug("getAllDepartmentsWithoutEmployees()");
-        String sql = "SELECT * FROM departments ORDER BY DEPARTMENT_NAME";
-        return namedParameterJdbcTemplate.query(sql, new DepartmentOnlyMapper());
+
+        return namedParameterJdbcTemplate.query( GET_ALL_DEPARTMENTS_WITHOUT_EMPLOYEES, new DepartmentOnlyMapper());
     }
 
     /**
@@ -195,11 +250,11 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public Department getDepartmentById(long id) {
         LOGGER.debug("getDepartmentById(id = {})", id);
+
         Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("id", id);
-        String sql = "SELECT departments.*, employees.* FROM departments LEFT JOIN employees ON departments.DEPARTMENT_ID = employees.EMPLOYEE_DEPARTMENT_ID WHERE departments.DEPARTMENT_ID = :id";
+        parameters.put(PARAMETER_ID, id);
         DepartmentMapper mapper = new DepartmentMapper();
-        namedParameterJdbcTemplate.query(sql, parameters, mapper);
+        namedParameterJdbcTemplate.query( GET_DEPARTMENT_BY_ID, parameters, mapper);
 
         LOGGER.debug("getDepartmentById(id): department = {}", mapper.getDepartment());
         return mapper.getDepartment();
@@ -212,11 +267,13 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public Department getDepartmentByName(String name) {
         LOGGER.debug("getDepartmentByName(name = {})", name);
+
         Map<String, Object> parameters = new HashMap<>(1);
-        parameters.put("name", name);
-        String sql = "SELECT departments.*, employees.* FROM departments LEFT JOIN employees ON departments.DEPARTMENT_ID = employees.EMPLOYEE_DEPARTMENT_ID WHERE departments.DEPARTMENT_NAME = :name";
+        parameters.put(PARAMETER_NAME, name);
+
         DepartmentMapper mapper = new DepartmentMapper();
-        namedParameterJdbcTemplate.query(sql, parameters, mapper);
+        namedParameterJdbcTemplate.query(GET_DEPARTMENT_BY_NAME, parameters, mapper);
+
         LOGGER.debug("getDepartmentByName(name) : department = {}", mapper.getDepartment());
         return mapper.getDepartment();
     }
