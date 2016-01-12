@@ -1,7 +1,7 @@
 package com.ar0ne.web;
 
 import com.ar0ne.model.Department;
-import com.ar0ne.model.Employee;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,7 +25,8 @@ import java.util.*;
 @RequestMapping("/department")
 public class DepartmentWebController {
 
-    public final static String URL = "http://localhost:8080/rest/department";
+    @Value( "${url.rest.department}" )
+    private String URL_DEPARTMENT;
 
     private static final Logger LOGGER = LogManager.getLogger(DepartmentWebController.class);
 
@@ -42,7 +43,7 @@ public class DepartmentWebController {
         try {
             Map<Long, Float> department_avg_salary_map = new HashMap<>();
             // get departments and convert array to list
-            Department[] departments = restTemplate.getForObject(URL, Department[].class);
+            Department[] departments = restTemplate.getForObject( URL_DEPARTMENT, Department[].class);
             List<Department> departmentList = Arrays.asList(departments);
 
             Float avg_salary = 0.0f;
@@ -82,7 +83,7 @@ public class DepartmentWebController {
         try {
 
             department = restTemplate.getForObject(
-                URL + "/id/" + id,
+                URL_DEPARTMENT + "/id/" + id,
                 Department.class
             );
 
@@ -110,7 +111,7 @@ public class DepartmentWebController {
 
         try {
             department = restTemplate.getForObject(
-                URL + "/name/" + name,
+                URL_DEPARTMENT + "/name/" + name,
                 Department.class
             );
 
@@ -152,7 +153,7 @@ public class DepartmentWebController {
             request.add("name", name);
 
             restTemplate.postForObject(
-                URL + "/create",
+                URL_DEPARTMENT + "/create",
                 request,
                 String.class
             );
@@ -185,7 +186,7 @@ public class DepartmentWebController {
             RestTemplate restTemplate = new RestTemplate();
 
             restTemplate.delete(
-                URL + "/delete/" + id
+                URL_DEPARTMENT + "/delete/" + id
             );
 
             redirectAttributes.addFlashAttribute( "message", "Department removed");
@@ -214,7 +215,7 @@ public class DepartmentWebController {
         try {
 
             department = restTemplate.getForObject(
-                URL + "/id/" + id,
+                URL_DEPARTMENT + "/id/" + id,
                 Department.class
             );
 
@@ -251,7 +252,7 @@ public class DepartmentWebController {
             request.add("id", id);
 
             restTemplate.postForObject(
-                URL + "/update",
+                URL_DEPARTMENT + "/update",
                 request,
                 String.class
             );

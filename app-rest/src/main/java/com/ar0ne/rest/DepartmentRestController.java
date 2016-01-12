@@ -39,7 +39,7 @@ public class DepartmentRestController {
     public ResponseEntity<List<Department>> getAllDepartments() {
         LOGGER.debug("get all departments()");
         List<Department> departmentList = departmentService.getAllDepartments();
-        return new ResponseEntity(departmentList, HttpStatus.OK);
+        return new ResponseEntity<>(departmentList, HttpStatus.OK);
     }
 
     /**
@@ -50,7 +50,7 @@ public class DepartmentRestController {
     public ResponseEntity<List<Department>> getAllDepartmentsWithoutEmployees() {
         LOGGER.debug("get all departments without employees()");
         List<Department> departmentList = departmentService.getAllDepartmentsWithoutEmployees();
-        return new ResponseEntity(departmentList, HttpStatus.OK);
+        return new ResponseEntity<>(departmentList, HttpStatus.OK);
     }
 
     /**
@@ -79,7 +79,7 @@ public class DepartmentRestController {
         LOGGER.debug("get department by name ({})", name);
         try {
             Department department = departmentService.getDepartmentByName(name);
-            return new ResponseEntity<Department>(department, HttpStatus.OK);
+            return new ResponseEntity<>(department, HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity("Department not found for name=" + name + ", error:" + ex.getMessage(), HttpStatus.NOT_FOUND);
         }
@@ -97,10 +97,10 @@ public class DepartmentRestController {
         department.setName(name);
         try {
             long id = departmentService.addDepartment(department);
-            return new ResponseEntity(id, HttpStatus.CREATED);
+            return new ResponseEntity<>(id, HttpStatus.CREATED);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(),  HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(),  HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -115,10 +115,10 @@ public class DepartmentRestController {
 
         try {
             departmentService.removeDepartment(id);
-            return new ResponseEntity("", HttpStatus.OK);
+            return new ResponseEntity<>("", HttpStatus.OK);
         }catch(Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -140,10 +140,10 @@ public class DepartmentRestController {
 
         try {
             departmentService.updateDepartment(department);
-            return new ResponseEntity("", HttpStatus.OK);
+            return new ResponseEntity<>("", HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity("Check input data!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Check input data!", HttpStatus.BAD_REQUEST);
         }
     }
 

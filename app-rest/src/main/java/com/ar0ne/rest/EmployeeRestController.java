@@ -40,7 +40,7 @@ public class EmployeeRestController {
     public ResponseEntity<List<Employee>> getAllEmployees() {
         LOGGER.debug("get all employees()");
         List<Employee> employeeList = employeeService.getAllEmployees();
-        return new ResponseEntity(employeeList, HttpStatus.OK);
+        return new ResponseEntity<>(employeeList, HttpStatus.OK);
     }
 
     /**
@@ -71,10 +71,10 @@ public class EmployeeRestController {
 
         try {
             employeeService.removeEmployee(id);
-            return new ResponseEntity("Deleted", HttpStatus.OK);
+            return new ResponseEntity<>("Deleted", HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -90,13 +90,13 @@ public class EmployeeRestController {
      * @return status 200 if all right
      */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
-    public ResponseEntity updateEmployee(@RequestParam Long id,
-                                         @RequestParam String surname,
-                                         @RequestParam String name,
-                                         @RequestParam String patronymic,
-                                         @RequestParam Long salary,
-                                         @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
-                                         @RequestParam Long department_id) {
+    public ResponseEntity updateEmployee( @RequestParam(value = "id") Long id,
+                                          @RequestParam(value = "surname") String surname,
+                                          @RequestParam(value = "name") String name,
+                                          @RequestParam(value = "patronymic") String patronymic,
+                                          @RequestParam(value = "salary") Long salary,
+                                          @RequestParam(value = "date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                          @RequestParam(value = "department_id") Long department_id) {
 
         LOGGER.debug("update employee to name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
                 name, surname, patronymic, salary, date_of_birthday);
@@ -112,10 +112,10 @@ public class EmployeeRestController {
 
         try {
             employeeService.updateEmployee(employee);
-            return new ResponseEntity("", HttpStatus.OK);
+            return new ResponseEntity<>("", HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -136,7 +136,7 @@ public class EmployeeRestController {
                                       @RequestParam(value = "name") String name,
                                       @RequestParam(value = "patronymic") String patronymic,
                                       @RequestParam(value = "salary") Long salary,
-                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
+                                      @RequestParam(value = "date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday,
                                       @RequestParam(value = "department_id") Long department_id) {
 
         LOGGER.debug("add employee with name = {}, surname = {}, patronymic = {}, salary = {}, date_of_birthday = {}",
@@ -153,10 +153,10 @@ public class EmployeeRestController {
             employee.setDepartmentId(department_id);
 
             long ret_id = employeeService.addEmployee(employee);
-            return new ResponseEntity(ret_id, HttpStatus.CREATED);
+            return new ResponseEntity<>(ret_id, HttpStatus.CREATED);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -174,10 +174,10 @@ public class EmployeeRestController {
         List<Employee> employeeList = null;
         try {
             employeeList = employeeService.getEmployeeByDateOfBirthday(date);
-            return new ResponseEntity(employeeList, HttpStatus.OK);
+            return new ResponseEntity<>(employeeList, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -197,10 +197,10 @@ public class EmployeeRestController {
         List<Employee> employeeList = null;
         try {
             employeeList = employeeService.getEmployeeBetweenDatesOfBirtday(from, to);
-            return new ResponseEntity(employeeList, HttpStatus.OK);
+            return new ResponseEntity<>(employeeList, HttpStatus.OK);
         } catch (Exception ex) {
             LOGGER.debug(ex);
-            return new ResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 

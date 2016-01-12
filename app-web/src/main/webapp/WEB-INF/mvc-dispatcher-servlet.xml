@@ -30,6 +30,15 @@
         </property>
     </bean>
 
+
+    <bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:urls.properties</value>
+            </list>
+        </property>
+    </bean>
+
     <mvc:resources mapping="/resources/**" location="/resources/" />
     
 

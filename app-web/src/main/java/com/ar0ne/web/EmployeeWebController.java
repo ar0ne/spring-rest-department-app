@@ -5,6 +5,7 @@ import com.ar0ne.model.Employee;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,12 +31,14 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeWebController {
 
+    @Value( "${url.rest.employee}" )
+    private String URL_EMPLOYEE;
 
-    public final static String URL_EMPLOYEE   = "http://localhost:8080/rest/employee";
-    public final static String URL_DEPARTMENT = "http://localhost:8080/rest/department";
+    @Value( "${url.rest.department}" )
+    private String URL_DEPARTMENT;
+
 
     private static final Logger LOGGER = LogManager.getLogger(EmployeeWebController.class);
-
 
     /**
      * Get page of all employees

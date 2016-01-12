@@ -36,6 +36,12 @@
 
     <context:component-scan base-package="com.ar0ne" />
 
-
+    <beans:bean class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <beans:property name="locations">
+            <beans:list>
+                <beans:value>classpath*:sql.properties</beans:value>
+            </beans:list>
+        </beans:property>
+    </beans:bean>
 
 </beans:beans>

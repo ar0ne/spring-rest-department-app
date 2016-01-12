@@ -10,7 +10,7 @@
         <property name="locations">
             <list>
                 <value>classpath:test_db.properties</value>
-                <value>classpath:sql.properties</value>
+                <value>classpath*:sql.properties</value>
             </list>
         </property>
     </bean>

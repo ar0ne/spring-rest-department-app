@@ -14,8 +14,6 @@
          http://www.springframework.org/schema/context
          http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!--<mvc:annotation-driven/>-->
-
     <import resource="classpath*:/Spring-Dao-Module.xml" />
 
     <context:component-scan base-package="com.ar0ne.dao" />
