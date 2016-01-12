@@ -16,11 +16,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -42,8 +44,16 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/spring-rest-mock-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
+@Transactional(transactionManager="transactionManager")
 public class DepartmentRestControllerTest {
+
+    public static final String DEPARTMENT_OF_ENERGY =   "Department of Energy";
+    public static final String URL_DEPARTMENT_ID =      "/department/id/";
+    public static final String URL_DEPARTMENT_CREATE =  "/department/create";
+    public static final String URL_DEPARTMENT_NAME =    "/department/name/";
+    public static final String URL_DEPARTMENT_DELETE =  "/department/delete/";
+    public static final String URL_DEPARTMENT_UPDATE =  "/department/update/";
+    public static final String EMPTY_STRING = "";
 
     private MockMvc mockMvc;
 
@@ -91,8 +101,8 @@ public class DepartmentRestControllerTest {
         return mapper;
     }
 
-    private static Department createDeparment() {
-        Department department = new Department("Department of Energy", 1L);
+    private static Department createDepartment() {
+        Department department = new Department( DEPARTMENT_OF_ENERGY , 1L);
         List<Employee> employees = new ArrayList<Employee>(
             Arrays.asList(
                 new Employee(1, 1, "Williamson", "Precious", "John", new LocalDate("1990-04-05"), 3500),
@@ -113,16 +123,18 @@ public class DepartmentRestControllerTest {
     @Test
     public void getDepartmentById() throws Exception {
 
-        departmentServiceMock.getDepartmentById(1L);
-        expectLastCall().andReturn(createDeparment());
+        long id = 1L;
+
+        departmentServiceMock.getDepartmentById(id);
+        expectLastCall().andReturn( createDepartment());
         replay(departmentServiceMock);
 
-        Department department = createDeparment();
+        Department department = createDepartment();
 
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         this.mockMvc.perform(
-                get("/department/id/" + 1)
+                get( URL_DEPARTMENT_ID + id)
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -136,13 +148,15 @@ public class DepartmentRestControllerTest {
      */
     @Test
     public void getDepartmentByIdWithIncorrectId() throws Exception {
-        departmentServiceMock.getDepartmentById(20000L);
+
+        long id = 20000L;
+        departmentServiceMock.getDepartmentById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Department not found for id=20000, error:Department can't be NULL",null));
 
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-            get("/department/id/"  + 20000)
+            get( URL_DEPARTMENT_ID  + id)
                     .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound())
@@ -156,13 +170,16 @@ public class DepartmentRestControllerTest {
      */
     @Test
     public void getDepartmentByIdWithIncorrectIdNegativeId() throws Exception {
-        departmentServiceMock.getDepartmentById(-2L);
+
+        long id = -2L;
+
+        departmentServiceMock.getDepartmentById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Department not found for id=-2, error:Department can't be NULL",null));
 
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-                get("/department/id/"  + -2)
+                get( URL_DEPARTMENT_ID  + id)
                     .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -176,13 +193,16 @@ public class DepartmentRestControllerTest {
      */
     @Test
     public void getDepartmentByIdWithIncorrectIdZeroId() throws Exception {
-        departmentServiceMock.getDepartmentById(0L);
+
+        long id = 0L;
+
+        departmentServiceMock.getDepartmentById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Department not found for id=0, error:Department can't be NULL",null));
 
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-                get("/department/id/"  + 0)
+                get( URL_DEPARTMENT_ID  + id)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -202,7 +222,7 @@ public class DepartmentRestControllerTest {
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-            post("/department/create")
+            post( URL_DEPARTMENT_CREATE )
                 .param("name", "")
             )
                 .andDo(print())
@@ -217,17 +237,17 @@ public class DepartmentRestControllerTest {
     @Test
     public void getDepartmentByName() throws Exception {
 
-        departmentServiceMock.getDepartmentByName("Department of Energy");
-        expectLastCall().andReturn(createDeparment());
+        departmentServiceMock.getDepartmentByName( DEPARTMENT_OF_ENERGY );
+        expectLastCall().andReturn(createDepartment());
 
         replay(departmentServiceMock);
 
-        Department department = createDeparment();
+        Department department = createDepartment();
 
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         this.mockMvc.perform(
-            get("/department/name/" + "Department of Energy")
+            get( URL_DEPARTMENT_NAME + DEPARTMENT_OF_ENERGY)
                     .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
@@ -238,44 +258,48 @@ public class DepartmentRestControllerTest {
     @Test
     public void getDepartmentByNameWithIncorrectName() throws Exception {
         departmentServiceMock.getDepartmentByName("NOT EXISTED");
-        expectLastCall().andThrow(new IllegalArgumentException("", null));
+        expectLastCall().andThrow(new IllegalArgumentException( EMPTY_STRING, null));
 
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-            get("/department/name/")
+            get( URL_DEPARTMENT_NAME )
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andDo(print())
             .andExpect(status().isNotFound())
-            .andExpect(content().string(""));
+            .andExpect(content().string( EMPTY_STRING ));
 
     }
 
-//    @Test
-//    public void removeDepartmentById() throws Exception {
-//
-//        departmentServiceMock.removeDepartment(1L);
-//        expectLastCall();
-//        replay(departmentServiceMock);
-//
-//        this.mockMvc.perform(
-//            delete("/department/delete/" + 1)
-//        )
-//            .andDo(print())
-//            .andExpect(status().isOk());
-//
-//    }
-
     @Test
-    public void removeDepartmentByIncorrectId() throws Exception {
+    public void removeDepartmentById() throws Exception {
 
-        departmentServiceMock.removeDepartment(100000L);
+        long id = 1L;
+
+        departmentServiceMock.removeDepartment(id);
         expectLastCall();
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-              delete("/department/delete/" + 100000)
+            delete( URL_DEPARTMENT_DELETE + id)
+        )
+            .andDo(print())
+            .andExpect(status().isOk());
+
+    }
+
+    @Test
+    public void removeDepartmentByIncorrectId() throws Exception {
+
+        long id = 100000L;
+
+        departmentServiceMock.removeDepartment(id);
+        expectLastCall();
+        replay(departmentServiceMock);
+
+        this.mockMvc.perform(
+              delete( URL_DEPARTMENT_DELETE + id)
             )
             .andDo(print())
             .andExpect(status().isNotFound());
@@ -286,7 +310,7 @@ public class DepartmentRestControllerTest {
     @Test
     public void updateDepartment() throws Exception {
 
-        Department department = createDeparment();
+        Department department = createDepartment();
 
         departmentServiceMock.updateDepartment(department);
         expectLastCall();
@@ -295,7 +319,7 @@ public class DepartmentRestControllerTest {
         String employeesJson = createObjectMapperWithJacksonConverter().writeValueAsString(department.getEmployees());
 
         this.mockMvc.perform(
-            post("/department/update/")
+            post( URL_DEPARTMENT_UPDATE )
                 .param("id", String.valueOf(department.getId()))
                 .param("name", department.getName())
                 .param("employees", employeesJson)
@@ -308,7 +332,7 @@ public class DepartmentRestControllerTest {
     @Test
     public void updateDepartmentWithIncorrectData() throws Exception {
 
-        Department department = createDeparment();
+        Department department = createDepartment();
         department.setName(null);
 
         departmentServiceMock.updateDepartment(department);
@@ -316,7 +340,7 @@ public class DepartmentRestControllerTest {
         replay(departmentServiceMock);
 
         this.mockMvc.perform(
-            post("/department/update")
+            post( URL_DEPARTMENT_UPDATE )
                 .param("id", String.valueOf(department.getId()))
                 .param("name", department.getName())
         )

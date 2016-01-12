@@ -14,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -30,6 +29,7 @@ import javax.annotation.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,8 +39,20 @@ import java.util.List;
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath*:/spring-rest-mock-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
+@Transactional(transactionManager="transactionManager")
 public class EmployeeRestControllerTest {
+
+    public static final String WRONG_DATA = "9999-09-09";
+    public static final String RIGHT_DATA_FROM = "1972-02-09";
+    public static final String RIGHT_DATA_TO = "1972-03-09";
+    public static final String URL_EMPLOYEE_DATE = "/employee/date/";
+    public static final String URL_EMPLOYEE_DELETE = "/employee/delete/";
+    public static final String URL_EMPLOYEE_UPDATE = "/employee/update";
+    public static final String URL_EMPLOYEE_CREATE = "/employee/create";
+    public static final String URL_EMPLOYEE = "/employee/";
+    public static final String URL_EMPLOYEE_ID = "/employee/id/";
+
+    public final static int EMPL_INIT_SIZE = 15;
 
     private MockMvc mockMvc;
 
@@ -49,8 +61,6 @@ public class EmployeeRestControllerTest {
 
     @Autowired
     EmployeeService employeeServiceMock;
-
-    public final static int EMPL_INIT_SIZE = 15;
 
     @After
     public void down(){
@@ -91,23 +101,20 @@ public class EmployeeRestControllerTest {
         return new ArrayList<Employee>(
             Arrays.asList(
                 new Employee(1, 1, "Williamson", "Precious", "John", new LocalDate("1990-04-05"), 3500),
+                new Employee(2, 1, "Ibarra", "Helen", "Lee", new LocalDate("1987-01-15"), 1500),
                 new Employee(3, 1, "Walsh", "Max", "John", new LocalDate("1991-09-12"), 2500),
                 new Employee(4, 1, "Thomas", "Isaac", "Houston", new LocalDate("1995-07-07"), 1900),
                 new Employee(5, 1, "Mike", "Gordon", "Iris", new LocalDate("1992-09-03"), 2000),
-
                 new Employee(6, 2, "Ella", "Gutierrez", "Martin", new LocalDate("1990-04-01"), 1200),
                 new Employee(7, 2, "Shiloh", "Acosta", "Coffey", new LocalDate("1990-03-10"), 1100),
                 new Employee(8, 2, "Alessandro", "Mccullough", "Molly", new LocalDate("1989-11-13"), 2100),
                 new Employee(9, 2, "Briana", "Green", "Immanuel", new LocalDate("1996-01-06"), 1250),
                 new Employee(10, 2, "Kieran", "Mathis", "Yates", new LocalDate("1972-02-09"), 4300),
-
                 new Employee(11, 3, "Elijah", "Marquez", "Brandon", new LocalDate("1988-05-02"), 1900),
                 new Employee(12, 3, "Aniya", "Ballard", "Dario", new LocalDate("1994-05-06"), 2230),
                 new Employee(13, 3, "Aurora", "Bright", "Guerra",new LocalDate( "1994-02-06"), 1890),
-
                 new Employee(14, 4, "Zariah", "Marks", "Austin", new LocalDate("1990-03-09"), 1290),
-                new Employee(15, 4, "Cordell", "Wilson", "Azul",new LocalDate( "1991-04-05"), 3200),
-                new Employee(16, 1, "Williamson", "Precious", "John", new LocalDate("1990-04-05"), 3500)
+                new Employee(15, 4, "Cordell", "Wilson", "Azul",new LocalDate( "1991-04-05"), 3200)
             )
         );
     }
@@ -115,7 +122,9 @@ public class EmployeeRestControllerTest {
     @Test
     public void getEmployeeById() throws Exception {
 
-        employeeServiceMock.getEmployeeById(1L);
+        long id = 1L;
+
+        employeeServiceMock.getEmployeeById( id );
         expectLastCall().andReturn(createDemoEmployee());
         replay(employeeServiceMock);
 
@@ -124,7 +133,7 @@ public class EmployeeRestControllerTest {
         Employee employee = createDemoEmployee();
 
         this.mockMvc.perform(
-            get("/employee/id/" + 1)
+            get( URL_EMPLOYEE_ID + id)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isOk())
@@ -136,13 +145,15 @@ public class EmployeeRestControllerTest {
     @Test
     public void getEmployeeByIdWithIncorrectId()  throws Exception{
 
-        employeeServiceMock.getEmployeeById(20000L);
+        long id = 20000L;
+
+        employeeServiceMock.getEmployeeById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Employee not found for id=20000, error:Employee with this ID doesn't exist",null));
 
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            get("/employee/id/"  + 20000)
+            get( URL_EMPLOYEE_ID + id)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound())
@@ -154,13 +165,15 @@ public class EmployeeRestControllerTest {
     @Test
     public void getEmployeeByIdWithNegativeId()  throws Exception{
 
-        employeeServiceMock.getEmployeeById(-2L);
+        long id = -2L;
+
+        employeeServiceMock.getEmployeeById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Employee not found for id=-2, error:Employee with this ID doesn't exist",null));
 
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            get("/employee/id/"  + "-2")
+            get( URL_EMPLOYEE_ID  + id)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound())
@@ -171,13 +184,15 @@ public class EmployeeRestControllerTest {
     @Test
     public void getEmployeeByIdWithZeroId()  throws Exception{
 
-        employeeServiceMock.getEmployeeById(0);
+        long id = 0;
+
+        employeeServiceMock.getEmployeeById(id);
         expectLastCall().andThrow(new IllegalArgumentException("Employee not found for id=0, error:Employee with this ID doesn't exist",null));
 
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            get("/employee/id/"  + 0)
+            get( URL_EMPLOYEE_ID + id)
                 .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isNotFound())
@@ -197,7 +212,7 @@ public class EmployeeRestControllerTest {
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         this.mockMvc.perform(
-            get("/employee/")
+            get( URL_EMPLOYEE )
                 .accept(MediaType.APPLICATION_JSON)
             )
             .andDo(print())
@@ -218,7 +233,7 @@ public class EmployeeRestControllerTest {
         Employee employee = createDemoEmployee();
 
         this.mockMvc.perform(
-            post("/employee/create")
+            post( URL_EMPLOYEE_CREATE )
                 .param("name", employee.getName())
                 .param("surname", employee.getSurname())
                 .param("patronymic", employee.getPatronymic())
@@ -244,7 +259,7 @@ public class EmployeeRestControllerTest {
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-                post("/employee/create")
+                post( URL_EMPLOYEE_CREATE )
                         .param("name", employee.getName())
                         .param("surname", employee.getSurname())
                         .param("patronymic", employee.getPatronymic())
@@ -261,12 +276,14 @@ public class EmployeeRestControllerTest {
     @Test
     public void removeEmployee() throws Exception {
 
-        employeeServiceMock.removeEmployee(2L);
+        long id = 2L;
+
+        employeeServiceMock.removeEmployee(id);
         expectLastCall();
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            delete("/employee/delete/" + 2)
+            delete( URL_EMPLOYEE_DELETE + id)
         )
             .andDo(print())
             .andExpect(status().isOk())
@@ -276,27 +293,23 @@ public class EmployeeRestControllerTest {
     @Test
     public void updateEmployee() throws Exception {
 
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
-
         Employee employee = createDemoEmployee();
-
-        String json = mapper.writeValueAsString(employee);
 
         employeeServiceMock.updateEmployee(employee);
         expectLastCall();
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            post("/employee/update")
-                .param("name", employee.getName())
-                .param("surname", employee.getSurname())
-                .param("patronymic", employee.getPatronymic())
-                .param("department_id", String.valueOf(employee.getDepartmentId()))
-                .param("salary", String.valueOf(employee.getSalary()))
-                .param("id", String.valueOf(employee.getId()))
-                .param("date_of_birthday", employee.getDateOfBirthday().toString())
+          post( URL_EMPLOYEE_UPDATE )
+            .param( "name", employee.getName() )
+            .param( "surname", employee.getSurname() )
+            .param( "patronymic", employee.getPatronymic() )
+            .param( "department_id", String.valueOf( employee.getDepartmentId() ) )
+            .param( "salary", String.valueOf( employee.getSalary() ) )
+            .param( "id", String.valueOf( employee.getId() ) )
+            .param( "date_of_birthday", employee.getDateOfBirthday().toString() )
         )
-            .andDo(print())
+            .andDo( print() )
             .andExpect(status().isOk());
     }
 
@@ -304,19 +317,15 @@ public class EmployeeRestControllerTest {
     @Test
     public void updateEmployeeWithIncorrectData() throws Exception {
 
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
-
         Employee employee = createDemoEmployee();
         employee.setName(null);
-
-        String json = mapper.writeValueAsString(employee);
 
         employeeServiceMock.updateEmployee(employee);
         expectLastCall();
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-                post("/employee/update")
+                post( URL_EMPLOYEE_UPDATE )
                         .param("name", employee.getName())
                         .param("surname", employee.getSurname())
                         .param("patronymic", employee.getPatronymic())
@@ -343,26 +352,25 @@ public class EmployeeRestControllerTest {
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-                get("/employee/date/" + employee.getDateOfBirthday().toString())
+                get( URL_EMPLOYEE_DATE + employee.getDateOfBirthday().toString())
                         .accept(MediaType.APPLICATION_JSON)
         )
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string(mapper.writeValueAsString(employeeList)));
 
-
     }
 
     @Test
     public void getEmployeesByDateOfBirthdayWithWrongDate() throws  Exception {
 
-        employeeServiceMock.getEmployeeByDateOfBirthday(new LocalDate("9999-09-09"));
+        employeeServiceMock.getEmployeeByDateOfBirthday(new LocalDate( WRONG_DATA ));
         expectLastCall().andThrow(new IllegalArgumentException("Employee can't be empty", null));
 
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            get("/employee/date/"  + "9999-09-09" )
+            get( URL_EMPLOYEE_DATE  + WRONG_DATA )
                     .accept(MediaType.APPLICATION_JSON))
             .andDo(print())
             .andExpect(status().isBadRequest())
@@ -373,28 +381,26 @@ public class EmployeeRestControllerTest {
     @Test
     public void getEmployeeBetweenDoB() throws Exception {
 
-        Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate("1972-02-09"), 4300l);
+        Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate( RIGHT_DATA_FROM ), 4300l);
+
         ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
-        employeeServiceMock.getEmployeeBetweenDatesOfBirtday(new LocalDate("1972-02-09"), new LocalDate("1972-03-09"));
+        employeeServiceMock.getEmployeeBetweenDatesOfBirtday(new LocalDate(RIGHT_DATA_FROM), new LocalDate(RIGHT_DATA_TO));
 
-        List<Employee> employeeList = new ArrayList<Employee>();
+        List<Employee> employeeList = new ArrayList<>();
         employeeList.add(employee);
 
         expectLastCall().andReturn(employeeList);
         replay(employeeServiceMock);
 
         this.mockMvc.perform(
-            get("/employee/date/" + "1972-02-09" + "/" + "1972-03-09")
+            get( URL_EMPLOYEE_DATE + RIGHT_DATA_FROM + "/" + RIGHT_DATA_TO )
                 .accept(MediaType.APPLICATION_JSON)
         )
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().string(mapper.writeValueAsString(employeeList)));
-
     }
-
-
 
 }
 
