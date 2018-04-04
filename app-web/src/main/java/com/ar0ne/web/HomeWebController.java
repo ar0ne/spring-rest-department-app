@@ -17,10 +17,7 @@ public class HomeWebController {
      */
     @RequestMapping(value = {SiteEndpointUrls.INDEX, ""}, method = RequestMethod.GET)
     public ModelAndView indexPage() {
-
-        ModelAndView view = new ModelAndView("web/index");
-
-        return view;
+        return new ModelAndView("web/index");
     }
 
 }

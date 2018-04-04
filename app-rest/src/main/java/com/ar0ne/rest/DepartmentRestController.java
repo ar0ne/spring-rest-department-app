@@ -5,15 +5,17 @@ import com.ar0ne.service.DepartmentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class DepartmentRestController {
 
     @Autowired
     @Qualifier("departmentServiceImpl")
-    DepartmentService departmentService;
+    private DepartmentService departmentService;
 
     /**
      *  Get list of all departments from database
@@ -59,13 +61,13 @@ public class DepartmentRestController {
      * @return department from database in JSON format
      */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_ID, method = RequestMethod.GET)
-    public ResponseEntity<Department> getDepartmentById(@PathVariable("id") long id) {
+    public ResponseEntity getDepartmentById(@PathVariable("id") long id) {
         LOGGER.debug("get department by id ({})", id);
         try {
             Department department = departmentService.getDepartmentById(id);
-            return new ResponseEntity<Department>(department, HttpStatus.OK);
+            return new ResponseEntity<>(department, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity("Department not found for id=" + id + ", error:" + ex.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Department not found for id=" + id + ", error:" + ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -75,13 +77,13 @@ public class DepartmentRestController {
      * @return department from database in JSON format
      */
     @RequestMapping(value = SiteEndpointUrls.GET_BY_NAME, method = RequestMethod.GET)
-    public ResponseEntity<Department> getDepartmentByName(@PathVariable("name") String name) {
+    public ResponseEntity getDepartmentByName(@PathVariable("name") String name) {
         LOGGER.debug("get department by name ({})", name);
         try {
             Department department = departmentService.getDepartmentByName(name);
             return new ResponseEntity<>(department, HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity("Department not found for name=" + name + ", error:" + ex.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Department not found for name=" + name + ", error:" + ex.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 

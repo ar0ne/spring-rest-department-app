@@ -16,15 +16,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,23 +37,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+/**
+ * @TODO: Mock DAO and Service layer
+ */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/spring-rest-mock-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-rest-test.xml"})
 @Transactional(transactionManager="transactionManager")
 public class DepartmentRestControllerTest {
 
-    public static final String DEPARTMENT_OF_ENERGY =   "Department of Energy";
-    public static final String URL_DEPARTMENT_ID =      "/department/id/";
-    public static final String URL_DEPARTMENT_CREATE =  "/department/create";
-    public static final String URL_DEPARTMENT_NAME =    "/department/name/";
-    public static final String URL_DEPARTMENT_DELETE =  "/department/delete/";
-    public static final String URL_DEPARTMENT_UPDATE =  "/department/update/";
-    public static final String EMPTY_STRING = "";
+    private static final String DEPARTMENT_OF_ENERGY =   "Department of Energy";
+    private static final String URL_DEPARTMENT_ID =      "/department/id/";
+    private static final String URL_DEPARTMENT_CREATE =  "/department/create";
+    private static final String URL_DEPARTMENT_NAME =    "/department/name/";
+    private static final String URL_DEPARTMENT_DELETE =  "/department/delete/";
+    private static final String URL_DEPARTMENT_UPDATE =  "/department/update/";
+    private static final String EMPTY_STRING = "";
 
     private MockMvc mockMvc;
 
-    @Resource
+    @Autowired
     DepartmentRestController departmentRestController;
 
     @Autowired
@@ -118,7 +117,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test getDepartmentById: check equals results from service and REST service
-     * @throws Exception
      */
     @Test
     public void getDepartmentById() throws Exception {
@@ -144,7 +142,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test getDepartmentByIdWithIncorrectId: check equals results from service and REST service with incorrect data
-     * @throws Exception
      */
     @Test
     public void getDepartmentByIdWithIncorrectId() throws Exception {
@@ -166,7 +163,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test getDepartmentByIdWithIncorrectIdNegativeId: check equals results from service and REST service with incorrect data
-     * @throws Exception
      */
     @Test
     public void getDepartmentByIdWithIncorrectIdNegativeId() throws Exception {
@@ -189,7 +185,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test getDepartmentByIdWithIncorrectIdZeroId: check equals results from service and REST service with incorrect data
-     * @throws Exception
      */
     @Test
     public void getDepartmentByIdWithIncorrectIdZeroId() throws Exception {
@@ -212,7 +207,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test addDepartmentWithIncorrectData: check equals results from service and REST service with incorrect data
-     * @throws Exception
      */
     @Test
     public void addDepartmentWithIncorrectData() throws Exception {
@@ -232,7 +226,6 @@ public class DepartmentRestControllerTest {
 
     /**
      * Test getDepartmentByName: check equals results from service and REST service
-     * @throws Exception
      */
     @Test
     public void getDepartmentByName() throws Exception {

@@ -1,6 +1,7 @@
 package com.ar0ne.web;
 
 import com.ar0ne.model.Department;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -25,10 +26,13 @@ import java.util.*;
 @RequestMapping("/department")
 public class DepartmentWebController {
 
+    private static final Logger logger = LogManager.getLogger(DepartmentWebController.class);
+
     @Value( "${url.rest.department}" )
     private String URL_DEPARTMENT;
 
-    private static final Logger LOGGER = LogManager.getLogger(DepartmentWebController.class);
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * Get page of all departments with average salary for every departments
@@ -38,29 +42,27 @@ public class DepartmentWebController {
     public ModelAndView getAllDepartments() {
 
         ModelAndView view = new ModelAndView("web/department/all");
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
-            Map<Long, Float> department_avg_salary_map = new HashMap<>();
+            Map<Long, Float> departmentAvgSalaryMap = new HashMap<>();
             // get departments and convert array to list
             Department[] departments = restTemplate.getForObject( URL_DEPARTMENT, Department[].class);
             List<Department> departmentList = Arrays.asList(departments);
 
-            Float avg_salary = 0.0f;
+            Float avgSalary;
             // sort list for better appearance
             Department.SortByDepartmentName sn = new Department().new SortByDepartmentName();
             Collections.sort(departmentList, sn);
 
             for(Department dep: departmentList) {
                 // calculate average salary for department and then place value in map with key == departmentId
-                avg_salary = dep.calcAverageSalary();
-                department_avg_salary_map.put(dep.getId(), avg_salary);
+                avgSalary = dep.calcAverageSalary();
+                departmentAvgSalaryMap.put(dep.getId(), avgSalary);
             }
 
-            view.addObject("department_avg_salary_map", department_avg_salary_map);
+            view.addObject("departmentAvgSalaryMap", departmentAvgSalaryMap);
             view.addObject("departmentList", departmentList);
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Database doesn't consist any departments yet.");
         }
 
@@ -76,9 +78,7 @@ public class DepartmentWebController {
     public ModelAndView getDepartmentsById(@PathVariable long id) {
 
         ModelAndView view = new ModelAndView("web/department/details");
-
-        RestTemplate restTemplate = new RestTemplate();
-        Department department = null;
+        Department department;
 
         try {
 
@@ -89,7 +89,7 @@ public class DepartmentWebController {
 
             view.addObject("department", department);
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't find this department");
         }
 
@@ -105,9 +105,7 @@ public class DepartmentWebController {
     public ModelAndView getDepartmentsByName(@PathVariable String name) {
 
         ModelAndView view = new ModelAndView("web/department/details");
-
-        RestTemplate restTemplate = new RestTemplate();
-        Department department = null;
+        Department department;
 
         try {
             department = restTemplate.getForObject(
@@ -117,7 +115,7 @@ public class DepartmentWebController {
 
             view.addObject("department", department);
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't find this department");
         }
 
@@ -130,9 +128,7 @@ public class DepartmentWebController {
      */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.GET)
     public ModelAndView addDepartmentForm() {
-
-        ModelAndView view = new ModelAndView("web/department/add");
-        return view;
+        return new ModelAndView("web/department/add");
     }
 
     /**
@@ -147,8 +143,6 @@ public class DepartmentWebController {
 
         try {
 
-            RestTemplate restTemplate = new RestTemplate();
-
             MultiValueMap<String, Object> request = new LinkedMultiValueMap<String, Object>();
             request.add("name", name);
 
@@ -162,7 +156,7 @@ public class DepartmentWebController {
             return new ModelAndView("redirect:/department" + SiteEndpointUrls.GET_ALL);
 
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't add department! Check input data!");
             return new ModelAndView("redirect:/department" + SiteEndpointUrls.CREATE);
         }
@@ -183,15 +177,13 @@ public class DepartmentWebController {
 
         try {
 
-            RestTemplate restTemplate = new RestTemplate();
-
             restTemplate.delete(
                 URL_DEPARTMENT + "/delete/" + id
             );
 
             redirectAttributes.addFlashAttribute( "message", "Department removed");
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't remove department with ID = " + id);
         }
 
@@ -208,10 +200,8 @@ public class DepartmentWebController {
     public ModelAndView updateDepartmentByIdForm(RedirectAttributes redirectAttributes,
                                                  @PathVariable long id) {
 
-        ModelAndView view = null;
-        RestTemplate restTemplate = new RestTemplate();
-        Department department = null;
-
+        ModelAndView view;
+        Department department;
         try {
 
             department = restTemplate.getForObject(
@@ -222,7 +212,7 @@ public class DepartmentWebController {
             view = new ModelAndView("web/department/update");
             view.addObject("department", department);
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view = new ModelAndView("redirect:/department" + SiteEndpointUrls.GET_ALL);
             view.addObject("error", "Can't get update page for this department! Check input data");
         }
@@ -242,11 +232,7 @@ public class DepartmentWebController {
                                              @RequestParam("name") String   name,
                                              @RequestParam("id")   String   id) {
 
-        ModelAndView view = null;
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
-
             MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
             request.add("name", name);
             request.add("id", id);
@@ -259,7 +245,7 @@ public class DepartmentWebController {
 
             redirectAttributes.addFlashAttribute("message", "Department updated.");
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't update department! Check input data!");
         }
 

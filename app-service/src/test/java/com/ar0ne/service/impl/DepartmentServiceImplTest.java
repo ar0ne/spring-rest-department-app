@@ -1,127 +1,114 @@
-package com.ar0ne.service.test;
+package com.ar0ne.service.impl;
 
-import static org.junit.Assert.*;
-
+import com.ar0ne.dao.DepartmentDao;
 import com.ar0ne.model.Department;
-import com.ar0ne.service.DepartmentService;
+import com.ar0ne.model.Employee;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springframework.transaction.annotation.Transactional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring-service-test.xml"})
-@TransactionConfiguration(transactionManager="transactionManager", defaultRollback=true)
-@Transactional
-public class DepartmentServiceTest {
-
-    @Autowired
-    private DepartmentService departmentService;
-
+/**
+ * @TODO: refactor this dumb test cases
+ */
+public class DepartmentServiceImplTest
+{
     private final static String DEPT_NAME = "Test dept.";
     private final static String DEPT_FIRST_NAME = "Department of Energy";
     private final static int DEPT_INIT_SIZE = 4;
     private final static long NEGATIVE_LONG = -2L;
     private final static long BIG_LONG = 20000000L;
-    private final static long ZERO_LONG = 0l;
-    private final static String BIG_TEXT = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
-            "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    private final static long ZERO_LONG = 0L;
+    private final static String BIG_TEXT = new String(new char[400]).replace('\0', 'A');
 
+    @InjectMocks
+    private DepartmentServiceImpl departmentService;
+
+    @Mock
+    private DepartmentDao departmentDao;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks( this );
+        List<Department> initDepartments = Arrays.asList(new Department(), new Department(), new Department(), new Department());
+        Mockito.when(departmentDao.getDepartmentById( Mockito.eq( 1L ) )).thenReturn( new Department( 1L, DEPT_FIRST_NAME, new ArrayList<>() ) );
+        Mockito.when(departmentDao.getAllDepartmentsWithoutEmployees()).thenReturn(initDepartments);
+        Mockito.when(departmentDao.getAllDepartments()).thenReturn(initDepartments);
+    }
 
     @Test
     public void getAllDepartments() {
         List<Department> departments = departmentService.getAllDepartments();
-        assertNotNull(departments);
-        assertEquals(DEPT_INIT_SIZE, departments.size());
+        Assert.assertNotNull(departments);
+        Assert.assertEquals(DEPT_INIT_SIZE, departments.size());
     }
 
     @Test
     public void getAllDepartmentsWithoutEmployees() {
         List<Department> departments = departmentService.getAllDepartmentsWithoutEmployees();
-        assertNotNull(departments);
-        assertEquals(DEPT_INIT_SIZE, departments.size());
+        Assert.assertNotNull(departments);
+        Assert.assertEquals(DEPT_INIT_SIZE, departments.size());
     }
 
     @Test
     public void getAllDepartmentsWithoutEmployeesEmptyEmployees() {
         List<Department> departments = departmentService.getAllDepartmentsWithoutEmployees();
         for(Department department: departments) {
-            assertNotNull(department.getEmployees());
-            assertEquals(department.getEmployees().size(), 0);
+            Assert.assertNotNull(department.getEmployees());
+            Assert.assertEquals(department.getEmployees().size(), 0);
         }
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalNegativeId() {
         Department department = departmentService.getDepartmentById(NEGATIVE_LONG);
-        assertNull(department);
+        Assert.assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalPositiveId() {
         Department department = departmentService.getDepartmentById(BIG_LONG);
-        assertNull(department);
+        Assert.assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByIdWithIllegalZeroId() {
         Department department = departmentService.getDepartmentById(ZERO_LONG);
-        assertNull(department);
-    }
-
-    @Test
-    public void getDepartmentByIdWithCorrectId() {
-        Department department = departmentService.getDepartmentById(1);
-        assertNotNull(department);
-        assertEquals(department.getId(), 1L);
-        assertEquals(department.getName(), DEPT_FIRST_NAME);
-        assertNotNull(department.getEmployees());
+        Assert.assertNull(department);
     }
 
     @Test
     public void getDepartmentById() {
-        Department department = new Department(DEPT_NAME, 1L);
-        long id = departmentService.addDepartment(department);
-        Department ret_department = departmentService.getDepartmentById(id);
-        assertNotNull(ret_department);
-        assertEquals(ret_department.getId(), id);
-        assertEquals(ret_department.getName(), department.getName());
+        Department retDepartment = departmentService.getDepartmentById(1L);
+        Assert.assertNotNull(retDepartment);
+        Assert.assertEquals(retDepartment.getId(), 1L);
+        Assert.assertEquals(retDepartment.getName(), DEPT_FIRST_NAME);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addDepartmentWithNullName() {
         Department department = new Department(null, 1L);
-        Long id = departmentService.addDepartment(department);
-        assertNull(id);
+        departmentService.addDepartment(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addDepartmentWithEmptyName() {
         Department department = new Department("", 1L);
-        Long id = departmentService.addDepartment(department);
-        assertNull(id);
+        departmentService.addDepartment(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addDepartmentWithBigText() {
 
         Department department = new Department(BIG_TEXT, 1L);
-        Long id = departmentService.addDepartment(department);
-        assertNull(id);
+        departmentService.addDepartment(department);
     }
 
 
@@ -129,44 +116,26 @@ public class DepartmentServiceTest {
     public void addDepartment() {
         Department department = new Department(DEPT_NAME, 1L);
         Long id = departmentService.addDepartment(department);
-        assertNotNull(id);
+        Assert.assertNotNull(id);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongNegativeId() {
         departmentService.removeDepartment(NEGATIVE_LONG);
-        assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
+        Assert.assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongPositiveId() {
         departmentService.removeDepartment(BIG_LONG);
-        assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
+        Assert.assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void removeDepartmentWithWrongZeroId() {
         departmentService.removeDepartment(ZERO_LONG);
-        assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
+        Assert.assertEquals(DEPT_INIT_SIZE, departmentService.getAllDepartments().size());
     }
-
-    @Test
-    public void removeDepartmentCorrectData() {
-        Department department = new Department(DEPT_NAME, 1L);
-
-        Long id = departmentService.addDepartment(department);
-
-        assertNotNull(id);
-
-        int size_before = departmentService.getAllDepartments().size();
-
-        departmentService.removeDepartment(id);
-
-        int size_after = departmentService.getAllDepartments().size();
-
-        assertEquals(size_after + 1, size_before);
-    }
-
 
     @Test(expected = IllegalArgumentException.class)
     public void updateDepartmentWithIncorrectDataNull() {
@@ -179,8 +148,8 @@ public class DepartmentServiceTest {
         department.setName(null);
         departmentService.updateDepartment(department);
         Department ret_department = departmentService.getDepartmentById(1L);
-        assertNotNull(ret_department);
-        assertNotNull(ret_department.getName());
+        Assert.assertNotNull(ret_department);
+        Assert.assertNotNull(ret_department.getName());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -192,33 +161,30 @@ public class DepartmentServiceTest {
     @Test
     public void updateDepartment() {
         Department department = departmentService.getDepartmentById(1L);
-        assertNotNull(department);
+        Assert.assertNotNull(department);
         department.setName(DEPT_NAME);
         departmentService.updateDepartment(department);
         Department ret_department = departmentService.getDepartmentById(1L);
-        assertEquals(ret_department, department);
+        Assert.assertEquals(ret_department, department);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByNameWithWrongDataNullName() {
         Department department = departmentService.getDepartmentByName(null);
-        assertNull(department);
+        Assert.assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByNameWithWrongDataEmptyName() {
         Department department = departmentService.getDepartmentByName("");
-        assertNull(department);
+        Assert.assertNull(department);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getDepartmentByNameWithWrongDataBigName() {
         Department department = departmentService.getDepartmentByName(BIG_TEXT);
-        assertNull(department);
+        Assert.assertNull(department);
     }
-
-
-
 
 }

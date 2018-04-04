@@ -5,9 +5,9 @@ import com.ar0ne.model.Employee;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,11 +19,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 /**
  * Web controller for employee entity
  */
@@ -31,14 +26,16 @@ import java.util.List;
 @RequestMapping("/employee")
 public class EmployeeWebController {
 
+    private static final Logger logger = LogManager.getLogger(EmployeeWebController.class);
+
     @Value( "${url.rest.employee}" )
     private String URL_EMPLOYEE;
 
     @Value( "${url.rest.department}" )
     private String URL_DEPARTMENT;
 
-
-    private static final Logger LOGGER = LogManager.getLogger(EmployeeWebController.class);
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * Get page of all employees
@@ -48,8 +45,6 @@ public class EmployeeWebController {
     public ModelAndView getAllEmployee() {
 
         ModelAndView view = new ModelAndView("web/employee/all");
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
 
             Employee[] employees = restTemplate.getForObject(
@@ -61,7 +56,7 @@ public class EmployeeWebController {
 
         } catch (Exception ex) {
 
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Database doesn't consist any employees yet.");
         }
 
@@ -77,10 +72,7 @@ public class EmployeeWebController {
     public ModelAndView getEmployeeById(@PathVariable long id) {
 
         ModelAndView view = new ModelAndView("web/employee/details");
-
-        RestTemplate restTemplate = new RestTemplate();
-        Employee employee = null;
-
+        Employee employee;
         try {
 
             employee = restTemplate.getForObject(
@@ -90,7 +82,7 @@ public class EmployeeWebController {
             view.addObject("employee", employee);
 
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't find this employee");
         }
 
@@ -106,9 +98,6 @@ public class EmployeeWebController {
     public ModelAndView addDepartmentForm() {
 
         ModelAndView view = new ModelAndView("web/employee/add");
-
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
             Department[] departments = restTemplate.getForObject(
                 URL_DEPARTMENT + SiteEndpointUrls.GET_ONLY,
@@ -117,7 +106,7 @@ public class EmployeeWebController {
 
             view.addObject("departments", departments);
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't create new employee");
         }
 
@@ -130,9 +119,9 @@ public class EmployeeWebController {
      * @param name name of new employee
      * @param surname surname of new employee
      * @param patronymic patronymic of new employee
-     * @param department_id department_id of new employee
+     * @param departmentId departmentId of new employee
      * @param salary salary of new employee
-     * @param date_of_birthday date_of_birthday of new employee
+     * @param dateOfBirthday dateOfBirthday of new employee
      * @return ModelAndView of all employee page if all right.
      */
     @RequestMapping(value = SiteEndpointUrls.CREATE, method = RequestMethod.POST)
@@ -140,9 +129,9 @@ public class EmployeeWebController {
                                       @RequestParam("name")             String   name,
                                       @RequestParam("surname")          String   surname,
                                       @RequestParam("patronymic")       String   patronymic,
-                                      @RequestParam("department_id")    Long   department_id,
+                                      @RequestParam("departmentId")    Long   departmentId,
                                       @RequestParam("salary")           Long   salary,
-                                      @RequestParam("date_of_birthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday) {
+                                      @RequestParam("dateOfBirthday") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateOfBirthday) {
 
         try {
 
@@ -152,9 +141,9 @@ public class EmployeeWebController {
             request.add("name", name);
             request.add("surname", surname);
             request.add("patronymic", patronymic);
-            request.add("department_id", department_id.toString());
+            request.add("departmentId", departmentId.toString());
             request.add("salary", salary.toString());
-            request.add("date_of_birthday", date_of_birthday.toString());
+            request.add("dateOfBirthday", dateOfBirthday.toString());
 
             restTemplate.postForObject(
                 URL_EMPLOYEE + "/create",
@@ -166,7 +155,7 @@ public class EmployeeWebController {
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
 
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't add employee! Check input data!");
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.CREATE);
         }
@@ -183,9 +172,8 @@ public class EmployeeWebController {
     public ModelAndView updateEmployeeByIdForm(RedirectAttributes redirectAttributes,
                                                @PathVariable long id) {
 
-        ModelAndView view = null;
-        RestTemplate restTemplate = new RestTemplate();
-        Employee employee = null;
+        ModelAndView view;
+        Employee employee;
         try {
             employee = restTemplate.getForObject(
                 URL_EMPLOYEE + "/id/" + id,
@@ -202,7 +190,7 @@ public class EmployeeWebController {
             view.addObject("departments", departments);
 
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view = new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
             view.addObject("error", "Can't get update page for this employee! Check input data");
         }
@@ -218,8 +206,8 @@ public class EmployeeWebController {
      * @param surname new surname of employee
      * @param patronymic new patronymic of employee
      * @param salary new salary of employee
-     * @param department_id new department_id of employee
-     * @param date_of_birthday new date_of_birthday of employee
+     * @param departmentId new departmentId of employee
+     * @param dateOfBirthday new dateOfBirthday of employee
      * @return ModelAndView of page get all employees if all right
      */
     @RequestMapping(value = SiteEndpointUrls.UPDATE, method = RequestMethod.POST)
@@ -229,11 +217,8 @@ public class EmployeeWebController {
                                             @RequestParam String    surname,
                                             @RequestParam String    patronymic,
                                             @RequestParam Long      salary,
-                                            @RequestParam Long      department_id,
-                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_of_birthday ){
-
-        ModelAndView view = null;
-        RestTemplate restTemplate = new RestTemplate();
+                                            @RequestParam Long      departmentId,
+                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateOfBirthday ){
 
         try {
 
@@ -241,9 +226,9 @@ public class EmployeeWebController {
             request.add("name", name);
             request.add("surname", surname);
             request.add("patronymic", patronymic);
-            request.add("department_id", department_id.toString());
+            request.add("departmentId", departmentId.toString());
             request.add("salary", salary.toString());
-            request.add("date_of_birthday", date_of_birthday.toString());
+            request.add("dateOfBirthday", dateOfBirthday.toString());
             request.add("id", id.toString());
 
             restTemplate.postForObject(
@@ -257,7 +242,7 @@ public class EmployeeWebController {
 
         } catch (Exception ex) {
 
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't update employee! Check input data!");
             return new ModelAndView("redirect:/employee" + SiteEndpointUrls.UPDATE_PAGE);
         }
@@ -277,14 +262,10 @@ public class EmployeeWebController {
         ModelAndView view = new ModelAndView("redirect:/employee" + SiteEndpointUrls.GET_ALL);
 
         try {
-
-            RestTemplate restTemplate = new RestTemplate();
             restTemplate.delete(URL_EMPLOYEE + "/delete/" + id);
-
             redirectAttributes.addFlashAttribute( "message", "Employee removed");
-
         } catch (Exception ex) {
-            LOGGER.debug(ex);
+            logger.debug(ex);
             redirectAttributes.addFlashAttribute( "error", "Can't remove employee with ID = " + id);
         }
 
@@ -303,8 +284,6 @@ public class EmployeeWebController {
                                           @PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         ModelAndView view = new ModelAndView("web/employee/all");
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
 
             Employee[] employees = restTemplate.getForObject(
@@ -315,7 +294,7 @@ public class EmployeeWebController {
 
         } catch (Exception ex) {
 
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't find employees for this date!");
 
         }
@@ -336,8 +315,6 @@ public class EmployeeWebController {
                                           @PathVariable("to")   @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate to) {
 
         ModelAndView view = new ModelAndView("web/employee/all");
-        RestTemplate restTemplate = new RestTemplate();
-
         try {
 
             Employee[] employees = restTemplate.getForObject(
@@ -349,7 +326,7 @@ public class EmployeeWebController {
 
         } catch (Exception ex) {
 
-            LOGGER.debug(ex);
+            logger.debug(ex);
             view.addObject("error", "Can't find employees for this date!");
 
         }

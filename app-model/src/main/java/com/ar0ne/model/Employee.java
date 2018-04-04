@@ -1,39 +1,39 @@
 package com.ar0ne.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.joda.time.LocalDate;
 
 import java.io.Serializable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class Employee implements Serializable{
+public class Employee implements Serializable {
 
     private long            id;
     private String          surname;
     private String          name;
     private String          patronymic;
     private long            salary;
-
-    private long            department_id;
+    private long            departmentId;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    private LocalDate date_of_birthday;
+    private LocalDate       dateOfBirthday;
 
     public Employee(){
     }
 
-    public Employee(long id, long department_id, String surname, String name,
-                    String patronymic, LocalDate date_of_birthday, long salary) {
+    public Employee(long id, long departmentId, String surname, String name,
+                    String patronymic, LocalDate dateOfBirthday, long salary) {
         this.id = id;
-        this.department_id = department_id;
+        this.departmentId = departmentId;
         this.surname = surname;
         this.name = name;
         this.patronymic = patronymic;
-        this.date_of_birthday = date_of_birthday;
+        this.dateOfBirthday = dateOfBirthday;
         this.salary = salary;
     }
 
@@ -46,12 +46,11 @@ public class Employee implements Serializable{
     }
 
     public long getDepartmentId() {
-        return department_id;
+        return departmentId;
     }
 
-    @JsonProperty("department_id")
-    public void setDepartmentId(long department_id) {
-        this.department_id = department_id;
+    public void setDepartmentId(long departmentId) {
+        this.departmentId = departmentId;
     }
 
     public String getSurname() {
@@ -79,12 +78,11 @@ public class Employee implements Serializable{
     }
 
     public LocalDate getDateOfBirthday() {
-        return date_of_birthday;
+        return dateOfBirthday;
     }
 
-    @JsonProperty("date_of_birthday")
-    public void setDateOfBirthday(LocalDate date_of_birthday) {
-        this.date_of_birthday = date_of_birthday;
+    public void setDateOfBirthday(LocalDate dateOfBirthday) {
+        this.dateOfBirthday = dateOfBirthday;
     }
 
     public long getSalary() {
@@ -103,25 +101,18 @@ public class Employee implements Serializable{
         Employee employee = (Employee) o;
 
         if (id != employee.id) return false;
-        if (department_id != employee.department_id) return false;
+        if ( departmentId != employee.departmentId ) return false;
         if (salary != employee.salary) return false;
         if (!surname.equals(employee.surname)) return false;
         if (!name.equals(employee.name)) return false;
         if (!patronymic.equals(employee.patronymic)) return false;
-        return date_of_birthday.equals(employee.date_of_birthday);
+        return dateOfBirthday.equals(employee.dateOfBirthday );
 
     }
 
     @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", department_id=" + department_id +
-                ", surname='" + surname + '\'' +
-                ", name='" + name + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", date_of_birthday=" + date_of_birthday +
-                ", salary=" + salary +
-                '}';
+    public String toString()
+    {
+        return ToStringBuilder.reflectionToString( this, ToStringStyle.MULTI_LINE_STYLE );
     }
 }

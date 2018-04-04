@@ -1,12 +1,15 @@
 package com.ar0ne.model;
 
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Department implements Serializable{
+public class Department implements Serializable {
 
     private long            id;
     private String          name;
@@ -15,13 +18,13 @@ public class Department implements Serializable{
     public Department(){
         this.id = 0;
         this.name = "";
-        this.employees = new ArrayList<Employee>();
+        this.employees = new ArrayList<>();
     }
 
     public Department(String name, long id) {
         this.name = name;
         this.id = id;
-        this.employees = new ArrayList<Employee>();
+        this.employees = new ArrayList<>();
     }
 
     public Department(long id, String name, List<Employee> employees) {
@@ -56,7 +59,7 @@ public class Department implements Serializable{
 
     public void addEmployee(Employee employee) {
         if (this.employees == null) {
-            this.employees = new ArrayList<Employee>();
+            this.employees = new ArrayList<>();
         }
         this.employees.add(employee);
     }
@@ -99,12 +102,9 @@ public class Department implements Serializable{
     }
 
     @Override
-    public String toString() {
-        return "Department{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", employees=" + employees +
-                '}';
+    public String toString()
+    {
+        return ToStringBuilder.reflectionToString( this, ToStringStyle.MULTI_LINE_STYLE );
     }
 
     /**

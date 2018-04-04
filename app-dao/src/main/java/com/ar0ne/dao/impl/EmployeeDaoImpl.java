@@ -1,5 +1,6 @@
-package com.ar0ne.dao;
+package com.ar0ne.dao.impl;
 
+import com.ar0ne.dao.EmployeeDao;
 import com.ar0ne.model.Employee;
 
 import java.util.HashMap;
@@ -9,31 +10,29 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import javax.sql.DataSource;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmployeeDaoImpl implements EmployeeDao {
+public class EmployeeDaoImpl implements EmployeeDao
+{
+
+    private static final Logger logger = LogManager.getLogger(DepartmentDaoImpl.class);
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-
-    private static final Logger LOGGER = LogManager.getLogger(DepartmentDaoImpl.class);
+    private KeyHolder keyHolder = new GeneratedKeyHolder();
 
     @Value("${parameters.id}")
     private String PARAMETER_ID;
@@ -132,7 +131,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      */
     public long addEmployee(Employee employee) {
 
-        LOGGER.debug("addEmployee(employee = {})", employee);
+        logger.debug("addEmployee(employee = {})", employee);
 
         MapSqlParameterSource parameterSource= new MapSqlParameterSource();
         parameterSource.addValue(PARAMETER_DEPARTMENT_ID,       employee.getDepartmentId());
@@ -145,7 +144,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
         namedParameterJdbcTemplate.update(ADD_EMPLOYEE, parameterSource, keyHolder);
 
         long id = keyHolder.getKey().longValue();
-        LOGGER.debug("addEmployee(employee): id = {}", id);
+        logger.debug("addEmployee(employee): id = {}", id);
         return id;
     }
 
@@ -154,7 +153,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param id of employee
      */
     public void removeEmployee(long id) {
-        LOGGER.debug("removeEmployee(id = {})", id);
+        logger.debug("removeEmployee(id = {})", id);
 
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_ID, id);
@@ -167,7 +166,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @param employee to be employee in the database
      */
     public void updateEmployee(Employee employee) {
-        LOGGER.debug("updateEmployee(employee = {})", employee);
+        logger.debug("updateEmployee(employee = {})", employee);
 
         Map<String, Object> parameters = new HashMap<>(2);
 
@@ -187,7 +186,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @return a list containing all of the employees in the database
      */
     public List<Employee> getAllEmployees() {
-        LOGGER.debug("getAllEmployees()");
+        logger.debug("getAllEmployees()");
         return namedParameterJdbcTemplate.query(GET_ALL_EMPLOYEES, new EmployeeMapper());
     }
 
@@ -197,13 +196,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @return the employee with the specified employeeId from the database
      */
     public Employee getEmployeeById(long id) {
-        LOGGER.debug("getEmployeeById(id = {})", id);
+        logger.debug("getEmployeeById(id = {})", id);
 
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_ID, id);
         Employee employee = namedParameterJdbcTemplate.queryForObject(GET_EMPLOYEE_BY_ID, parameters, new EmployeeMapper());
 
-        LOGGER.debug("getEmployeeById(id) : employee = {}" , employee);
+        logger.debug("getEmployeeById(id) : employee = {}" , employee);
         return employee;
     }
 
@@ -213,7 +212,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
      * @return list of the employees in the database
      */
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
-        LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
+        logger.debug("getEmployeeByDateOfBirthday(date = {})", date);
 
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_DATE, date.toString());
@@ -224,18 +223,18 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
     /**
      * Returns list of employees with the specified dateOfBirthday in interval from-to from database
-     * @param date_from start date of interval for searching
-     * @param date_to end date of interval for searching
+     * @param dateFrom start date of interval for searching
+     * @param dateTo end date of interval for searching
      * @return list of the employees in the database
      */
-    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
-        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
+    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate dateFrom, LocalDate dateTo ) {
+        logger.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", dateFrom, dateTo );
 
-        Map<String, Object> parametrs = new HashMap<>(1);
-        parametrs.put(PARAMETER_DATE_FROM, date_from.toString());
-        parametrs.put(PARAMETER_DATE_TO, date_to.toString());
+        Map<String, Object> parameters = new HashMap<>(1);
+        parameters.put(PARAMETER_DATE_FROM, dateFrom.toString());
+        parameters.put(PARAMETER_DATE_TO, dateTo.toString());
         EmployeeMapper mapper = new EmployeeMapper();
 
-        return namedParameterJdbcTemplate.query(GET_EMPLOYEE_BETWEEN_DATES_OF_BIRTHDAY, parametrs, mapper);
+        return namedParameterJdbcTemplate.query(GET_EMPLOYEE_BETWEEN_DATES_OF_BIRTHDAY, parameters, mapper);
     }
 }

@@ -15,4 +15,6 @@ public final class SiteEndpointUrls {
     public static final String GET_BY_DATE       = "/date/{date}";
     public static final String GET_BETWEEN_DATES = "/date/{from}/{to}";
 
+    private SiteEndpointUrls() {}
+
 }

@@ -1,5 +1,6 @@
-package com.ar0ne.dao;
+package com.ar0ne.dao.impl;
 
+import com.ar0ne.dao.DepartmentDao;
 import com.ar0ne.model.Department;
 
 import org.apache.logging.log4j.LogManager;
@@ -24,15 +25,15 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DepartmentDaoImpl implements DepartmentDao {
+public class DepartmentDaoImpl implements DepartmentDao
+{
+
+    private static final Logger logger = LogManager.getLogger(DepartmentDaoImpl.class);
 
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-
-    private static final Logger LOGGER = LogManager.getLogger(DepartmentDaoImpl.class);
-
+    private KeyHolder keyHolder = new GeneratedKeyHolder();
 
     @Value("${parameters.id}")
     private String PARAMETER_ID;
@@ -149,7 +150,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
          * @return List of Departments with field of List<Employee> from ResultSet of SQL query.
          */
         public final List<Department> getAllDepartments() {
-            return new ArrayList<Department>(map.values());
+            return new ArrayList<>(map.values());
         }
 
     }
@@ -164,7 +165,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
             Department department = new Department();
             department.setId(rs.getLong(DEPARTMENT_ID));
             department.setName(rs.getString(DEPARTMENT_NAME));
-            department.setEmployees( new ArrayList<Employee>() );
+            department.setEmployees(new ArrayList<>());
             return department;
         }
 
@@ -178,7 +179,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
      */
     public long addDepartment(Department department) {
 
-        LOGGER.debug("addDepartment(department = {})", department);
+        logger.debug("addDepartment(department = {})", department);
 
         SqlParameterSource parameterSource = new MapSqlParameterSource().addValue("name", department.getName());
 
@@ -186,7 +187,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
         long id = keyHolder.getKey().longValue();
 
-        LOGGER.debug("addDepartment(department): id = {}", id);
+        logger.debug("addDepartment(department): id = {}", id);
 
         return id;
     }
@@ -196,9 +197,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @param id of department
      */
     public void removeDepartment(long id) {
-        LOGGER.debug("removeDepartment(id) : id = {}", id);
+        logger.debug("removeDepartment(id) : id = {}", id);
 
-        Map<String, Object> parameters = new HashMap<>(1);
+        final Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_ID, id);
 
         namedParameterJdbcTemplate.update( DELETE_DEPARTMENT_BY_ID, parameters);
@@ -210,9 +211,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @param department to be updated in the database
      */
     public void updateDepartment(Department department) {
-        LOGGER.debug("updateDepartment(department = {})", department);
+        logger.debug("updateDepartment(department = {})", department);
 
-        Map<String, Object> parameters = new HashMap<>(2);
+        final Map<String, Object> parameters = new HashMap<>(2);
         parameters.put(PARAMETER_ID,    department.getId());
         parameters.put(PARAMETER_NAME,  department.getName());
 
@@ -224,7 +225,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @return a list containing all of the departments with specified employees in the database
      */
     public List<Department> getAllDepartments() {
-        LOGGER.debug("getAllDepartments()");
+        logger.debug("getAllDepartments()");
 
         DepartmentMapper mapper = new DepartmentMapper();
         namedParameterJdbcTemplate.query( GET_ALL_DEPARTMENTS, mapper);
@@ -238,7 +239,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @return a list containing all of the departments, but without specified employees in the database
      */
     public List<Department> getAllDepartmentsWithoutEmployees() {
-        LOGGER.debug("getAllDepartmentsWithoutEmployees()");
+        logger.debug("getAllDepartmentsWithoutEmployees()");
 
         return namedParameterJdbcTemplate.query( GET_ALL_DEPARTMENTS_WITHOUT_EMPLOYEES, new DepartmentOnlyMapper());
     }
@@ -249,14 +250,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @return the department with the specified departmentId from the database
      */
     public Department getDepartmentById(long id) {
-        LOGGER.debug("getDepartmentById(id = {})", id);
+        logger.debug("getDepartmentById(id = {})", id);
 
-        Map<String, Object> parameters = new HashMap<>(1);
+        final Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_ID, id);
         DepartmentMapper mapper = new DepartmentMapper();
         namedParameterJdbcTemplate.query( GET_DEPARTMENT_BY_ID, parameters, mapper);
 
-        LOGGER.debug("getDepartmentById(id): department = {}", mapper.getDepartment());
+        logger.debug("getDepartmentById(id): department = {}", mapper.getDepartment());
         return mapper.getDepartment();
     }
 
@@ -266,7 +267,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
      * @return the department with the specified departmentName from the database
      */
     public Department getDepartmentByName(String name) {
-        LOGGER.debug("getDepartmentByName(name = {})", name);
+        logger.debug("getDepartmentByName(name = {})", name);
 
         Map<String, Object> parameters = new HashMap<>(1);
         parameters.put(PARAMETER_NAME, name);
@@ -274,7 +275,7 @@ public class DepartmentDaoImpl implements DepartmentDao {
         DepartmentMapper mapper = new DepartmentMapper();
         namedParameterJdbcTemplate.query(GET_DEPARTMENT_BY_NAME, parameters, mapper);
 
-        LOGGER.debug("getDepartmentByName(name) : department = {}", mapper.getDepartment());
+        logger.debug("getDepartmentByName(name) : department = {}", mapper.getDepartment());
         return mapper.getDepartment();
     }
 }

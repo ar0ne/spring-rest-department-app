@@ -19,8 +19,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <spring.version>4.2.0.RELEASE</spring.version>
         <spring-dao.version>2.0.8</spring-dao.version>
         <mysql.connector.version>5.1.35</mysql.connector.version>
@@ -39,6 +39,8 @@
         <javax.validation.version>1.1.0.Final</javax.validation.version>
         <jstl.version>1.2</jstl.version>
         <cobertura-maven-plugin.version>2.7</cobertura-maven-plugin.version>
+        <common.lang.version>2.4</common.lang.version>
+        <mockito.version>1.9.5</mockito.version>
     </properties>
 
     <build>
@@ -146,7 +148,6 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
                 <version>${junit.version}</version>
-                <!--<scope>test</scope>-->
             </dependency>
 
             <dependency>
@@ -236,7 +237,6 @@
                 <groupId>jstl</groupId>
                 <artifactId>jstl</artifactId>
                 <version>${jstl.version}</version>
-                 <!--   <scope>provided</scope> -->
             </dependency>
 
             <dependency>
@@ -246,9 +246,21 @@
             </dependency>
 
             <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>taglibs</groupId>
                 <artifactId>standard</artifactId>
                  <version>${taglibs.standard.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${common.lang.version}</version>
             </dependency>
 
         </dependencies>

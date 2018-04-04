@@ -1,7 +1,8 @@
-package com.ar0ne.service;
+package com.ar0ne.service.impl;
 
 import com.ar0ne.dao.EmployeeDao;
 import com.ar0ne.model.Employee;
+import com.ar0ne.service.EmployeeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.joda.time.LocalDate;
@@ -10,24 +11,25 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class EmployeeServiceImpl implements EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService
+{
+    private static final Logger logger = LogManager.getLogger(EmployeeServiceImpl.class);
 
     @Autowired
     private EmployeeDao employeeDao;
 
-    private static final Logger LOGGER = LogManager.getLogger(EmployeeServiceImpl.class);
-
     /**
-     * Insert specified employee to the database
-     * @param employee employee to be inserted to the database
-     * @return id of employee in database
+     * Insert specified employee to DAO
+     * @param employee employee to be inserted to DAO
+     * @return id of employee in DAO
      */
     public long addEmployee(Employee employee) {
 
-        LOGGER.debug("addEmployee(employee = {})", employee);
+        logger.debug("addEmployee(employee = {})", employee);
         Assert.hasText(employee.getName(), "Employee NAME can't be NULL");
         Assert.notNull(employee.getSalary(), "Employee SALARY can't be NULL");
         Assert.hasText(employee.getSurname(), "Employee SURNAME can't be NULL");
@@ -37,27 +39,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.isTrue(employee.getName().length() < 100, "Employee Name can't be much then 100 chars");
         Assert.isTrue(employee.getSurname().length() < 100, "Employee Surname can't be much then 100 chars");
         Assert.isTrue(employee.getPatronymic().length() < 100, "Employee Patronymic can't be much then 100 chars");
-        Assert.isTrue(employee.getSalary() >= 0l, "Employee Salary can't be negative");
+        Assert.isTrue(employee.getSalary() >= 0L, "Employee Salary can't be negative");
 
         long id = employeeDao.addEmployee(employee);
-        LOGGER.debug("addEmployee(employee) : id = {}", id);
+        logger.debug("addEmployee(employee) : id = {}", id);
         return id;
     }
 
     /**
-     * Remove employee from database
+     * Remove employee from DAO
      * @param id of employee
      */
     public void removeEmployee(long id) {
-        LOGGER.debug("removeEmployee(id = {})", id);
+        logger.debug("removeEmployee(id = {})", id);
                 Assert.notNull(id, "Employee ID can't be NULL");
 
-        Employee existEmployee = null;
+        Employee existEmployee;
         try {
             existEmployee = employeeDao.getEmployeeById(id);
             Assert.notNull(existEmployee, "Can't remove employee with this ID");
         } catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Can't remove employee with ID = {}, because he doesn't exist.", id);
+            logger.error("Can't remove employee with ID = {}, because he doesn't exist.", id);
             throw new IllegalArgumentException("Employee with this ID doesn't exist");
         }
 
@@ -66,10 +68,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /**
      * Replaces the employee in the database with the specified employee.
-     * @param employee to be employee in the database
+     * @param employee to be employee in DAO
      */
     public void updateEmployee(Employee employee) {
-        LOGGER.debug("updateEmployee(employee = {})", employee);
+        logger.debug("updateEmployee(employee = {})", employee);
         Assert.notNull(employee, "Employee can't be NULL");
         Assert.notNull(employee.getId(), "Employee ID cant be NULL");
         Assert.hasText(employee.getName(), "Employee NAME cant be NULL");
@@ -81,14 +83,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Assert.isTrue(employee.getName().length() < 100, "Employee Name can't be much then 100 chars");
         Assert.isTrue(employee.getSurname().length() < 100, "Employee Surname can't be much then 100 chars");
         Assert.isTrue(employee.getPatronymic().length() < 100, "Employee Patronymic can't be much then 100 chars");
-        Assert.isTrue(employee.getSalary() >= 0l, "Employee Salary can't be negative");
+        Assert.isTrue(employee.getSalary() >= 0L, "Employee Salary can't be negative");
 
         Employee existEmployee = null;
         try {
             existEmployee = employeeDao.getEmployeeById(employee.getId());
             Assert.notNull(existEmployee, "Can't update not existed employee. Or wrong ID!");
         } catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Can't update employee with ID = {}, because he didn't exist!");
+            logger.error("Can't update employee with ID = {}, because he didn't exist!");
             throw new IllegalArgumentException("Can't update employee what doesn't exist!");
         }
 
@@ -96,84 +98,76 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     /**
-     * Returns a list containing all of the employees in the database.
-     * @return a list containing all of the employees in the database
+     * Returns a list containing all of the employees in DAO.
+     * @return a list containing all of the employees in DAO
      */
     public List<Employee> getAllEmployees() {
-        LOGGER.debug("getAllEmployees()");
+        logger.debug("getAllEmployees()");
         List<Employee> employees = employeeDao.getAllEmployees();
         Assert.notEmpty(employees, "Empty list of employees");
-        LOGGER.debug("getAllEmployees() : employees = {}", employees);
+        logger.debug("getAllEmployees() : employees = {}", employees);
         return employees;
     }
 
     /**
-     * Returns the employee with the specified employeetId from database.
+     * Returns the employee with the specified employeetId from DAO.
      * @param id id of the employee to return
      * @return the employee with the specified employeeId from the database
      */
     public Employee getEmployeeById(long id) {
-        LOGGER.debug("getEmployeeById(id = {})", id);
+        logger.debug("getEmployeeById(id = {})", id);
         Assert.notNull(id, "Employee ID can't be NULL");
 
-        Employee employee = null;
+        Employee employee;
         try {
             employee = employeeDao.getEmployeeById(id);
         } catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Employee with ID = '{}' doesn't exist", id);
+            logger.error("Employee with ID = '{}' doesn't exist", id);
             throw new IllegalArgumentException("Employee with this ID doesn't exist");
         }
-        LOGGER.debug("getEmployeeById(id) : employee = {}", employee);
+        logger.debug("getEmployeeById(id) : employee = {}", employee);
         return employee;
     }
 
     /**
-     * Returns list of employees with the specified dateOfBirthday from database
+     * Returns a list of employees with the specified dateOfBirthday from DAO
      * @param date Date of Birthday of the employees to return
      * @return list of the employees in the database
      */
     public List<Employee> getEmployeeByDateOfBirthday(LocalDate date) {
-        LOGGER.debug("getEmployeeByDateOfBirthday(date = {})", date);
+        logger.debug("getEmployeeByDateOfBirthday(date = {})", date);
         Assert.notNull(date, "Date of birthday can't be NULL");
-        List<Employee> employeeList = null;
+        List<Employee> employeeList;
         try {
             employeeList = employeeDao.getEmployeeByDateOfBirthday(date);
-            Assert.notNull(employeeList, "Employee can't be NULL");
-            Assert.notEmpty(employeeList, "Employee can't be empty");
         } catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Employees with date = {} not exist", date.toString());
+            logger.error("Employees with date = {} not exist", date);
             throw new IllegalArgumentException("Employee with this date doesn't exist!");
         }
 
-        LOGGER.debug("getEmployeeByDateOfBirthday(date}) : employeeList = {}", employeeList);
-        return employeeList;
+        return employeeList != null ? employeeList : new ArrayList<>();
     }
 
     /**
-     * Returns list of employees with the specified dateOfBirthday in interval from-to from database
-     * @param date_from start date of interval for searching
-     * @param date_to end date of interval for searching
+     * Returns a list of employees with the specified dateOfBirthday in interval from-to DAO
+     * @param dateFrom start date of interval for searching
+     * @param dateTo end date of interval for searching
      * @return list of the employees in the database
      */
-    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate date_from, LocalDate date_to) {
-        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", date_from, date_to);
-        Assert.notNull(date_from, "Date From cant be NULL");
-        Assert.notNull(date_to, "Date To cant be NULL");
-        Assert.isTrue(date_from.isBefore(date_to), "Date From can't be earlier then Date To");
+    public List<Employee> getEmployeeBetweenDatesOfBirtday(LocalDate dateFrom, LocalDate dateTo ) {
+        logger.debug("getEmployeeBetweenDatesOfBirtday(date_from = {}, date_to = {}", dateFrom, dateTo );
+        Assert.notNull( dateFrom, "Date From cant be NULL");
+        Assert.notNull( dateTo, "Date To cant be NULL");
+        Assert.isTrue( dateFrom.isBefore( dateTo ), "Date From can't be earlier then Date To");
 
-        List<Employee> employeeList = null;
+        List<Employee> employeeList;
         try {
-            employeeList = employeeDao.getEmployeeBetweenDatesOfBirtday(date_from, date_to);
-            Assert.notNull(employeeList, "Employee can't be NULL");
-            Assert.notEmpty(employeeList, "Employee can't be empty");
+            employeeList = employeeDao.getEmployeeBetweenDatesOfBirtday( dateFrom, dateTo );
         } catch (EmptyResultDataAccessException ex) {
-            LOGGER.error("Employees between date_from = {} and date_to not exist", date_from.toString(), date_to.toString());
+            logger.error("Employees between date_from = {} and date_to not exist", dateFrom, dateTo);
             throw new IllegalArgumentException("Employee with this date doesn't exist!");
         }
 
-        LOGGER.debug("getEmployeeBetweenDatesOfBirtday(date_from, date_to) : employeeList = {}", employeeList);
-        return employeeList;
-
-
+        return employeeList != null ? employeeList : new ArrayList<>();
     }
 }

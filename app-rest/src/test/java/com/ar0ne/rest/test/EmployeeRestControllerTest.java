@@ -36,23 +36,26 @@ import java.util.Arrays;
 import java.util.List;
 
 
+/**
+ * @TODO: Mock DAO and Service layer
+ */
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:/spring-rest-mock-test.xml"})
+@ContextConfiguration(locations = {"classpath*:/spring-rest-test.xml"})
 @Transactional(transactionManager="transactionManager")
 public class EmployeeRestControllerTest {
 
-    public static final String WRONG_DATA = "9999-09-09";
-    public static final String RIGHT_DATA_FROM = "1972-02-09";
-    public static final String RIGHT_DATA_TO = "1972-03-09";
-    public static final String URL_EMPLOYEE_DATE = "/employee/date/";
-    public static final String URL_EMPLOYEE_DELETE = "/employee/delete/";
-    public static final String URL_EMPLOYEE_UPDATE = "/employee/update";
-    public static final String URL_EMPLOYEE_CREATE = "/employee/create";
-    public static final String URL_EMPLOYEE = "/employee/";
-    public static final String URL_EMPLOYEE_ID = "/employee/id/";
-
-    public final static int EMPL_INIT_SIZE = 15;
+    private static final String WRONG_DATA = "9999-09-09";
+    private static final String RIGHT_DATA_FROM = "1972-02-09";
+    private static final String RIGHT_DATA_TO = "1972-03-09";
+    private static final String URL_EMPLOYEE_DATE = "/employee/date/";
+    private static final String URL_EMPLOYEE_DELETE = "/employee/delete/";
+    private static final String URL_EMPLOYEE_UPDATE = "/employee/update";
+    private static final String URL_EMPLOYEE_CREATE = "/employee/create";
+    private static final String URL_EMPLOYEE = "/employee/";
+    private static final String URL_EMPLOYEE_ID = "/employee/id/";
+    private final static int EMPL_INIT_SIZE = 15;
+    private static final ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
     private MockMvc mockMvc;
 
@@ -76,7 +79,7 @@ public class EmployeeRestControllerTest {
     private static MappingJackson2HttpMessageConverter createJacksonMessageConverter() {
         MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
+
 
         messageConverter.setObjectMapper(mapper);
 
@@ -98,7 +101,7 @@ public class EmployeeRestControllerTest {
     }
 
     private List<Employee> createDemoEmployees() {
-        return new ArrayList<Employee>(
+        return new ArrayList<>(
             Arrays.asList(
                 new Employee(1, 1, "Williamson", "Precious", "John", new LocalDate("1990-04-05"), 3500),
                 new Employee(2, 1, "Ibarra", "Helen", "Lee", new LocalDate("1987-01-15"), 1500),
@@ -127,8 +130,6 @@ public class EmployeeRestControllerTest {
         employeeServiceMock.getEmployeeById( id );
         expectLastCall().andReturn(createDemoEmployee());
         replay(employeeServiceMock);
-
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         Employee employee = createDemoEmployee();
 
@@ -209,8 +210,6 @@ public class EmployeeRestControllerTest {
 
         List<Employee> employees = createDemoEmployees();
 
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
-
         this.mockMvc.perform(
             get( URL_EMPLOYEE )
                 .accept(MediaType.APPLICATION_JSON)
@@ -237,10 +236,10 @@ public class EmployeeRestControllerTest {
                 .param("name", employee.getName())
                 .param("surname", employee.getSurname())
                 .param("patronymic", employee.getPatronymic())
-                .param("department_id", String.valueOf(employee.getDepartmentId()))
+                .param("departmentId", String.valueOf(employee.getDepartmentId()))
                 .param("salary", String.valueOf(employee.getSalary()))
                 .param("id", String.valueOf(employee.getId()))
-                .param("date_of_birthday", employee.getDateOfBirthday().toString())
+                .param("dateOfBirthday", employee.getDateOfBirthday().toString())
             )
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -263,10 +262,10 @@ public class EmployeeRestControllerTest {
                         .param("name", employee.getName())
                         .param("surname", employee.getSurname())
                         .param("patronymic", employee.getPatronymic())
-                        .param("department_id", String.valueOf(employee.getDepartmentId()))
+                        .param("departmentId", String.valueOf(employee.getDepartmentId()))
                         .param("salary", String.valueOf(employee.getSalary()))
                         .param("id", String.valueOf(employee.getId()))
-                        .param("date_of_birthday", employee.getDateOfBirthday().toString())
+                        .param("dateOfBirthday", employee.getDateOfBirthday().toString())
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -304,10 +303,10 @@ public class EmployeeRestControllerTest {
             .param( "name", employee.getName() )
             .param( "surname", employee.getSurname() )
             .param( "patronymic", employee.getPatronymic() )
-            .param( "department_id", String.valueOf( employee.getDepartmentId() ) )
+            .param( "departmentId", String.valueOf( employee.getDepartmentId() ) )
             .param( "salary", String.valueOf( employee.getSalary() ) )
             .param( "id", String.valueOf( employee.getId() ) )
-            .param( "date_of_birthday", employee.getDateOfBirthday().toString() )
+            .param( "dateOfBirthday", employee.getDateOfBirthday().toString() )
         )
             .andDo( print() )
             .andExpect(status().isOk());
@@ -329,10 +328,10 @@ public class EmployeeRestControllerTest {
                         .param("name", employee.getName())
                         .param("surname", employee.getSurname())
                         .param("patronymic", employee.getPatronymic())
-                        .param("department_id", String.valueOf(employee.getDepartmentId()))
+                        .param("departmentId", String.valueOf(employee.getDepartmentId()))
                         .param("salary", String.valueOf(employee.getSalary()))
                         .param("id", String.valueOf(employee.getId()))
-                        .param("date_of_birthday", employee.getDateOfBirthday().toString())
+                        .param("dateOfBirthday", employee.getDateOfBirthday().toString())
         )
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -342,7 +341,6 @@ public class EmployeeRestControllerTest {
     public void getEmployeesByDateOfBirthday() throws  Exception {
 
         Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate("1972-02-09"), 4300l);
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         List<Employee> employeeList = new ArrayList<Employee>();
         employeeList.add(employee);
@@ -362,28 +360,9 @@ public class EmployeeRestControllerTest {
     }
 
     @Test
-    public void getEmployeesByDateOfBirthdayWithWrongDate() throws  Exception {
-
-        employeeServiceMock.getEmployeeByDateOfBirthday(new LocalDate( WRONG_DATA ));
-        expectLastCall().andThrow(new IllegalArgumentException("Employee can't be empty", null));
-
-        replay(employeeServiceMock);
-
-        this.mockMvc.perform(
-            get( URL_EMPLOYEE_DATE  + WRONG_DATA )
-                    .accept(MediaType.APPLICATION_JSON))
-            .andDo(print())
-            .andExpect(status().isBadRequest())
-            .andExpect(content().string("\"Employee can't be empty\""));
-    }
-
-
-    @Test
     public void getEmployeeBetweenDoB() throws Exception {
 
         Employee employee = new Employee (10l, 2l, "Kieran", "Mathis", "Yates", new LocalDate( RIGHT_DATA_FROM ), 4300l);
-
-        ObjectMapper mapper = createObjectMapperWithJacksonConverter();
 
         employeeServiceMock.getEmployeeBetweenDatesOfBirtday(new LocalDate(RIGHT_DATA_FROM), new LocalDate(RIGHT_DATA_TO));
 
