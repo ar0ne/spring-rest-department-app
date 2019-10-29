@@ -29,7 +29,7 @@
         <junit.version>4.12</junit.version>
         <easymock.version>3.3.1</easymock.version>
         <javax.servlet-api.version>2.5</javax.servlet-api.version>
-        <jackson.version>2.6.1</jackson.version>
+        <jackson.version>2.10.0</jackson.version>
         <hsqldb.version>2.3.1</hsqldb.version>
         <tiles.version>3.0.5</tiles.version>
         <taglibs.standard.version>1.1.2</taglibs.standard.version>
