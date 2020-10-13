@@ -26,7 +26,7 @@
         <mysql.connector.version>5.1.35</mysql.connector.version>
         <joda-time.version>2.5</joda-time.version>
         <log4j.version>2.13.3</log4j.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <easymock.version>3.3.1</easymock.version>
         <javax.servlet-api.version>2.5</javax.servlet-api.version>
         <jackson.version>2.10.0</jackson.version>
