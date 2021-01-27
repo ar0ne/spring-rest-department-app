@@ -23,7 +23,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <spring.version>5.2.0.RELEASE</spring.version>
         <spring-dao.version>2.0.8</spring-dao.version>
-        <mysql.connector.version>5.1.35</mysql.connector.version>
+        <mysql.connector.version>8.0.16</mysql.connector.version>
         <joda-time.version>2.5</joda-time.version>
         <log4j.version>2.13.3</log4j.version>
         <junit.version>4.13.1</junit.version>
